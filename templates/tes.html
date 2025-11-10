@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Tes Rekomendasi Jurusan{% endblock %}
+{% block content %}
+<div class="card shadow-lg p-4 mx-auto fade-in" style="max-width: 700px;">
+  <h3 class="text-center text-primary mb-4">🧭 Tes Rekomendasi Jurusan Kuliah</h3>
+
+  <form action="{{ url_for('hasil') }}" method="POST">
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Nama Siswa</label>
+      <input type="text" name="nama" class="form-control" placeholder="Masukkan nama lengkap" required>
+    </div>
+
+    <h5 class="mt-4 text-success">Nilai Akademik (0–100)</h5>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Matematika</label>
+        <input type="number" name="mtk" class="form-control" min="0" max="100" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Bahasa Indonesia</label>
+        <input type="number" name="bindo" class="form-control" min="0" max="100" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Bahasa Inggris</label>
+        <input type="number" name="bing" class="form-control" min="0" max="100" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">IPA / IPS</label>
+        <input type="number" name="ipa_ips" class="form-control" min="0" max="100" required>
+      </div>
+    </div>
+
+    <h5 class="mt-4 text-success">Minat (1–5)</h5>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Logika / Analisis</label>
+        <input type="number" name="minat_logika" class="form-control" min="1" max="5" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Sosial / Komunikasi</label>
+        <input type="number" name="minat_sosial" class="form-control" min="1" max="5" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Kreatif / Desain</label>
+        <input type="number" name="minat_kreatif" class="form-control" min="1" max="5" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Bahasa / Literasi</label>
+        <input type="number" name="minat_bahasa" class="form-control" min="1" max="5" required>
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <button type="submit" class="btn btn-success px-4 py-2">🔍 Lihat Hasil</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

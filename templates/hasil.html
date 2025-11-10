@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Hasil Rekomendasi Jurusan{% endblock %}
+{% block content %}
+
+<div class="card shadow-lg mx-auto p-4 fade-in-scale" style="max-width: 850px;">
+  <h3 class="text-center text-success mb-4">🎓 Hasil Rekomendasi Jurusan Kuliah</h3>
+
+  <p class="text-center fs-5 fw-semibold">
+    Nama Siswa: <span class="text-primary">{{ nama }}</span>
+  </p>
+
+  <div class="text-center my-3 p-3 bg-light rounded">
+    <h6 class="fw-bold text-secondary mb-2">Skor Kesesuaian Fuzzy Umum</h6>
+    <h2 class="text-success display-6 mb-2">{{ "%.2f"|format(skor) }}</h2>
+    <small class="text-muted">
+      {% if skor >= 65 %}
+        ✅ Profil Anda sangat cocok dengan jurusan-jurusan berikut
+      {% elif skor >= 45 %}
+        ⚠️ Profil Anda cukup sesuai, pertimbangkan dengan matang
+      {% else %}
+        ℹ️ Pertimbangkan untuk mengeksplorasi minat & kemampuan lebih lanjut
+      {% endif %}
+    </small>
+  </div>
+
+  <hr class="my-4">
+
+  <h5 class="text-secondary mb-3">🎯 Top 3 Rekomendasi Jurusan</h5>
+
+  <ol class="list-group list-group-numbered">
+    {% for jurusan, nilai in hasil %}
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2 me-auto">
+        <div class="fw-bold mb-1">{{ jurusan }}</div>
+        <small class="text-muted">
+          {% if "Informatika" in jurusan %}
+            Cocok untuk siswa dengan kemampuan logika, matematika, dan problem solving tinggi. Prospek karir: Software Engineer, Data Scientist, AI Specialist.
+          {% elif "Sistem Informasi" in jurusan %}
+            Kombinasi antara teknologi dan bisnis. Cocok yang suka analisis tapi juga berinteraksi dengan orang. Prospek: Business Analyst, IT Consultant.
+          {% elif "Manajemen" in jurusan %}
+            Cocok bagi yang punya minat sosial dan kemampuan analisis. Prospek: Manager, Entrepreneur, HR Specialist.
+          {% elif "Komunikasi" in jurusan %}
+            Sesuai bagi yang ekspresif, komunikatif, dan suka storytelling. Prospek: Public Relations, Content Creator, Journalist.
+          {% elif "Psikologi" in jurusan %}
+            Tepat bagi yang suka memahami perilaku manusia dan empati tinggi. Prospek: Psikolog, HR, Counselor.
+          {% elif "Desain" in jurusan %}
+            Ideal untuk siswa kreatif dengan imajinasi visual dan estetika tinggi. Prospek: Graphic Designer, UI/UX Designer, Animator.
+          {% elif "Sastra Inggris" in jurusan %}
+            Cocok bagi yang menguasai bahasa asing, suka membaca dan menulis. Prospek: Translator, Editor, Teacher.
+          {% elif "Sastra Indonesia" in jurusan %}
+            Sesuai bagi yang mencintai bahasa, sastra, dan dunia kepenulisan. Prospek: Penulis, Editor, Jurnalis.
+          {% elif "Arsitektur" in jurusan %}
+            Perpaduan kreativitas dan logika teknis. Cocok yang suka desain dan matematika. Prospek: Arsitek, Urban Planner, Interior Designer.
+          {% elif "PGSD" in jurusan %}
+            Rekomendasi bagi yang sabar, komunikatif, dan suka mengajar anak-anak. Prospek: Guru SD, Pendidik PAUD.
+          {% else %}
+            Jurusan yang sesuai dengan profil akademik dan minat Anda.
+          {% endif %}
+        </small>
+        
+        <div class="mt-2">
+          {% if nilai >= 75 %}
+            <span class="badge bg-success">Sangat Cocok</span>
+          {% elif nilai >= 60 %}
+            <span class="badge bg-info">Cocok</span>
+          {% elif nilai >= 45 %}
+            <span class="badge bg-warning text-dark">Cukup Cocok</span>
+          {% else %}
+            <span class="badge bg-secondary">Pertimbangkan</span>
+          {% endif %}
+        </div>
+      </div>
+      <span class="badge bg-success rounded-pill fs-6">{{ "%.2f"|format(nilai) }}</span>
+    </li>
+    {% endfor %}
+  </ol>
+
+  <div class="alert alert-info mt-4" role="alert">
+    <strong>💡 Catatan:</strong> Rekomendasi ini berdasarkan analisis fuzzy logic dari nilai akademik dan minat Anda. 
+    Pertimbangkan juga faktor lain seperti passion, peluang karir, dan kondisi finansial sebelum memutuskan.
+  </div>
+
+  <div class="text-center mt-4">
+    <a href="/tes" class="btn btn-outline-primary">🔄 Ulangi Tes</a>
+    <a href="/admin" class="btn btn-outline-success ms-2">📊 Lihat Data Siswa</a>
+    <button onclick="window.print()" class="btn btn-outline-secondary ms-2">🖨️ Cetak Hasil</button>
+  </div>
+</div>
+
+<style>
+  @media print {
+    .btn { display: none; }
+    .fade-in-scale { animation: none; }
+  }
+</style>
+
+{% endblock %}
