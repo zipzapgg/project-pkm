@@ -2,23 +2,18 @@ import numpy as np
 import skfuzzy as fuzz
 from skfuzzy import control as ctrl
 
-# === DEFINISI VARIABEL FUZZY ===
-# Variabel Nilai Akademik (0-100)
 mtk = ctrl.Antecedent(np.arange(0, 101, 1), 'mtk')
 bindo = ctrl.Antecedent(np.arange(0, 101, 1), 'bindo')
 bing = ctrl.Antecedent(np.arange(0, 101, 1), 'bing')
 ipa_ips = ctrl.Antecedent(np.arange(0, 101, 1), 'ipa_ips')
 
-# Variabel Minat (1-5)
 minat_logika = ctrl.Antecedent(np.arange(1, 6, 1), 'minat_logika')
 minat_sosial = ctrl.Antecedent(np.arange(1, 6, 1), 'minat_sosial')
 minat_kreatif = ctrl.Antecedent(np.arange(1, 6, 1), 'minat_kreatif')
 minat_bahasa = ctrl.Antecedent(np.arange(1, 6, 1), 'minat_bahasa')
 
-# Output: Kesesuaian (0-100)
 hasil = ctrl.Consequent(np.arange(0, 101, 1), 'hasil')
 
-# === MEMBERSHIP FUNCTION ===
 def set_membership_akademik(var):
     var['rendah'] = fuzz.trapmf(var.universe, [0, 0, 40, 55])
     var['sedang'] = fuzz.trimf(var.universe, [45, 65, 80])
@@ -39,53 +34,71 @@ hasil['rendah'] = fuzz.trapmf(hasil.universe, [0, 0, 25, 45])
 hasil['sedang'] = fuzz.trimf(hasil.universe, [35, 55, 75])
 hasil['tinggi'] = fuzz.trapmf(hasil.universe, [65, 80, 100, 100])
 
-# === ATURAN FUZZY ===
+
+
 rules = [
     # LOGIKA & TEKNIK
     ctrl.Rule(mtk['tinggi'] & minat_logika['tinggi'], hasil['tinggi']),
-    ctrl.Rule(mtk['tinggi'] & minat_logika['sedang'], hasil['sedang']),
-    ctrl.Rule(mtk['rendah'] & minat_logika['tinggi'], hasil['sedang']),
     ctrl.Rule(ipa_ips['tinggi'] & minat_logika['tinggi'], hasil['tinggi']),
+    ctrl.Rule(mtk['tinggi'] & minat_logika['sedang'], hasil['sedang']),
+    ctrl.Rule(mtk['sedang'] & minat_logika['tinggi'], hasil['sedang']),
+    ctrl.Rule(mtk['sedang'] & minat_logika['sedang'], hasil['sedang']),
 
     # SOSIAL & KOMUNIKASI
     ctrl.Rule(bindo['tinggi'] & minat_sosial['tinggi'], hasil['tinggi']),
     ctrl.Rule(bing['tinggi'] & minat_sosial['tinggi'], hasil['tinggi']),
     ctrl.Rule(ipa_ips['tinggi'] & minat_sosial['tinggi'], hasil['tinggi']),
+    ctrl.Rule(bindo['sedang'] & minat_sosial['sedang'], hasil['sedang']),
+    ctrl.Rule(bing['sedang'] & minat_sosial['sedang'], hasil['sedang']),
 
     # KREATIF & DESAIN
     ctrl.Rule(minat_kreatif['tinggi'] & bing['tinggi'], hasil['tinggi']),
     ctrl.Rule(minat_kreatif['tinggi'] & bindo['tinggi'], hasil['tinggi']),
+    ctrl.Rule(minat_kreatif['sedang'] & bing['sedang'], hasil['sedang']),
 
     # BAHASA
     ctrl.Rule(minat_bahasa['tinggi'] & bing['tinggi'], hasil['tinggi']),
     ctrl.Rule(minat_bahasa['tinggi'] & bindo['tinggi'], hasil['tinggi']),
+    ctrl.Rule(minat_bahasa['sedang'] & bing['sedang'], hasil['sedang']),
 
     # HYBRID (Manajemen, Arsitektur)
     ctrl.Rule(minat_logika['tinggi'] & minat_sosial['tinggi'], hasil['tinggi']),
     ctrl.Rule(minat_logika['tinggi'] & minat_kreatif['tinggi'], hasil['tinggi']),
+    ctrl.Rule(minat_logika['sedang'] & minat_sosial['sedang'], hasil['sedang']),
+    ctrl.Rule(minat_logika['sedang'] & minat_kreatif['sedang'], hasil['sedang']),
 
+    # ATURAN NEGATIF / RENDAH
+    ctrl.Rule(mtk['rendah'] & minat_logika['rendah'], hasil['rendah']),
+    ctrl.Rule(bindo['rendah'] & minat_sosial['rendah'], hasil['rendah']),
+    ctrl.Rule(bing['rendah'] & minat_bahasa['rendah'], hasil['rendah']),
+    ctrl.Rule(minat_kreatif['rendah'], hasil['rendah']),
+    
     # DEFAULT RULES
     ctrl.Rule(mtk['rendah'] & bindo['rendah'] & bing['rendah'], hasil['rendah']),
 ]
 
 sistem_ctrl = ctrl.ControlSystem(rules)
 
-# === FUNGSI PENDUKUNG ===
 def evaluasi_jurusan(mtk_v, bindo_v, bing_v, ipa_ips_v,
                      min_log, min_sos, min_kre, min_bah,
                      bobot_akademik, bobot_minat):
 
     sistem = ctrl.ControlSystemSimulation(sistem_ctrl)
-    sistem.input['mtk'] = mtk_v
-    sistem.input['bindo'] = bindo_v
-    sistem.input['bing'] = bing_v
-    sistem.input['ipa_ips'] = ipa_ips_v
-    sistem.input['minat_logika'] = min_log
-    sistem.input['minat_sosial'] = min_sos
-    sistem.input['minat_kreatif'] = min_kre
-    sistem.input['minat_bahasa'] = min_bah
-    sistem.compute()
-    skor_fuzzy = sistem.output['hasil']
+    
+    try:
+        sistem.input['mtk'] = mtk_v
+        sistem.input['bindo'] = bindo_v
+        sistem.input['bing'] = bing_v
+        sistem.input['ipa_ips'] = ipa_ips_v
+        sistem.input['minat_logika'] = min_log
+        sistem.input['minat_sosial'] = min_sos
+        sistem.input['minat_kreatif'] = min_kre
+        sistem.input['minat_bahasa'] = min_bah
+        sistem.compute()
+        skor_fuzzy = sistem.output['hasil']
+    except Exception as e:
+        print(f"Error pada komputasi fuzzy: {e}")
+        skor_fuzzy = 50
 
     nilai_akademik = {'mtk': mtk_v, 'bindo': bindo_v, 'bing': bing_v, 'ipa_ips': ipa_ips_v}
     skor_akademik = sum(nilai_akademik[k] * bobot_akademik.get(k, 0) for k in nilai_akademik.keys())
@@ -96,7 +109,6 @@ def evaluasi_jurusan(mtk_v, bindo_v, bing_v, ipa_ips_v,
     skor_final = (0.4 * skor_fuzzy) + (0.3 * skor_akademik) + (0.3 * skor_minat)
     return round(skor_final, 2)
 
-# === FUNGSI UTAMA ===
 def hitung_rekomendasi(mtk_v, bindo_v, bing_v, ipa_ips_v,
                        min_log, min_sos, min_kre, min_bah):
     """
@@ -156,12 +168,10 @@ def hitung_rekomendasi(mtk_v, bindo_v, bing_v, ipa_ips_v,
         )
         hasil_evaluasi.append((jurusan, skor))
 
-    # Urutkan berdasarkan skor tertinggi
+
     hasil_evaluasi = sorted(hasil_evaluasi, key=lambda x: x[1], reverse=True)
     
-    # Ambil top 3 dan hitung skor rata-rata
     top3 = hasil_evaluasi[:3]
     skor_rata = float(np.mean([x[1] for x in top3]))
 
     return top3, skor_rata
-

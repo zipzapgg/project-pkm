@@ -10,23 +10,8 @@ body {
 /*NAVBAR*/
 .navbar {
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-}
-
-.navbar-brand {
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-.nav-link {
-  transition: color 0.2s ease-in-out;
-  margin-left: 10px;
-}
-
-.nav-link:hover {
-  color: #ffe082 !important;
-}
-
-.navbar {
+  background: rgba(25, 118, 210, 0.95);
+  backdrop-filter: blur(8px);
   transition: all 0.3s ease;
 }
 
@@ -54,17 +39,13 @@ body {
   box-shadow: none;
 }
 
-.navbar {
-  background: rgba(33, 150, 243, 0.95); /* transparansi halus */
-  backdrop-filter: blur(8px);
-}
-
 
 /*CARD*/
 .card {
   border-radius: 15px;
   transition: all 0.3s ease;
   background-color: #fff;
+  border: none;
 }
 
 .card:hover {
@@ -119,13 +100,46 @@ body {
   box-shadow: 0 0 6px rgba(25, 118, 210, 0.3);
 }
 
+
+.form-range {
+  padding-left: 0;
+}
+
+.form-range::-webkit-slider-thumb {
+  background: #1976d2;
+  transition: all 0.2s ease;
+}
+
+.form-range::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+.form-range::-moz-range-thumb {
+  background: #1976d2;
+  transition: all 0.2s ease;
+}
+
+.form-range:focus {
+  box-shadow: none;
+}
+
+.form-range:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 8px rgba(25, 118, 210, 0.5);
+}
+
+
 /*HEADINGS*/
-h2, h3, h4, h5 {
+h1, h2, h3, h4, h5 {
   font-weight: 600;
+  color: #333;
 }
 
 .text-primary {
   color: #1976d2 !important;
+}
+
+.text-success {
+  color: #43a047 !important;
 }
 
 /*ANIMASI*/
@@ -144,7 +158,6 @@ h2, h3, h4, h5 {
   animation: fadeInUp 0.7s ease;
 }
 
-/* Efek masuk untuk kartu hasil */
 @keyframes fadeInScale {
   from {
     opacity: 0;
@@ -160,7 +173,6 @@ h2, h3, h4, h5 {
   animation: fadeInScale 0.8s ease;
 }
 
-/* Efek muncul bertahap untuk list hasil */
 @keyframes slideInList {
   from {
     opacity: 0;
@@ -188,7 +200,7 @@ footer {
   padding: 20px;
   font-size: 14px;
   color: #555;
-  background: #fafafa;
+  background: rgba(255, 255, 255, 0.6);
   border-top: 1px solid #ddd;
 }
 

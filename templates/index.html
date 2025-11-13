@@ -1,12 +1,63 @@
 {% extends "base.html" %}
 {% block title %}Beranda - SPK Jurusan{% endblock %}
 {% block content %}
-<div class="text-center">
-  <h2 class="text-primary">Selamat Datang di Sistem Pakar Rekomendasi Jurusan Kuliah</h2>
-  <p class="lead mt-3">
-    Aplikasi ini membantu siswa SMAN 6 Kabupaten Tangerang dalam menentukan jurusan kuliah yang paling sesuai
-    berdasarkan nilai dan minat menggunakan logika fuzzy.
+
+<div class="text-center p-5 mb-4 bg-light rounded-3 fade-in">
+  <h1 class="display-5 fw-bold text-primary">Selamat Datang di SPK Jurusan Kuliah</h1>
+  <p class="fs-4 text-muted mt-3">
+    Temukan jurusan kuliah yang paling sesuai dengan nilai akademik dan minat pribadimu.
   </p>
-  <a href="/tes" class="btn btn-success mt-4 px-4 py-2">Mulai Tes Sekarang</a>
+  <p class="lead mt-2">
+    Aplikasi ini membantu siswa SMAN 6 Kabupaten Tangerang menggunakan logika fuzzy untuk
+    memberikan rekomendasi yang objektif dan terukur.
+  </p>
+  <a href="/tes" class="btn btn-success btn-lg mt-4 px-5 py-3">
+    Mulai Tes Sekarang!
+  </a>
 </div>
+
+<section class="py-5 fade-in-scale" style="animation-delay: 0.3s;">
+  <div class="container text-center">
+    <h2 class="fw-bold text-primary mb-3">💡 Tentang Sistem Ini</h2>
+  </div>
+
+  <div class="container mt-4">
+    <div class="row align-items-center">
+      <div class="col-md-5 mb-4 text-center">
+          <img src="{{ url_for('static', filename='img/fuzzy_icon.png') }}" 
+               alt="Ilustrasi Fuzzy Logic"
+               class="img-fluid rounded shadow-sm" style="max-width: 80%;">
+      </div>
+      <div class="col-md-7">
+        <h4 class="fw-bold text-success mb-3">🔬 Teknologi yang Digunakan</h4>
+        <p class="text-muted">
+          Sistem ini tidak menebak-nebak. Kami menggunakan teknologi modern untuk menganalisis profilmu:
+        </p>
+        <ul class="list-group list-group-flush text-secondary">
+          <li class="list-group-item bg-transparent">
+            🧠 <strong>Logika Fuzzy (scikit-fuzzy)</strong> — Metode kecerdasan buatan untuk menangani data yang tidak pasti (seperti "minat" dan "nilai sedang").
+          </li>
+          <li class="list-group-item bg-transparent">
+            🌐 <strong>Python & Flask</strong> — Otak di balik aplikasi, menjalankan semua perhitungan yang kompleks dengan cepat.
+          </li>
+          <li class="list-group-item bg-transparent">
+            💾 <strong>MySQL</strong> — Database untuk menyimpan hasil tes (secara aman dan rahasia) untuk analisis sekolah.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container mt-4">
+  <div class="card border-0 shadow-sm p-4 fade-in-scale text-center" style="animation-delay: 0.5s;">
+    <h5 class="fw-bold text-primary">🎓 Program Kreativitas Mahasiswa (PKM)</h5>
+    <p class="mt-3 text-muted">
+      Sistem ini merupakan hasil kegiatan <em>Program Kreativitas Mahasiswa (PKM)</em> bidang 
+      <strong>Pengabdian kepada Masyarakat</strong>. Aplikasi ini diharapkan dapat membantu sekolah dan siswa dalam 
+      <strong>pengambilan keputusan akademik</strong>.
+    </p>
+  </div>
+</div>
+
 {% endblock %}

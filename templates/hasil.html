@@ -25,6 +25,15 @@
 
   <hr class="my-4">
 
+  <h5 class="text-secondary mb-3 text-center">⭐ Profil Minat Kamu</h5>
+  <p class="text-center text-muted mt-0 mb-3">
+    Visualisasi ini menunjukkan kekuatan minatmu di empat area kunci.
+  </p>
+  <div class="chart-container" style="position: relative; height:350px; width:100%; max-width:500px; margin: auto;">
+      <canvas id="minatChart"></canvas>
+  </div>
+  <hr class="my-4">
+
   <h5 class="text-secondary mb-3">🎯 Top 3 Rekomendasi Jurusan</h5>
 
   <ol class="list-group list-group-numbered">
@@ -82,16 +91,72 @@
 
   <div class="text-center mt-4">
     <a href="/tes" class="btn btn-outline-primary">🔄 Ulangi Tes</a>
-    <a href="/admin" class="btn btn-outline-success ms-2">📊 Lihat Data Siswa</a>
     <button onclick="window.print()" class="btn btn-outline-secondary ms-2">🖨️ Cetak Hasil</button>
   </div>
 </div>
 
 <style>
   @media print {
-    .btn { display: none; }
+    .btn, .alert, .navbar, footer, hr { display: none !important; }
     .fade-in-scale { animation: none; }
+    .card { box-shadow: none !important; border: none !important; }
   }
 </style>
+
+<script>
+  const minatData = {{ minat | tojson }};
+
+  const ctx = document.getElementById('minatChart').getContext('2d');
+  const myChart = new Chart(ctx, {
+      type: 'radar',
+      data: {
+          labels: ['Logika/Analisis', 'Sosial/Komunikasi', 'Kreatif/Desain', 'Bahasa/Literasi'],
+          datasets: [{
+              label: 'Skor Minat Kamu',
+              data: [
+                  minatData.logika, 
+                  minatData.sosial, 
+                  minatData.kreatif, 
+                  minatData.bahasa
+              ],
+              fill: true,
+              backgroundColor: 'rgba(25, 118, 210, 0.2)',
+              borderColor: 'rgb(25, 118, 210)',
+              pointBackgroundColor: 'rgb(25, 118, 210)',
+              pointBorderColor: '#fff',
+              pointHoverBackgroundColor: '#fff',
+              pointHoverBorderColor: 'rgb(25, 118, 210)'
+          }]
+      },
+      options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+              r: {
+                  angleLines: {
+                      display: true
+                  },
+                  suggestedMin: 0,
+                  suggestedMax: 5,
+                  pointLabels: {
+                      font: {
+                          size: 13,
+                          weight: 'bold'
+                      }
+                  },
+                  ticks: {
+                      stepSize: 1,
+                      backdropColor: 'rgba(255, 255, 255, 0.75)'
+                  }
+              }
+          },
+          plugins: {
+              legend: {
+                  display: false
+              }
+          }
+      }
+  });
+</script>
 
 {% endblock %}

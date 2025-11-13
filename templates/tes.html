@@ -1,58 +1,186 @@
 {% extends "base.html" %}
 {% block title %}Tes Rekomendasi Jurusan{% endblock %}
+
 {% block content %}
 <div class="card shadow-lg p-4 mx-auto fade-in" style="max-width: 700px;">
   <h3 class="text-center text-primary mb-4">🧭 Tes Rekomendasi Jurusan Kuliah</h3>
 
-  <form action="{{ url_for('hasil') }}" method="POST">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{% if category == 'error' %}danger{% else %}{{ category }}{% endif %} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form id="tesForm" action="{{ url_for('hasil') }}" method="POST" novalidate>
+    {{ form.hidden_tag() }}
+
     <div class="mb-3">
-      <label class="form-label fw-semibold">Nama Siswa</label>
-      <input type="text" name="nama" class="form-control" placeholder="Masukkan nama lengkap" required>
+      {{ form.nama.label(class="form-label fw-semibold") }}
+      {{ form.nama(
+          class="form-control is-invalid" if form.nama.errors else "form-control", 
+          placeholder="Masukkan nama lengkap") 
+      }}
+      {% if form.nama.errors %}
+        <div class="invalid-feedback d-block">
+          {% for error in form.nama.errors %}
+            <span>{{ error }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
     </div>
 
     <h5 class="mt-4 text-success">Nilai Akademik (0–100)</h5>
     <div class="row">
       <div class="col-md-6 mb-3">
-        <label class="form-label">Matematika</label>
-        <input type="number" name="mtk" class="form-control" min="0" max="100" required>
+        {{ form.mtk.label(class="form-label") }}
+        {{ form.mtk(
+            class="form-control is-invalid" if form.mtk.errors else "form-control", 
+            type="number", min="0", max="100") 
+        }}
+        {% if form.mtk.errors %}
+          <div class="invalid-feedback d-block">{% for error in form.mtk.errors %}<span>{{ error }}</span>{% endfor %}</div>
+        {% endif %}
       </div>
       <div class="col-md-6 mb-3">
-        <label class="form-label">Bahasa Indonesia</label>
-        <input type="number" name="bindo" class="form-control" min="0" max="100" required>
+        {{ form.bindo.label(class="form-label") }}
+        {{ form.bindo(
+            class="form-control is-invalid" if form.bindo.errors else "form-control", 
+            type="number", min="0", max="100") 
+        }}
+        {% if form.bindo.errors %}
+          <div class="invalid-feedback d-block">{% for error in form.bindo.errors %}<span>{{ error }}</span>{% endfor %}</div>
+        {% endif %}
       </div>
       <div class="col-md-6 mb-3">
-        <label class="form-label">Bahasa Inggris</label>
-        <input type="number" name="bing" class="form-control" min="0" max="100" required>
+        {{ form.bing.label(class="form-label") }}
+        {{ form.bing(
+            class="form-control is-invalid" if form.bing.errors else "form-control", 
+            type="number", min="0", max="100") 
+        }}
+        {% if form.bing.errors %}
+          <div class="invalid-feedback d-block">{% for error in form.bing.errors %}<span>{{ error }}</span>{% endfor %}</div>
+        {% endif %}
       </div>
       <div class="col-md-6 mb-3">
-        <label class="form-label">IPA / IPS</label>
-        <input type="number" name="ipa_ips" class="form-control" min="0" max="100" required>
+        {{ form.ipa_ips.label(class="form-label") }}
+        {{ form.ipa_ips(
+            class="form-control is-invalid" if form.ipa_ips.errors else "form-control", 
+            type="number", min="0", max="100") 
+        }}
+        {% if form.ipa_ips.errors %}
+          <div class="invalid-feedback d-block">{% for error in form.ipa_ips.errors %}<span>{{ error }}</span>{% endfor %}</div>
+        {% endif %}
       </div>
     </div>
 
     <h5 class="mt-4 text-success">Minat (1–5)</h5>
+    <small class="form-text text-muted mb-2 d-block">
+      Geser slider untuk menyesuaikan. (1 = Sangat Tidak Minat, 5 = Sangat Minat)
+    </small>
     <div class="row">
       <div class="col-md-6 mb-3">
-        <label class="form-label">Logika / Analisis</label>
-        <input type="number" name="minat_logika" class="form-control" min="1" max="5" required>
+        {{ form.minat_logika.label(class="form-label") }}
+        <div class="d-flex align-items-center">
+          {{ form.minat_logika(
+              class="form-range" if form.minat_logika.errors else "form-range", 
+              type="range", min="1", max="5", step="1", id="rangeLogika") 
+          }}
+          <span class="fw-bold text-primary ms-3" id="labelLogika" style="width: 20px;">3</span>
+        </div>
+        {% if form.minat_logika.errors %}
+          <div class="invalid-feedback d-block">{% for error in form.minat_logika.errors %}<span>{{ error }}</span>{% endfor %}</div>
+        {% endif %}
       </div>
+
       <div class="col-md-6 mb-3">
-        <label class="form-label">Sosial / Komunikasi</label>
-        <input type="number" name="minat_sosial" class="form-control" min="1" max="5" required>
+        {{ form.minat_sosial.label(class="form-label") }}
+        <div class="d-flex align-items-center">
+          {{ form.minat_sosial(
+              class="form-range" if form.minat_sosial.errors else "form-range", 
+              type="range", min="1", max="5", step="1", id="rangeSosial") 
+          }}
+          <span class="fw-bold text-primary ms-3" id="labelSosial" style="width: 20px;">3</span>
+        </div>
+        {% if form.minat_sosial.errors %}
+          <div class="invalid-feedback d-block">{% for error in form.minat_sosial.errors %}<span>{{ error }}</span>{% endfor %}</div>
+        {% endif %}
       </div>
+
       <div class="col-md-6 mb-3">
-        <label class="form-label">Kreatif / Desain</label>
-        <input type="number" name="minat_kreatif" class="form-control" min="1" max="5" required>
+        {{ form.minat_kreatif.label(class="form-label") }}
+        <div class="d-flex align-items-center">
+          {{ form.minat_kreatif(
+              class="form-range" if form.minat_kreatif.errors else "form-range", 
+              type="range", min="1", max="5", step="1", id="rangeKreatif") 
+          }}
+          <span class="fw-bold text-primary ms-3" id="labelKreatif" style="width: 20px;">3</span>
+        </div>
+        {% if form.minat_kreatif.errors %}
+          <div class="invalid-feedback d-block">{% for error in form.minat_kreatif.errors %}<span>{{ error }}</span>{% endfor %}</div>
+        {% endif %}
       </div>
+
       <div class="col-md-6 mb-3">
-        <label class="form-label">Bahasa / Literasi</label>
-        <input type="number" name="minat_bahasa" class="form-control" min="1" max="5" required>
+        {{ form.minat_bahasa.label(class="form-label") }}
+        <div class="d-flex align-items-center">
+          {{ form.minat_bahasa(
+              class="form-range" if form.minat_bahasa.errors else "form-range", 
+              type="range", min="1", max="5", step="1", id="rangeBahasa") 
+          }}
+          <span class="fw-bold text-primary ms-3" id="labelBahasa" style="width: 20px;">3</span>
+        </div>
+        {% if form.minat_bahasa.errors %}
+          <div class="invalid-feedback d-block">{% for error in form.minat_bahasa.errors %}<span>{{ error }}</span>{% endfor %}</div>
+        {% endif %}
       </div>
     </div>
-
     <div class="text-center mt-4">
-      <button type="submit" class="btn btn-success px-4 py-2">🔍 Lihat Hasil</button>
+      {{ form.submit(class="btn btn-success px-4 py-2", id="submitButton") }}
+      <div id="loading-spinner" class="text-center" style="display: none;">
+        <div class="spinner-border text-success" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2 text-success">Sedang menghitung hasil, mohon tunggu...</p>
+      </div>
     </div>
   </form>
 </div>
+
+<script>
+  document.getElementById('tesForm').addEventListener('submit', function(event) {
+    if (!this.checkValidity()) {
+      return;
+    }
+    document.getElementById('submitButton').style.display = 'none';
+    document.getElementById('loading-spinner').style.display = 'block';
+  });
+
+  const sliders = {
+    rangeLogika: document.getElementById('labelLogika'),
+    rangeSosial: document.getElementById('labelSosial'),
+    rangeKreatif: document.getElementById('labelKreatif'),
+    rangeBahasa: document.getElementById('labelBahasa')
+  };
+
+  function updateLabel(event) {
+    const sliderId = event.target.id;
+    const label = sliders[sliderId];
+    if (label) {
+      label.textContent = event.target.value;
+    }
+  }
+
+  document.querySelectorAll('.form-range').forEach(slider => {
+    const label = sliders[slider.id];
+    if (label) {
+      label.textContent = slider.value;
+    }
+    slider.addEventListener('input', updateLabel);
+  });
+</script>
 {% endblock %}
