@@ -6,3 +6,4 @@ scipy
 flask-basicauth
 Flask-WTF
 python-dotenv
+packaging
