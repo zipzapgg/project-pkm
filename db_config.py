@@ -2,7 +2,6 @@ import mysql.connector
 import os
 from dotenv import load_dotenv
 
-# Muat variabel dari file .env
 load_dotenv()
 
 def get_connection():
@@ -19,5 +18,4 @@ def get_connection():
         return conn
     except mysql.connector.Error as e:
         print(f"Error connecting to MySQL database: {e}")
-        # Jika gagal konek, kembalikan None agar bisa ditangani di app.py
         return None
