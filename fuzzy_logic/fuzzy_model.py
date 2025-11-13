@@ -34,8 +34,6 @@ hasil['rendah'] = fuzz.trapmf(hasil.universe, [0, 0, 25, 45])
 hasil['sedang'] = fuzz.trimf(hasil.universe, [35, 55, 75])
 hasil['tinggi'] = fuzz.trapmf(hasil.universe, [65, 80, 100, 100])
 
-
-
 rules = [
     # LOGIKA & TEKNIK
     ctrl.Rule(mtk['tinggi'] & minat_logika['tinggi'], hasil['tinggi']),
@@ -67,11 +65,11 @@ rules = [
     ctrl.Rule(minat_logika['sedang'] & minat_sosial['sedang'], hasil['sedang']),
     ctrl.Rule(minat_logika['sedang'] & minat_kreatif['sedang'], hasil['sedang']),
 
-    # ATURAN NEGATIF / RENDAH
+    # ATURAN NEGATIF / RENDAH (PENTING)
     ctrl.Rule(mtk['rendah'] & minat_logika['rendah'], hasil['rendah']),
     ctrl.Rule(bindo['rendah'] & minat_sosial['rendah'], hasil['rendah']),
     ctrl.Rule(bing['rendah'] & minat_bahasa['rendah'], hasil['rendah']),
-    ctrl.Rule(minat_kreatif['rendah'], hasil['rendah']),
+    ctrl.Rule(minat_kreatif['rendah'], hasil['rendah']), 
     
     # DEFAULT RULES
     ctrl.Rule(mtk['rendah'] & bindo['rendah'] & bing['rendah'], hasil['rendah']),
@@ -167,7 +165,6 @@ def hitung_rekomendasi(mtk_v, bindo_v, bing_v, ipa_ips_v,
             config['minat']
         )
         hasil_evaluasi.append((jurusan, skor))
-
 
     hasil_evaluasi = sorted(hasil_evaluasi, key=lambda x: x[1], reverse=True)
     

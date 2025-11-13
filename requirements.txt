@@ -2,6 +2,7 @@ flask
 mysql-connector-python
 numpy
 scikit-fuzzy
+scipy
 flask-basicauth
 Flask-WTF
 python-dotenv

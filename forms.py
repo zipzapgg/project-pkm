@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, FloatField, SubmitField
-from wtforms.validators import InputRequired, NumberRange, DataRequired
+from wtforms.validators import InputRequired, NumberRange, DataRequired, Length, Regexp
 
 class TesForm(FlaskForm):
     """
@@ -8,8 +8,14 @@ class TesForm(FlaskForm):
     """
     nama = StringField('Nama Siswa', 
         validators=[DataRequired(message="Nama tidak boleh kosong.")])
+
+    nisn = StringField('NISN (Nomor Induk Siswa Nasional)',
+        validators=[
+            DataRequired(message="NISN tidak boleh kosong."),
+            Length(min=10, max=10, message="NISN harus 10 digit."),
+            Regexp('^[0-9]+$', message="NISN hanya boleh berisi angka.")
+        ])
     
-    # Nilai Akademik
     mtk = FloatField('Matematika', 
         validators=[
             InputRequired(message="Nilai tidak boleh kosong."), 
@@ -31,7 +37,6 @@ class TesForm(FlaskForm):
             NumberRange(min=0, max=100, message="Nilai harus antara 0 dan 100.")
         ])
 
-    # Minat
     minat_logika = FloatField('Logika / Analisis', 
         validators=[
             InputRequired(message="Minat tidak boleh kosong."), 

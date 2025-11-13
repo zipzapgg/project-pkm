@@ -32,6 +32,7 @@
   <div class="chart-container" style="position: relative; height:350px; width:100%; max-width:500px; margin: auto;">
       <canvas id="minatChart"></canvas>
   </div>
+
   <hr class="my-4">
 
   <h5 class="text-secondary mb-3">🎯 Top 3 Rekomendasi Jurusan</h5>
@@ -132,17 +133,12 @@
           responsive: true,
           maintainAspectRatio: false,
           scales: {
-              r: {
-                  angleLines: {
-                      display: true
-                  },
+              r: { 
+                  angleLines: { display: true },
                   suggestedMin: 0,
                   suggestedMax: 5,
                   pointLabels: {
-                      font: {
-                          size: 13,
-                          weight: 'bold'
-                      }
+                      font: { size: 13, weight: 'bold' }
                   },
                   ticks: {
                       stepSize: 1,
@@ -151,9 +147,7 @@
               }
           },
           plugins: {
-              legend: {
-                  display: false
-              }
+              legend: { display: false }
           }
       }
   });
