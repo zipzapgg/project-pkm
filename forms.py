@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FloatField, SubmitField
+from wtforms import StringField, FloatField, SubmitField, SelectField
 from wtforms.validators import InputRequired, NumberRange, DataRequired, Length, Regexp
 
 class TesForm(FlaskForm):
@@ -31,10 +31,18 @@ class TesForm(FlaskForm):
             InputRequired(message="Nilai tidak boleh kosong."), 
             NumberRange(min=0, max=100, message="Nilai harus antara 0 dan 100.")
         ])
-    ipa_ips = FloatField('IPA / IPS', 
+    
+    # Diganti dengan SelectField untuk peminatan
+    peminatan = SelectField('Peminatan', 
+        choices=[
+            ('', '-- Pilih Peminatan --'),
+            ('MIPA', 'Matematika dan IPA'),
+            ('IPS', 'Ilmu Pengetahuan Sosial'),
+            ('Bahasa', 'Bahasa dan Budaya'),
+            ('Vokasi', 'Vokasi dan Prakarya')
+        ],
         validators=[
-            InputRequired(message="Nilai tidak boleh kosong."), 
-            NumberRange(min=0, max=100, message="Nilai harus antara 0 dan 100.")
+            DataRequired(message="Peminatan harus dipilih.")
         ])
 
     minat_logika = FloatField('Logika / Analisis', 

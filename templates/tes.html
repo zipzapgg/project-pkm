@@ -2,14 +2,28 @@
 {% block title %}Tes Rekomendasi Jurusan{% endblock %}
 
 {% block content %}
-<div class="card shadow-lg p-4 mx-auto fade-in" style="max-width: 700px;">
-  <h3 class="text-center text-primary mb-4">🧭 Tes Rekomendasi Jurusan Kuliah</h3>
+<div class="card shadow-lg p-5 mx-auto fade-in" style="max-width: 800px;">
+  <!-- Header -->
+  <div class="text-center mb-4">
+    <div class="mb-3">
+      <span style="font-size: 3.5rem;">🧭</span>
+    </div>
+    <h3 class="fw-bold mb-2" style="color: #2d3748;">Tes Rekomendasi Jurusan Kuliah</h3>
+    <p class="text-muted">Isi data dengan jujur untuk mendapatkan rekomendasi yang akurat</p>
+    
+    <!-- Progress Info -->
+    <div class="d-flex justify-content-center gap-3 mt-3">
+      <span class="badge bg-light text-dark px-3 py-2">⏱️ 2 Menit</span>
+      <span class="badge bg-light text-dark px-3 py-2">📝 12 Pertanyaan</span>
+      <span class="badge bg-light text-dark px-3 py-2">🎯 3 Rekomendasi</span>
+    </div>
+  </div>
 
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       {% for category, message in messages %}
         <div class="alert alert-{% if category == 'error' or category == 'danger' %}danger{% else %}{{ category }}{% endif %} alert-dismissible fade show" role="alert">
-          {{ message }}
+          <strong>{% if category == 'error' or category == 'danger' %}⚠️{% else %}ℹ️{% endif %}</strong> {{ message }}
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
       {% endfor %}
@@ -19,152 +33,255 @@
   <form id="tesForm" action="{{ url_for('hasil') }}" method="POST" novalidate>
     {{ form.hidden_tag() }}
 
-    <div class="mb-3">
-      {{ form.nama.label(class="form-label fw-semibold") }}
-      {{ form.nama(
-          class="form-control is-invalid" if form.nama.errors else "form-control", 
-          placeholder="Masukkan nama lengkap") 
-      }}
-      {% if form.nama.errors %}
-        <div class="invalid-feedback d-block">
-          {% for error in form.nama.errors %}<span>{{ error }}</span>{% endfor %}
-        </div>
-      {% endif %}
-    </div>
-
-    <div class="mb-3">
-      {{ form.nisn.label(class="form-label fw-semibold") }}
-      {{ form.nisn(
-          class="form-control is-invalid" if form.nisn.errors else "form-control", 
-          placeholder="Masukkan 10 digit NISN", type="number") 
-      }}
-      {% if form.nisn.errors %}
-        <div class="invalid-feedback d-block">
-          {% for error in form.nisn.errors %}<span>{{ error }}</span>{% endfor %}
-        </div>
-      {% endif %}
-    </div>
-
-    <h5 class="mt-4 text-success">Nilai Akademik (0–100)</h5>
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        {{ form.mtk.label(class="form-label") }}
-        {{ form.mtk(
-            class="form-control is-invalid" if form.mtk.errors else "form-control", 
-            type="number", min="0", max="100") 
-        }}
-        {% if form.mtk.errors %}
-          <div class="invalid-feedback d-block">{% for error in form.mtk.errors %}<span>{{ error }}</span>{% endfor %}</div>
-        {% endif %}
-      </div>
-      <div class="col-md-6 mb-3">
-        {{ form.bindo.label(class="form-label") }}
-        {{ form.bindo(
-            class="form-control is-invalid" if form.bindo.errors else "form-control", 
-            type="number", min="0", max="100") 
-        }}
-        {% if form.bindo.errors %}
-          <div class="invalid-feedback d-block">{% for error in form.bindo.errors %}<span>{{ error }}</span>{% endfor %}</div>
-        {% endif %}
-      </div>
-      <div class="col-md-6 mb-3">
-        {{ form.bing.label(class="form-label") }}
-        {{ form.bing(
-            class="form-control is-invalid" if form.bing.errors else "form-control", 
-            type="number", min="0", max="100") 
-        }}
-        {% if form.bing.errors %}
-          <div class="invalid-feedback d-block">{% for error in form.bing.errors %}<span>{{ error }}</span>{% endfor %}</div>
-        {% endif %}
-      </div>
-      <div class="col-md-6 mb-3">
-        {{ form.ipa_ips.label(class="form-label") }}
-        {{ form.ipa_ips(
-            class="form-control is-invalid" if form.ipa_ips.errors else "form-control", 
-            type="number", min="0", max="100") 
-        }}
-        {% if form.ipa_ips.errors %}
-          <div class="invalid-feedback d-block">{% for error in form.ipa_ips.errors %}<span>{{ error }}</span>{% endfor %}</div>
-        {% endif %}
-      </div>
-    </div>
-
-    <h5 class="mt-4 text-success">Minat (1–5)</h5>
-    <small class="form-text text-muted mb-2 d-block">
-      Geser slider untuk menyesuaikan. (1 = Sangat Tidak Minat, 5 = Sangat Minat)
-    </small>
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        {{ form.minat_logika.label(class="form-label") }}
-        <div class="d-flex align-items-center">
-          {{ form.minat_logika(
-              class="form-range" if form.minat_logika.errors else "form-range", 
-              type="range", min="1", max="5", step="1", id="rangeLogika") 
-          }}
-          <span class="fw-bold text-primary ms-3" id="labelLogika" style="width: 20px;">3</span>
-        </div>
-        {% if form.minat_logika.errors %}
-          <div class="invalid-feedback d-block">{% for error in form.minat_logika.errors %}<span>{{ error }}</span>{% endfor %}</div>
-        {% endif %}
-      </div>
-
-      <div class="col-md-6 mb-3">
-        {{ form.minat_sosial.label(class="form-label") }}
-        <div class="d-flex align-items-center">
-          {{ form.minat_sosial(
-              class="form-range" if form.minat_sosial.errors else "form-range", 
-              type="range", min="1", max="5", step="1", id="rangeSosial") 
-          }}
-          <span class="fw-bold text-primary ms-3" id="labelSosial" style="width: 20px;">3</span>
-        </div>
-        {% if form.minat_sosial.errors %}
-          <div class="invalid-feedback d-block">{% for error in form.minat_sosial.errors %}<span>{{ error }}</span>{% endfor %}</div>
-        {% endif %}
-      </div>
-
-      <div class="col-md-6 mb-3">
-        {{ form.minat_kreatif.label(class="form-label") }}
-        <div class="d-flex align-items-center">
-          {{ form.minat_kreatif(
-              class="form-range" if form.minat_kreatif.errors else "form-range", 
-              type="range", min="1", max="5", step="1", id="rangeKreatif") 
-          }}
-          <span class="fw-bold text-primary ms-3" id="labelKreatif" style="width: 20px;">3</span>
-        </div>
-        {% if form.minat_kreatif.errors %}
-          <div class="invalid-feedback d-block">{% for error in form.minat_kreatif.errors %}<span>{{ error }}</span>{% endfor %}</div>
-        {% endif %}
-      </div>
-
-      <div class="col-md-6 mb-3">
-        {{ form.minat_bahasa.label(class="form-label") }}
-        <div class="d-flex align-items-center">
-          {{ form.minat_bahasa(
-              class="form-range" if form.minat_bahasa.errors else "form-range", 
-              type="range", min="1", max="5", step="1", id="rangeBahasa") 
-          }}
-          <span class="fw-bold text-primary ms-3" id="labelBahasa" style="width: 20px;">3</span>
-        </div>
-        {% if form.minat_bahasa.errors %}
-          <div class="invalid-feedback d-block">{% for error in form.minat_bahasa.errors %}<span>{{ error }}</span>{% endfor %}</div>
-        {% endif %}
-      </div>
-    </div>
-
-    <div class="text-center mt-4">
-      {{ form.submit(class="btn btn-success px-4 py-2", id="submitButton") }}
+    <!-- Section 1: Data Diri -->
+    <div class="mb-5 p-4" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05)); border-radius: 16px; border-left: 4px solid #667eea;">
+      <h5 class="fw-bold mb-4" style="color: #667eea;">
+        <span style="font-size: 1.5rem;">👤</span> Data Diri
+      </h5>
       
-      <div id="loading-spinner" class="text-center" style="display: none;">
-        <div class="spinner-border text-success" role="status">
+      <div class="row g-3">
+        <div class="col-md-6">
+          {{ form.nama.label(class="form-label fw-semibold") }}
+          {{ form.nama(
+              class="form-control is-invalid" if form.nama.errors else "form-control", 
+              placeholder="Contoh: Ahmad Rizki") 
+          }}
+          {% if form.nama.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form.nama.errors %}<span>{{ error }}</span>{% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="col-md-6">
+          {{ form.nisn.label(class="form-label fw-semibold") }}
+          {{ form.nisn(
+              class="form-control is-invalid" if form.nisn.errors else "form-control", 
+              placeholder="Contoh: 0012345678", 
+              type="number",
+              maxlength="10") 
+          }}
+          {% if form.nisn.errors %}
+            <div class="invalid-feedback d-block">
+              {% for error in form.nisn.errors %}<span>{{ error }}</span>{% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Nilai Akademik -->
+    <div class="mb-5 p-4" style="background: linear-gradient(135deg, rgba(17, 153, 142, 0.05), rgba(56, 239, 125, 0.05)); border-radius: 16px; border-left: 4px solid #11998e;">
+      <h5 class="fw-bold mb-3" style="color: #11998e;">
+        <span style="font-size: 1.5rem;">📚</span> Nilai Akademik
+      </h5>
+      <p class="text-muted mb-4 small">Masukkan nilai rata-rata kamu di rentang 0-100</p>
+      
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="input-group-custom">
+            {{ form.mtk.label(class="form-label fw-semibold") }}
+            <div class="position-relative">
+              {{ form.mtk(
+                  class="form-control is-invalid" if form.mtk.errors else "form-control", 
+                  type="number", min="0", max="100", placeholder="0-100") 
+              }}
+              <span class="input-icon">🔢</span>
+            </div>
+            {% if form.mtk.errors %}
+              <div class="invalid-feedback d-block">{% for error in form.mtk.errors %}<span>{{ error }}</span>{% endfor %}</div>
+            {% endif %}
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="input-group-custom">
+            {{ form.bindo.label(class="form-label fw-semibold") }}
+            <div class="position-relative">
+              {{ form.bindo(
+                  class="form-control is-invalid" if form.bindo.errors else "form-control", 
+                  type="number", min="0", max="100", placeholder="0-100") 
+              }}
+              <span class="input-icon">📖</span>
+            </div>
+            {% if form.bindo.errors %}
+              <div class="invalid-feedback d-block">{% for error in form.bindo.errors %}<span>{{ error }}</span>{% endfor %}</div>
+            {% endif %}
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="input-group-custom">
+            {{ form.bing.label(class="form-label fw-semibold") }}
+            <div class="position-relative">
+              {{ form.bing(
+                  class="form-control is-invalid" if form.bing.errors else "form-control", 
+                  type="number", min="0", max="100", placeholder="0-100") 
+              }}
+              <span class="input-icon">🌍</span>
+            </div>
+            {% if form.bing.errors %}
+              <div class="invalid-feedback d-block">{% for error in form.bing.errors %}<span>{{ error }}</span>{% endfor %}</div>
+            {% endif %}
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="input-group-custom">
+            {{ form.peminatan.label(class="form-label fw-semibold") }}
+            <div class="position-relative">
+              {{ form.peminatan(
+                  class="form-select is-invalid" if form.peminatan.errors else "form-select") 
+              }}
+              <span class="input-icon">🎓</span>
+            </div>
+            {% if form.peminatan.errors %}
+              <div class="invalid-feedback d-block">{% for error in form.peminatan.errors %}<span>{{ error }}</span>{% endfor %}</div>
+            {% endif %}
+            <small class="text-muted">
+              <strong>MIPA:</strong> Matematika & IPA | 
+              <strong>IPS:</strong> Ilmu Pengetahuan Sosial | 
+              <strong>Bahasa:</strong> Bahasa & Budaya | 
+              <strong>Vokasi:</strong> Vokasi & Prakarya
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Minat -->
+    <div class="mb-5 p-4" style="background: linear-gradient(135deg, rgba(250, 112, 154, 0.05), rgba(254, 225, 64, 0.05)); border-radius: 16px; border-left: 4px solid #fa709a;">
+      <h5 class="fw-bold mb-3" style="color: #fa709a;">
+        <span style="font-size: 1.5rem;">❤️</span> Minat & Bakat
+      </h5>
+      <p class="text-muted mb-4 small">
+        Geser slider untuk menilai tingkat minatmu (1 = Sangat Tidak Minat, 5 = Sangat Minat)
+      </p>
+      
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="slider-container">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <label class="form-label fw-semibold mb-0">🧠 {{ form.minat_logika.label.text }}</label>
+              <span class="badge bg-primary fw-bold px-3 py-2" id="labelLogika" style="font-size: 1.1rem; min-width: 40px;">3</span>
+            </div>
+            {{ form.minat_logika(
+                class="form-range", 
+                type="range", min="1", max="5", step="1", id="rangeLogika") 
+            }}
+            <div class="d-flex justify-content-between text-muted small mt-1">
+              <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+            </div>
+            {% if form.minat_logika.errors %}
+              <div class="invalid-feedback d-block">{% for error in form.minat_logika.errors %}<span>{{ error }}</span>{% endfor %}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="slider-container">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <label class="form-label fw-semibold mb-0">🤝 {{ form.minat_sosial.label.text }}</label>
+              <span class="badge bg-primary fw-bold px-3 py-2" id="labelSosial" style="font-size: 1.1rem; min-width: 40px;">3</span>
+            </div>
+            {{ form.minat_sosial(
+                class="form-range", 
+                type="range", min="1", max="5", step="1", id="rangeSosial") 
+            }}
+            <div class="d-flex justify-content-between text-muted small mt-1">
+              <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+            </div>
+            {% if form.minat_sosial.errors %}
+              <div class="invalid-feedback d-block">{% for error in form.minat_sosial.errors %}<span>{{ error }}</span>{% endfor %}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="slider-container">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <label class="form-label fw-semibold mb-0">🎨 {{ form.minat_kreatif.label.text }}</label>
+              <span class="badge bg-primary fw-bold px-3 py-2" id="labelKreatif" style="font-size: 1.1rem; min-width: 40px;">3</span>
+            </div>
+            {{ form.minat_kreatif(
+                class="form-range", 
+                type="range", min="1", max="5", step="1", id="rangeKreatif") 
+            }}
+            <div class="d-flex justify-content-between text-muted small mt-1">
+              <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+            </div>
+            {% if form.minat_kreatif.errors %}
+              <div class="invalid-feedback d-block">{% for error in form.minat_kreatif.errors %}<span>{{ error }}</span>{% endfor %}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="slider-container">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <label class="form-label fw-semibold mb-0">📚 {{ form.minat_bahasa.label.text }}</label>
+              <span class="badge bg-primary fw-bold px-3 py-2" id="labelBahasa" style="font-size: 1.1rem; min-width: 40px;">3</span>
+            </div>
+            {{ form.minat_bahasa(
+                class="form-range", 
+                type="range", min="1", max="5", step="1", id="rangeBahasa") 
+            }}
+            <div class="d-flex justify-content-between text-muted small mt-1">
+              <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+            </div>
+            {% if form.minat_bahasa.errors %}
+              <div class="invalid-feedback d-block">{% for error in form.minat_bahasa.errors %}<span>{{ error }}</span>{% endfor %}</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center mt-5">
+      {{ form.submit(class="btn btn-success btn-lg px-5 py-3 shadow-lg", id="submitButton", style="font-size: 1.2rem;") }}
+      
+      <div id="loading-spinner" class="mt-4" style="display: none;">
+        <div class="spinner-border text-success" role="status" style="width: 3rem; height: 3rem;">
           <span class="visually-hidden">Loading...</span>
         </div>
-        <p class="mt-2 text-success">Sedang menghitung hasil, mohon tunggu...</p>
+        <p class="mt-3 text-success fw-bold">Sistem sedang menganalisis data kamu...</p>
+        <p class="text-muted small">Mohon tunggu sebentar ya! ⏳</p>
       </div>
     </div>
   </form>
 </div>
 
+<style>
+  .input-icon {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    pointer-events: none;
+  }
+  
+  .input-group-custom .form-control,
+  .input-group-custom .form-select {
+    padding-right: 45px;
+  }
+  
+  .slider-container {
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+  }
+  
+  .slider-container:hover {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+</style>
+
 <script>
+  // Form Submit Handler
   document.getElementById('tesForm').addEventListener('submit', function(event) {
     if (!this.checkValidity()) {
       return;
@@ -173,6 +290,7 @@
     document.getElementById('loading-spinner').style.display = 'block';
   });
 
+  // Slider Update
   const sliders = {
     rangeLogika: document.getElementById('labelLogika'),
     rangeSosial: document.getElementById('labelSosial'),
@@ -185,6 +303,11 @@
     const label = sliders[sliderId];
     if (label) {
       label.textContent = event.target.value;
+      // Add animation
+      label.style.transform = 'scale(1.2)';
+      setTimeout(() => {
+        label.style.transform = 'scale(1)';
+      }, 200);
     }
   }
 
@@ -194,6 +317,19 @@
       label.textContent = slider.value;
     }
     slider.addEventListener('input', updateLabel);
+    
+    // Add transition
+    slider.style.transition = 'all 0.2s ease';
+  });
+
+  // Input Validation
+  document.querySelectorAll('input[type="number"]').forEach(input => {
+    input.addEventListener('input', function() {
+      if (this.value < 0) this.value = 0;
+      if (this.name.includes('nilai') || this.name.includes('mtk') || this.name.includes('bindo') || this.name.includes('bing')) {
+        if (this.value > 100) this.value = 100;
+      }
+    });
   });
 </script>
 {% endblock %}

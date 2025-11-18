@@ -5,7 +5,6 @@ from skfuzzy import control as ctrl
 mtk = ctrl.Antecedent(np.arange(0, 101, 1), 'mtk')
 bindo = ctrl.Antecedent(np.arange(0, 101, 1), 'bindo')
 bing = ctrl.Antecedent(np.arange(0, 101, 1), 'bing')
-ipa_ips = ctrl.Antecedent(np.arange(0, 101, 1), 'ipa_ips')
 
 minat_logika = ctrl.Antecedent(np.arange(1, 6, 1), 'minat_logika')
 minat_sosial = ctrl.Antecedent(np.arange(1, 6, 1), 'minat_sosial')
@@ -19,7 +18,7 @@ def set_membership_akademik(var):
     var['sedang'] = fuzz.trimf(var.universe, [45, 65, 80])
     var['tinggi'] = fuzz.trapmf(var.universe, [75, 85, 100, 100])
 
-for var in [mtk, bindo, bing, ipa_ips]:
+for var in [mtk, bindo, bing]:
     set_membership_akademik(var)
 
 def set_membership_minat(var):
@@ -37,7 +36,6 @@ hasil['tinggi'] = fuzz.trapmf(hasil.universe, [65, 80, 100, 100])
 rules = [
     # LOGIKA & TEKNIK
     ctrl.Rule(mtk['tinggi'] & minat_logika['tinggi'], hasil['tinggi']),
-    ctrl.Rule(ipa_ips['tinggi'] & minat_logika['tinggi'], hasil['tinggi']),
     ctrl.Rule(mtk['tinggi'] & minat_logika['sedang'], hasil['sedang']),
     ctrl.Rule(mtk['sedang'] & minat_logika['tinggi'], hasil['sedang']),
     ctrl.Rule(mtk['sedang'] & minat_logika['sedang'], hasil['sedang']),
@@ -45,7 +43,6 @@ rules = [
     # SOSIAL & KOMUNIKASI
     ctrl.Rule(bindo['tinggi'] & minat_sosial['tinggi'], hasil['tinggi']),
     ctrl.Rule(bing['tinggi'] & minat_sosial['tinggi'], hasil['tinggi']),
-    ctrl.Rule(ipa_ips['tinggi'] & minat_sosial['tinggi'], hasil['tinggi']),
     ctrl.Rule(bindo['sedang'] & minat_sosial['sedang'], hasil['sedang']),
     ctrl.Rule(bing['sedang'] & minat_sosial['sedang'], hasil['sedang']),
 
@@ -77,9 +74,9 @@ rules = [
 
 sistem_ctrl = ctrl.ControlSystem(rules)
 
-def evaluasi_jurusan(mtk_v, bindo_v, bing_v, ipa_ips_v,
+def evaluasi_jurusan(mtk_v, bindo_v, bing_v, peminatan,
                      min_log, min_sos, min_kre, min_bah,
-                     bobot_akademik, bobot_minat):
+                     bobot_akademik, bobot_minat, bobot_peminatan):
 
     sistem = ctrl.ControlSystemSimulation(sistem_ctrl)
     
@@ -87,7 +84,6 @@ def evaluasi_jurusan(mtk_v, bindo_v, bing_v, ipa_ips_v,
         sistem.input['mtk'] = mtk_v
         sistem.input['bindo'] = bindo_v
         sistem.input['bing'] = bing_v
-        sistem.input['ipa_ips'] = ipa_ips_v
         sistem.input['minat_logika'] = min_log
         sistem.input['minat_sosial'] = min_sos
         sistem.input['minat_kreatif'] = min_kre
@@ -98,71 +94,86 @@ def evaluasi_jurusan(mtk_v, bindo_v, bing_v, ipa_ips_v,
         print(f"Error pada komputasi fuzzy: {e}")
         skor_fuzzy = 50
 
-    nilai_akademik = {'mtk': mtk_v, 'bindo': bindo_v, 'bing': bing_v, 'ipa_ips': ipa_ips_v}
+    nilai_akademik = {'mtk': mtk_v, 'bindo': bindo_v, 'bing': bing_v}
     skor_akademik = sum(nilai_akademik[k] * bobot_akademik.get(k, 0) for k in nilai_akademik.keys())
 
     nilai_minat = {'logika': min_log, 'sosial': min_sos, 'kreatif': min_kre, 'bahasa': min_bah}
     skor_minat = sum((nilai_minat[k] / 5.0) * 100 * bobot_minat.get(k, 0) for k in nilai_minat.keys())
 
-    skor_final = (0.4 * skor_fuzzy) + (0.3 * skor_akademik) + (0.3 * skor_minat)
+    # Hitung skor peminatan (bobot sesuai kesesuaian)
+    skor_peminatan = bobot_peminatan.get(peminatan, 0) * 100
+
+    # Formula baru dengan bobot peminatan
+    skor_final = (0.35 * skor_fuzzy) + (0.25 * skor_akademik) + (0.25 * skor_minat) + (0.15 * skor_peminatan)
     return round(skor_final, 2)
 
-def hitung_rekomendasi(mtk_v, bindo_v, bing_v, ipa_ips_v,
+def hitung_rekomendasi(mtk_v, bindo_v, bing_v, peminatan,
                        min_log, min_sos, min_kre, min_bah):
     """
-    Menghitung rekomendasi jurusan berbasis fuzzy
+    Menghitung rekomendasi jurusan berbasis fuzzy dengan peminatan
     Return: (skor_umum, list of tuples (jurusan, skor))
     """
     jurusan_config = {
         "Teknik Informatika": {
-            'akademik': {'mtk': 0.5, 'ipa_ips': 0.3, 'bing': 0.2},
-            'minat': {'logika': 0.7, 'kreatif': 0.2, 'sosial': 0.1}
+            'akademik': {'mtk': 0.5, 'bing': 0.3, 'bindo': 0.2},
+            'minat': {'logika': 0.7, 'kreatif': 0.2, 'sosial': 0.1},
+            'peminatan': {'MIPA': 1.0, 'IPS': 0.3, 'Bahasa': 0.2, 'Vokasi': 0.6}
         },
         "Sistem Informasi": {
-            'akademik': {'mtk': 0.4, 'ipa_ips': 0.3, 'bindo': 0.15, 'bing': 0.15},
-            'minat': {'logika': 0.5, 'sosial': 0.3, 'kreatif': 0.2}
+            'akademik': {'mtk': 0.4, 'bindo': 0.3, 'bing': 0.3},
+            'minat': {'logika': 0.5, 'sosial': 0.3, 'kreatif': 0.2},
+            'peminatan': {'MIPA': 0.9, 'IPS': 0.6, 'Bahasa': 0.3, 'Vokasi': 0.5}
         },
         "Ilmu Komunikasi": {
-            'akademik': {'bindo': 0.4, 'bing': 0.3, 'ipa_ips': 0.3},
-            'minat': {'sosial': 0.6, 'bahasa': 0.3, 'kreatif': 0.1}
+            'akademik': {'bindo': 0.4, 'bing': 0.4, 'mtk': 0.2},
+            'minat': {'sosial': 0.6, 'bahasa': 0.3, 'kreatif': 0.1},
+            'peminatan': {'MIPA': 0.2, 'IPS': 1.0, 'Bahasa': 0.8, 'Vokasi': 0.4}
         },
         "Psikologi": {
-            'akademik': {'ipa_ips': 0.4, 'bindo': 0.3, 'bing': 0.3},
-            'minat': {'sosial': 0.7, 'logika': 0.2, 'bahasa': 0.1}
+            'akademik': {'bindo': 0.4, 'bing': 0.3, 'mtk': 0.3},
+            'minat': {'sosial': 0.7, 'logika': 0.2, 'bahasa': 0.1},
+            'peminatan': {'MIPA': 0.5, 'IPS': 1.0, 'Bahasa': 0.6, 'Vokasi': 0.3}
         },
         "Desain Komunikasi Visual": {
-            'akademik': {'bing': 0.3, 'mtk': 0.2, 'bindo': 0.25, 'ipa_ips': 0.25},
-            'minat': {'kreatif': 0.7, 'logika': 0.2, 'bahasa': 0.1}
+            'akademik': {'bing': 0.3, 'bindo': 0.3, 'mtk': 0.4},
+            'minat': {'kreatif': 0.7, 'logika': 0.2, 'bahasa': 0.1},
+            'peminatan': {'MIPA': 0.4, 'IPS': 0.5, 'Bahasa': 0.6, 'Vokasi': 1.0}
         },
         "Sastra Inggris": {
-            'akademik': {'bing': 0.6, 'bindo': 0.3, 'ipa_ips': 0.1},
-            'minat': {'bahasa': 0.7, 'kreatif': 0.2, 'sosial': 0.1}
+            'akademik': {'bing': 0.6, 'bindo': 0.3, 'mtk': 0.1},
+            'minat': {'bahasa': 0.7, 'kreatif': 0.2, 'sosial': 0.1},
+            'peminatan': {'MIPA': 0.2, 'IPS': 0.6, 'Bahasa': 1.0, 'Vokasi': 0.3}
         },
         "Sastra Indonesia": {
-            'akademik': {'bindo': 0.6, 'bing': 0.2, 'ipa_ips': 0.2},
-            'minat': {'bahasa': 0.6, 'kreatif': 0.3, 'sosial': 0.1}
+            'akademik': {'bindo': 0.6, 'bing': 0.2, 'mtk': 0.2},
+            'minat': {'bahasa': 0.6, 'kreatif': 0.3, 'sosial': 0.1},
+            'peminatan': {'MIPA': 0.2, 'IPS': 0.7, 'Bahasa': 1.0, 'Vokasi': 0.3}
         },
         "Manajemen": {
-            'akademik': {'mtk': 0.3, 'ipa_ips': 0.3, 'bindo': 0.2, 'bing': 0.2},
-            'minat': {'logika': 0.4, 'sosial': 0.4, 'kreatif': 0.2}
+            'akademik': {'mtk': 0.3, 'bindo': 0.3, 'bing': 0.4},
+            'minat': {'logika': 0.4, 'sosial': 0.4, 'kreatif': 0.2},
+            'peminatan': {'MIPA': 0.5, 'IPS': 1.0, 'Bahasa': 0.4, 'Vokasi': 0.6}
         },
         "Arsitektur": {
-            'akademik': {'mtk': 0.35, 'ipa_ips': 0.35, 'bing': 0.15, 'bindo': 0.15},
-            'minat': {'kreatif': 0.5, 'logika': 0.4, 'sosial': 0.1}
+            'akademik': {'mtk': 0.4, 'bing': 0.3, 'bindo': 0.3},
+            'minat': {'kreatif': 0.5, 'logika': 0.4, 'sosial': 0.1},
+            'peminatan': {'MIPA': 0.8, 'IPS': 0.4, 'Bahasa': 0.3, 'Vokasi': 0.9}
         },
         "Pendidikan Guru (PGSD)": {
-            'akademik': {'bindo': 0.3, 'mtk': 0.25, 'ipa_ips': 0.25, 'bing': 0.2},
-            'minat': {'sosial': 0.5, 'bahasa': 0.3, 'logika': 0.1, 'kreatif': 0.1}
+            'akademik': {'bindo': 0.35, 'mtk': 0.35, 'bing': 0.3},
+            'minat': {'sosial': 0.5, 'bahasa': 0.3, 'logika': 0.1, 'kreatif': 0.1},
+            'peminatan': {'MIPA': 0.5, 'IPS': 0.8, 'Bahasa': 0.9, 'Vokasi': 0.6}
         }
     }
 
     hasil_evaluasi = []
     for jurusan, config in jurusan_config.items():
         skor = evaluasi_jurusan(
-            mtk_v, bindo_v, bing_v, ipa_ips_v,
+            mtk_v, bindo_v, bing_v, peminatan,
             min_log, min_sos, min_kre, min_bah,
             config['akademik'],
-            config['minat']
+            config['minat'],
+            config['peminatan']
         )
         hasil_evaluasi.append((jurusan, skor))
 

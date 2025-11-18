@@ -25,7 +25,7 @@
           <th>Nilai MTK</th>
           <th>B. Indo</th>
           <th>B. Inggris</th>
-          <th>IPA/IPS</th>
+          <th>Peminatan</th>
           <th>Minat Logika</th>
           <th>Minat Sosial</th>
           <th>Minat Kreatif</th>
@@ -41,7 +41,15 @@
           <td>{{ row.nilai_mtk }}</td>
           <td>{{ row.nilai_bhs }}</td>
           <td>{{ row.nilai_bing }}</td>
-          <td>{{ row.nilai_ipa }}</td>
+          <td>
+            <span class="badge 
+              {% if row.peminatan == 'MIPA' %}bg-info
+              {% elif row.peminatan == 'IPS' %}bg-warning text-dark
+              {% elif row.peminatan == 'Bahasa' %}bg-success
+              {% else %}bg-primary{% endif %}">
+              {{ row.peminatan }}
+            </span>
+          </td>
           <td>{{ row.minat_logika }}</td>
           <td>{{ row.minat_sosial }}</td>
           <td>{{ row.minat_kreatif }}</td>
