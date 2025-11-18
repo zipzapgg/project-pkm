@@ -1,56 +1,31 @@
 import mysql.connector
-from mysql.connector import pooling
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# Konfigurasi Database & Pool
-# Pool name dan size penting untuk manajemen koneksi
-db_config = {
-    "host": os.getenv('DB_HOST'),
-    "user": os.getenv('DB_USER'),
-    "password": os.getenv('DB_PASSWORD'),
-    "database": os.getenv('DB_NAME'),
-    "pool_name": "mypool",
-    "pool_size": 10,          # Menyiapkan 10 koneksi standby
-    "pool_reset_session": True
-}
-
-# Variabel global untuk menampung pool
-cnx_pool = None
-
-def init_pool():
-    """Inisialisasi pool koneksi hanya sekali"""
-    global cnx_pool
-    try:
-        cnx_pool = mysql.connector.pooling.MySQLConnectionPool(**db_config)
-        print("✅ Database Connection Pool created successfully")
-    except mysql.connector.Error as e:
-        print(f"❌ Error creating connection pool: {e}")
-        cnx_pool = None
-
-# Panggil inisialisasi saat file di-load
-if not cnx_pool:
-    init_pool()
-
 def get_connection():
     """
-    Mengambil koneksi dari pool yang sudah tersedia.
-    Tidak membuat koneksi baru (handshake) dari nol.
+    Membuat koneksi langsung ke database.
+    Lebih stabil untuk lingkungan serverless/free tier seperti PythonAnywhere.
     """
-    global cnx_pool
     try:
-        if cnx_pool:
-            # Ambil koneksi dari pool
-            connection = cnx_pool.get_connection()
-            return connection
+        # Ambil port dari .env, default ke 3306 jika tidak ada/salah
+        port_env = os.getenv('DB_PORT')
+        if not port_env:
+            port_db = 3306
         else:
-            # Coba init ulang jika pool belum ada (fallback)
-            init_pool()
-            if cnx_pool:
-                return cnx_pool.get_connection()
-            return None
+            port_db = int(port_env)
+
+        conn = mysql.connector.connect(
+            host=os.getenv('DB_HOST'),
+            user=os.getenv('DB_USER'),
+            password=os.getenv('DB_PASSWORD'),
+            database=os.getenv('DB_NAME'),
+            port=port_db,
+            autocommit=True  # Penting agar data langsung tersimpan
+        )
+        return conn
     except mysql.connector.Error as e:
-        print(f"Error getting connection from pool: {e}")
+        print(f"❌ Error connecting to MySQL database: {e}")
         return None

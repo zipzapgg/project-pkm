@@ -35,7 +35,7 @@ hasil['rendah'] = fuzz.trapmf(hasil.universe, [0, 0, 25, 45])
 hasil['sedang'] = fuzz.trimf(hasil.universe, [35, 55, 75])
 hasil['tinggi'] = fuzz.trapmf(hasil.universe, [65, 80, 100, 100])
 
-# 3. Aturan Fuzzy (Diperbarui agar lebih lengkap)
+# 3. Aturan Fuzzy
 rules = [
     # --- KELOMPOK 1: POSITIF (Sangat Cocok) ---
     ctrl.Rule(mtk['tinggi'] & minat_logika['tinggi'], hasil['tinggi']),
@@ -44,28 +44,22 @@ rules = [
     ctrl.Rule(minat_kreatif['tinggi'] & bing['tinggi'], hasil['tinggi']),
 
     # --- KELOMPOK 2: MODERAT (Cukup Cocok) ---
-    # Bakat tinggi tapi minat biasa aja -> Sedang
     ctrl.Rule(mtk['tinggi'] & minat_logika['sedang'], hasil['sedang']),
     ctrl.Rule(bindo['tinggi'] & minat_sosial['sedang'], hasil['sedang']),
     ctrl.Rule(bing['tinggi'] & minat_bahasa['sedang'], hasil['sedang']),
     
-    # Minat tinggi tapi bakat biasa aja -> Sedang (Bisa dikejar dengan belajar)
     ctrl.Rule(mtk['sedang'] & minat_logika['tinggi'], hasil['sedang']),
     ctrl.Rule(bindo['sedang'] & minat_sosial['tinggi'], hasil['sedang']),
     ctrl.Rule(bing['sedang'] & minat_bahasa['tinggi'], hasil['sedang']),
     
-    # Dua-duanya sedang
     ctrl.Rule(mtk['sedang'] & minat_logika['sedang'], hasil['sedang']),
     ctrl.Rule(bindo['sedang'] & minat_sosial['sedang'], hasil['sedang']),
     ctrl.Rule(bing['sedang'] & minat_bahasa['sedang'], hasil['sedang']),
 
     # --- KELOMPOK 3: KONFLIK (Kurang Cocok) ---
-    # Nilai Tinggi tapi TIDAK MINAT -> Rendah (Jangan dipaksa)
     ctrl.Rule(mtk['tinggi'] & minat_logika['rendah'], hasil['rendah']),
     ctrl.Rule(bindo['tinggi'] & minat_sosial['rendah'], hasil['rendah']),
     ctrl.Rule(bing['tinggi'] & minat_bahasa['rendah'], hasil['rendah']),
-    
-    # Minat Tinggi tapi Nilai Jeblok -> Rendah (Realistis)
     ctrl.Rule(mtk['rendah'] & minat_logika['tinggi'], hasil['rendah']),
     ctrl.Rule(bindo['rendah'] & minat_sosial['tinggi'], hasil['rendah']),
 
@@ -75,7 +69,7 @@ rules = [
     ctrl.Rule(bing['rendah'] & minat_bahasa['rendah'], hasil['rendah']),
     ctrl.Rule(minat_kreatif['rendah'], hasil['rendah']),
     
-    # --- HYBRID (Manajemen, Arsitektur dll) ---
+    # --- HYBRID ---
     ctrl.Rule(minat_logika['tinggi'] & minat_sosial['tinggi'], hasil['tinggi']),
     ctrl.Rule(minat_logika['tinggi'] & minat_kreatif['tinggi'], hasil['tinggi']),
 ]
@@ -88,9 +82,7 @@ def evaluasi_jurusan(mtk_v, bindo_v, bing_v, peminatan,
 
     sistem = ctrl.ControlSystemSimulation(sistem_ctrl)
     
-    # Default score jika fuzzy gagal
     skor_fuzzy = 50 
-    
     try:
         sistem.input['mtk'] = mtk_v
         sistem.input['bindo'] = bindo_v
@@ -103,11 +95,9 @@ def evaluasi_jurusan(mtk_v, bindo_v, bing_v, peminatan,
         sistem.compute()
         skor_fuzzy = sistem.output['hasil']
     except Exception as e:
-        # Log error tapi jangan crash aplikasi
-        print(f"Warning: Fuzzy compute error (Rules incomplete for this input): {e}")
-        skor_fuzzy = 40 # Nilai aman (rendah) jika tidak masuk rules manapun
+        print(f"Warning: Fuzzy compute error: {e}")
+        skor_fuzzy = 40
 
-    # Hitung skor komponen lain
     nilai_akademik = {'mtk': mtk_v, 'bindo': bindo_v, 'bing': bing_v}
     skor_akademik = sum(nilai_akademik[k] * bobot_akademik.get(k, 0) for k in nilai_akademik.keys())
 
@@ -116,15 +106,14 @@ def evaluasi_jurusan(mtk_v, bindo_v, bing_v, peminatan,
 
     skor_peminatan = bobot_peminatan.get(peminatan, 0) * 100
 
-    # Bobot Akhir: Fuzzy (35%) + Akademik (25%) + Minat (25%) + Peminatan (15%)
     skor_final = (0.35 * skor_fuzzy) + (0.25 * skor_akademik) + (0.25 * skor_minat) + (0.15 * skor_peminatan)
     return round(skor_final, 2)
 
 def hitung_rekomendasi(mtk_v, bindo_v, bing_v, peminatan,
                        min_log, min_sos, min_kre, min_bah):
     
-    # Konfigurasi Bobot tiap Jurusan
     jurusan_config = {
+        # --- TEKNIK & KOMPUTER ---
         "Teknik Informatika": {
             'akademik': {'mtk': 0.5, 'bing': 0.3, 'bindo': 0.2},
             'minat': {'logika': 0.7, 'kreatif': 0.2, 'sosial': 0.1},
@@ -134,6 +123,23 @@ def hitung_rekomendasi(mtk_v, bindo_v, bing_v, peminatan,
             'akademik': {'mtk': 0.4, 'bindo': 0.3, 'bing': 0.3},
             'minat': {'logika': 0.5, 'sosial': 0.3, 'kreatif': 0.2},
             'peminatan': {'MIPA': 0.9, 'IPS': 0.6, 'Bahasa': 0.3, 'Vokasi': 0.5}
+        },
+        "Bisnis Digital": { # BARU
+            'akademik': {'mtk': 0.4, 'bing': 0.4, 'bindo': 0.2},
+            'minat': {'logika': 0.4, 'kreatif': 0.4, 'sosial': 0.2},
+            'peminatan': {'MIPA': 0.7, 'IPS': 0.8, 'Bahasa': 0.4, 'Vokasi': 0.8}
+        },
+        
+        # --- SOSIAL & HUMANIORA ---
+        "Ilmu Hukum": { # BARU
+            'akademik': {'bindo': 0.5, 'bing': 0.3, 'mtk': 0.2},
+            'minat': {'logika': 0.4, 'sosial': 0.4, 'bahasa': 0.2},
+            'peminatan': {'MIPA': 0.4, 'IPS': 1.0, 'Bahasa': 0.6, 'Vokasi': 0.4}
+        },
+        "Hubungan Internasional": { # BARU
+            'akademik': {'bing': 0.6, 'bindo': 0.3, 'mtk': 0.1},
+            'minat': {'sosial': 0.5, 'bahasa': 0.4, 'logika': 0.1},
+            'peminatan': {'MIPA': 0.3, 'IPS': 1.0, 'Bahasa': 0.9, 'Vokasi': 0.3}
         },
         "Ilmu Komunikasi": {
             'akademik': {'bindo': 0.4, 'bing': 0.4, 'mtk': 0.2},
@@ -145,11 +151,35 @@ def hitung_rekomendasi(mtk_v, bindo_v, bing_v, peminatan,
             'minat': {'sosial': 0.7, 'logika': 0.2, 'bahasa': 0.1},
             'peminatan': {'MIPA': 0.5, 'IPS': 1.0, 'Bahasa': 0.6, 'Vokasi': 0.3}
         },
-        "Desain Komunikasi Visual": {
-            'akademik': {'bing': 0.3, 'bindo': 0.3, 'mtk': 0.4},
-            'minat': {'kreatif': 0.7, 'logika': 0.2, 'bahasa': 0.1},
-            'peminatan': {'MIPA': 0.4, 'IPS': 0.5, 'Bahasa': 0.6, 'Vokasi': 1.0}
+        "Kriminologi": { # BARU
+            'akademik': {'bindo': 0.4, 'mtk': 0.3, 'bing': 0.3},
+            'minat': {'logika': 0.5, 'sosial': 0.5},
+            'peminatan': {'MIPA': 0.5, 'IPS': 1.0, 'Bahasa': 0.5, 'Vokasi': 0.3}
         },
+        "Administrasi Publik": { # BARU
+            'akademik': {'bindo': 0.5, 'bing': 0.3, 'mtk': 0.2},
+            'minat': {'sosial': 0.7, 'logika': 0.3},
+            'peminatan': {'MIPA': 0.3, 'IPS': 1.0, 'Bahasa': 0.5, 'Vokasi': 0.4}
+        },
+
+        # --- EKONOMI & BISNIS ---
+        "Manajemen": {
+            'akademik': {'mtk': 0.3, 'bindo': 0.3, 'bing': 0.4},
+            'minat': {'logika': 0.4, 'sosial': 0.4, 'kreatif': 0.2},
+            'peminatan': {'MIPA': 0.5, 'IPS': 1.0, 'Bahasa': 0.4, 'Vokasi': 0.6}
+        },
+        "Akuntansi": { # BARU
+            'akademik': {'mtk': 0.6, 'bing': 0.2, 'bindo': 0.2},
+            'minat': {'logika': 0.7, 'sosial': 0.2, 'kreatif': 0.1},
+            'peminatan': {'MIPA': 0.7, 'IPS': 1.0, 'Bahasa': 0.3, 'Vokasi': 0.9}
+        },
+        "Ekonomi Pembangunan": { # BARU
+            'akademik': {'mtk': 0.5, 'bindo': 0.3, 'bing': 0.2},
+            'minat': {'logika': 0.6, 'sosial': 0.4},
+            'peminatan': {'MIPA': 0.6, 'IPS': 1.0, 'Bahasa': 0.3, 'Vokasi': 0.4}
+        },
+
+        # --- BAHASA & SENI ---
         "Sastra Inggris": {
             'akademik': {'bing': 0.6, 'bindo': 0.3, 'mtk': 0.1},
             'minat': {'bahasa': 0.7, 'kreatif': 0.2, 'sosial': 0.1},
@@ -160,11 +190,18 @@ def hitung_rekomendasi(mtk_v, bindo_v, bing_v, peminatan,
             'minat': {'bahasa': 0.6, 'kreatif': 0.3, 'sosial': 0.1},
             'peminatan': {'MIPA': 0.2, 'IPS': 0.7, 'Bahasa': 1.0, 'Vokasi': 0.3}
         },
-        "Manajemen": {
-            'akademik': {'mtk': 0.3, 'bindo': 0.3, 'bing': 0.4},
-            'minat': {'logika': 0.4, 'sosial': 0.4, 'kreatif': 0.2},
-            'peminatan': {'MIPA': 0.5, 'IPS': 1.0, 'Bahasa': 0.4, 'Vokasi': 0.6}
+        "Sastra Jepang": { # BARU
+            'akademik': {'bing': 0.4, 'bindo': 0.4, 'mtk': 0.2},
+            'minat': {'bahasa': 0.8, 'kreatif': 0.1, 'sosial': 0.1},
+            'peminatan': {'MIPA': 0.2, 'IPS': 0.6, 'Bahasa': 1.0, 'Vokasi': 0.4}
         },
+        "Desain Komunikasi Visual": {
+            'akademik': {'bing': 0.3, 'bindo': 0.3, 'mtk': 0.4},
+            'minat': {'kreatif': 0.7, 'logika': 0.2, 'bahasa': 0.1},
+            'peminatan': {'MIPA': 0.4, 'IPS': 0.5, 'Bahasa': 0.6, 'Vokasi': 1.0}
+        },
+        
+        # --- LAINNYA ---
         "Arsitektur": {
             'akademik': {'mtk': 0.4, 'bing': 0.3, 'bindo': 0.3},
             'minat': {'kreatif': 0.5, 'logika': 0.4, 'sosial': 0.1},
@@ -188,7 +225,6 @@ def hitung_rekomendasi(mtk_v, bindo_v, bing_v, peminatan,
         )
         hasil_evaluasi.append((jurusan, skor))
 
-    # Urutkan dari skor tertinggi
     hasil_evaluasi = sorted(hasil_evaluasi, key=lambda x: x[1], reverse=True)
     
     top3 = hasil_evaluasi[:3]
