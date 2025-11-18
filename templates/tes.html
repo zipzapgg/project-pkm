@@ -2,8 +2,7 @@
 {% block title %}Tes Rekomendasi Jurusan{% endblock %}
 
 {% block content %}
-<div class="card shadow-lg p-5 mx-auto fade-in" style="max-width: 800px;">
-  <!-- Header -->
+<div class="card shadow-lg p-4 p-md-5 mx-auto fade-in" style="max-width: 800px;">
   <div class="text-center mb-4">
     <div class="mb-3">
       <span style="font-size: 3.5rem;">🧭</span>
@@ -11,8 +10,7 @@
     <h3 class="fw-bold mb-2" style="color: #2d3748;">Tes Rekomendasi Jurusan Kuliah</h3>
     <p class="text-muted">Isi data dengan jujur untuk mendapatkan rekomendasi yang akurat</p>
     
-    <!-- Progress Info -->
-    <div class="d-flex justify-content-center gap-3 mt-3">
+    <div class="d-flex justify-content-center gap-2 gap-md-3 mt-3 flex-wrap">
       <span class="badge bg-light text-dark px-3 py-2">⏱️ 2 Menit</span>
       <span class="badge bg-light text-dark px-3 py-2">📝 12 Pertanyaan</span>
       <span class="badge bg-light text-dark px-3 py-2">🎯 3 Rekomendasi</span>
@@ -33,9 +31,8 @@
   <form id="tesForm" action="{{ url_for('hasil') }}" method="POST" novalidate>
     {{ form.hidden_tag() }}
 
-    <!-- Section 1: Data Diri -->
-    <div class="mb-5 p-4" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05)); border-radius: 16px; border-left: 4px solid #667eea;">
-      <h5 class="fw-bold mb-4" style="color: #667eea;">
+    <div class="mb-4 mb-md-5 p-3 p-md-4" style="background: linear-gradient(135deg, rgba(0, 97, 255, 0.05), rgba(96, 239, 255, 0.05)); border-radius: 16px; border-left: 4px solid #0061ff;">
+      <h5 class="fw-bold mb-4" style="color: #0061ff;">
         <span style="font-size: 1.5rem;">👤</span> Data Diri
       </h5>
       
@@ -58,7 +55,7 @@
           {{ form.nisn(
               class="form-control is-invalid" if form.nisn.errors else "form-control", 
               placeholder="Contoh: 0012345678", 
-              type="number",
+              type="number", inputmode="numeric",
               maxlength="10") 
           }}
           {% if form.nisn.errors %}
@@ -70,8 +67,7 @@
       </div>
     </div>
 
-    <!-- Section 2: Nilai Akademik -->
-    <div class="mb-5 p-4" style="background: linear-gradient(135deg, rgba(17, 153, 142, 0.05), rgba(56, 239, 125, 0.05)); border-radius: 16px; border-left: 4px solid #11998e;">
+    <div class="mb-4 mb-md-5 p-3 p-md-4" style="background: linear-gradient(135deg, rgba(17, 153, 142, 0.05), rgba(56, 239, 125, 0.05)); border-radius: 16px; border-left: 4px solid #11998e;">
       <h5 class="fw-bold mb-3" style="color: #11998e;">
         <span style="font-size: 1.5rem;">📚</span> Nilai Akademik
       </h5>
@@ -84,7 +80,7 @@
             <div class="position-relative">
               {{ form.mtk(
                   class="form-control is-invalid" if form.mtk.errors else "form-control", 
-                  type="number", min="0", max="100", placeholder="0-100") 
+                  type="number", inputmode="numeric", min="0", max="100", placeholder="0-100") 
               }}
               <span class="input-icon">🔢</span>
             </div>
@@ -100,7 +96,7 @@
             <div class="position-relative">
               {{ form.bindo(
                   class="form-control is-invalid" if form.bindo.errors else "form-control", 
-                  type="number", min="0", max="100", placeholder="0-100") 
+                  type="number", inputmode="numeric", min="0", max="100", placeholder="0-100") 
               }}
               <span class="input-icon">📖</span>
             </div>
@@ -116,7 +112,7 @@
             <div class="position-relative">
               {{ form.bing(
                   class="form-control is-invalid" if form.bing.errors else "form-control", 
-                  type="number", min="0", max="100", placeholder="0-100") 
+                  type="number", inputmode="numeric", min="0", max="100", placeholder="0-100") 
               }}
               <span class="input-icon">🌍</span>
             </div>
@@ -139,18 +135,14 @@
               <div class="invalid-feedback d-block">{% for error in form.peminatan.errors %}<span>{{ error }}</span>{% endfor %}</div>
             {% endif %}
             <small class="text-muted">
-              <strong>MIPA:</strong> Matematika & IPA | 
-              <strong>IPS:</strong> Ilmu Pengetahuan Sosial | 
-              <strong>Bahasa:</strong> Bahasa & Budaya | 
-              <strong>Vokasi:</strong> Vokasi & Prakarya
+              Pilih peminatan SMA kamu saat ini.
             </small>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Section 3: Minat -->
-    <div class="mb-5 p-4" style="background: linear-gradient(135deg, rgba(250, 112, 154, 0.05), rgba(254, 225, 64, 0.05)); border-radius: 16px; border-left: 4px solid #fa709a;">
+    <div class="mb-4 mb-md-5 p-3 p-md-4" style="background: linear-gradient(135deg, rgba(250, 112, 154, 0.05), rgba(254, 225, 64, 0.05)); border-radius: 16px; border-left: 4px solid #fa709a;">
       <h5 class="fw-bold mb-3" style="color: #fa709a;">
         <span style="font-size: 1.5rem;">❤️</span> Minat & Bakat
       </h5>
@@ -237,7 +229,6 @@
       </div>
     </div>
 
-    <!-- Submit Button -->
     <div class="text-center mt-5">
       {{ form.submit(class="btn btn-success btn-lg px-5 py-3 shadow-lg", id="submitButton", style="font-size: 1.2rem;") }}
       

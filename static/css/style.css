@@ -6,7 +6,8 @@
 }
 
 body {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  /* GANTI: Base Color jadi Blue Gradient */
+  background: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
   background-attachment: fixed;
   font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
   min-height: 100vh;
@@ -24,9 +25,9 @@ body::before {
   width: 100%;
   height: 100%;
   background-image: 
-    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
   animation: float 20s ease-in-out infinite;
   pointer-events: none;
   z-index: 0;
@@ -167,25 +168,27 @@ body::before {
   box-shadow: 0 15px 40px rgba(17, 153, 142, 0.4);
 }
 
+/* GANTI: Btn Primary jadi Biru */
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+  background: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
+  box-shadow: 0 10px 30px rgba(0, 97, 255, 0.3);
 }
 
 .btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 15px 40px rgba(0, 97, 255, 0.4);
 }
 
+/* GANTI: Outline Primary jadi Biru */
 .btn-outline-primary {
-  border: 2px solid #667eea;
-  color: #667eea;
+  border: 2px solid #0061ff;
+  color: #0061ff;
   background: transparent;
   font-weight: 700;
 }
 
 .btn-outline-primary:hover {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
   color: white;
   border-color: transparent;
   transform: translateY(-3px);
@@ -213,9 +216,10 @@ body::before {
   font-size: 0.95rem;
 }
 
+/* GANTI: Focus color jadi Biru */
 .form-control:focus, .form-select:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  border-color: #0061ff;
+  box-shadow: 0 0 0 4px rgba(0, 97, 255, 0.1);
   background: white;
   transform: translateY(-2px);
 }
@@ -241,37 +245,38 @@ input[type=number] {
 /* Modern Range Slider */
 .form-range {
   height: 8px;
-  background: linear-gradient(to right, #e0e0e0 0%, #667eea 100%);
+  background: linear-gradient(to right, #e0e0e0 0%, #0061ff 100%);
   border-radius: 10px;
   outline: none;
   -webkit-appearance: none;
 }
 
+/* GANTI: Slider Thumb jadi Biru */
 .form-range::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 97, 255, 0.4);
   transition: all 0.3s ease;
 }
 
 .form-range::-webkit-slider-thumb:hover {
   transform: scale(1.2);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+  box-shadow: 0 6px 20px rgba(0, 97, 255, 0.6);
 }
 
 .form-range::-moz-range-thumb {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
   cursor: pointer;
   border: none;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 97, 255, 0.4);
 }
 
 /*HEADINGS - Bold & Modern*/
@@ -281,9 +286,10 @@ h1, h2, h3, h4, h5 {
   letter-spacing: -0.5px;
 }
 
+/* GANTI: H1 Gradient Text jadi Biru */
 h1 {
   font-size: 3rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -294,6 +300,7 @@ h3 {
   display: inline-block;
 }
 
+/* GANTI: Underline H3 jadi Biru */
 h3::after {
   content: '';
   position: absolute;
@@ -301,7 +308,7 @@ h3::after {
   left: 0;
   width: 60px;
   height: 4px;
-  background: linear-gradient(90deg, #667eea, #764ba2);
+  background: linear-gradient(90deg, #0061ff, #60efff);
   border-radius: 2px;
 }
 
@@ -336,10 +343,11 @@ h3::after {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
+/* GANTI: Hover list jadi nuansa biru muda */
 .list-group-item:hover {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(0, 97, 255, 0.1) 0%, rgba(96, 239, 255, 0.1) 100%);
   transform: translateX(8px) scale(1.02);
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 97, 255, 0.15);
 }
 
 /*ALERT - Modern Design*/
@@ -413,8 +421,9 @@ h3::after {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
+/* GANTI: Table head jadi biru */
 .table thead {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
   color: white;
 }
 
@@ -423,7 +432,7 @@ h3::after {
 }
 
 .table tbody tr:hover {
-  background: rgba(102, 126, 234, 0.08);
+  background: rgba(0, 97, 255, 0.08);
   transform: scale(1.01);
 }
 
@@ -449,13 +458,14 @@ footer {
   background: rgba(255, 255, 255, 0.1);
 }
 
+/* GANTI: Scrollbar jadi biru */
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  background: linear-gradient(135deg, #60efff 0%, #0061ff 100%);
 }
 
 /*SPINNER - Loading*/
@@ -476,16 +486,43 @@ footer {
 
 /*RESPONSIVE*/
 @media (max-width: 768px) {
+  /* Fix scroll lag on iOS */
+  body {
+    background-attachment: scroll;
+  }
+
+  /* Resize Typography for Small Screens */
   h1 {
-    font-size: 2rem;
+    font-size: 2rem !important;
+    line-height: 1.2;
   }
   
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.5rem; }
+  
+  /* Adjust Container Padding */
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  
+  /* Make cards slightly less rounded to save space */
   .card {
-    border-radius: 20px;
+    border-radius: 16px;
+    margin-bottom: 1rem;
   }
   
+  /* Buttons Adjustment */
   .btn {
     padding: 10px 24px;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    width: 100%; /* Buttons full width on mobile usually better */
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  /* Navbar Toggler Adjust */
+  .navbar-brand {
+    font-size: 1.2rem;
   }
 }

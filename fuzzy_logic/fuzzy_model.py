@@ -2,6 +2,7 @@ import numpy as np
 import skfuzzy as fuzz
 from skfuzzy import control as ctrl
 
+# 1. Definisikan Variabel
 mtk = ctrl.Antecedent(np.arange(0, 101, 1), 'mtk')
 bindo = ctrl.Antecedent(np.arange(0, 101, 1), 'bindo')
 bing = ctrl.Antecedent(np.arange(0, 101, 1), 'bing')
@@ -13,6 +14,7 @@ minat_bahasa = ctrl.Antecedent(np.arange(1, 6, 1), 'minat_bahasa')
 
 hasil = ctrl.Consequent(np.arange(0, 101, 1), 'hasil')
 
+# 2. Membership Functions (Himpunan Fuzzy)
 def set_membership_akademik(var):
     var['rendah'] = fuzz.trapmf(var.universe, [0, 0, 40, 55])
     var['sedang'] = fuzz.trimf(var.universe, [45, 65, 80])
@@ -33,43 +35,49 @@ hasil['rendah'] = fuzz.trapmf(hasil.universe, [0, 0, 25, 45])
 hasil['sedang'] = fuzz.trimf(hasil.universe, [35, 55, 75])
 hasil['tinggi'] = fuzz.trapmf(hasil.universe, [65, 80, 100, 100])
 
+# 3. Aturan Fuzzy (Diperbarui agar lebih lengkap)
 rules = [
-    # LOGIKA & TEKNIK
+    # --- KELOMPOK 1: POSITIF (Sangat Cocok) ---
     ctrl.Rule(mtk['tinggi'] & minat_logika['tinggi'], hasil['tinggi']),
-    ctrl.Rule(mtk['tinggi'] & minat_logika['sedang'], hasil['sedang']),
-    ctrl.Rule(mtk['sedang'] & minat_logika['tinggi'], hasil['sedang']),
-    ctrl.Rule(mtk['sedang'] & minat_logika['sedang'], hasil['sedang']),
-
-    # SOSIAL & KOMUNIKASI
     ctrl.Rule(bindo['tinggi'] & minat_sosial['tinggi'], hasil['tinggi']),
-    ctrl.Rule(bing['tinggi'] & minat_sosial['tinggi'], hasil['tinggi']),
-    ctrl.Rule(bindo['sedang'] & minat_sosial['sedang'], hasil['sedang']),
-    ctrl.Rule(bing['sedang'] & minat_sosial['sedang'], hasil['sedang']),
-
-    # KREATIF & DESAIN
+    ctrl.Rule(bing['tinggi'] & minat_bahasa['tinggi'], hasil['tinggi']),
     ctrl.Rule(minat_kreatif['tinggi'] & bing['tinggi'], hasil['tinggi']),
-    ctrl.Rule(minat_kreatif['tinggi'] & bindo['tinggi'], hasil['tinggi']),
-    ctrl.Rule(minat_kreatif['sedang'] & bing['sedang'], hasil['sedang']),
 
-    # BAHASA
-    ctrl.Rule(minat_bahasa['tinggi'] & bing['tinggi'], hasil['tinggi']),
-    ctrl.Rule(minat_bahasa['tinggi'] & bindo['tinggi'], hasil['tinggi']),
-    ctrl.Rule(minat_bahasa['sedang'] & bing['sedang'], hasil['sedang']),
+    # --- KELOMPOK 2: MODERAT (Cukup Cocok) ---
+    # Bakat tinggi tapi minat biasa aja -> Sedang
+    ctrl.Rule(mtk['tinggi'] & minat_logika['sedang'], hasil['sedang']),
+    ctrl.Rule(bindo['tinggi'] & minat_sosial['sedang'], hasil['sedang']),
+    ctrl.Rule(bing['tinggi'] & minat_bahasa['sedang'], hasil['sedang']),
+    
+    # Minat tinggi tapi bakat biasa aja -> Sedang (Bisa dikejar dengan belajar)
+    ctrl.Rule(mtk['sedang'] & minat_logika['tinggi'], hasil['sedang']),
+    ctrl.Rule(bindo['sedang'] & minat_sosial['tinggi'], hasil['sedang']),
+    ctrl.Rule(bing['sedang'] & minat_bahasa['tinggi'], hasil['sedang']),
+    
+    # Dua-duanya sedang
+    ctrl.Rule(mtk['sedang'] & minat_logika['sedang'], hasil['sedang']),
+    ctrl.Rule(bindo['sedang'] & minat_sosial['sedang'], hasil['sedang']),
+    ctrl.Rule(bing['sedang'] & minat_bahasa['sedang'], hasil['sedang']),
 
-    # HYBRID (Manajemen, Arsitektur)
-    ctrl.Rule(minat_logika['tinggi'] & minat_sosial['tinggi'], hasil['tinggi']),
-    ctrl.Rule(minat_logika['tinggi'] & minat_kreatif['tinggi'], hasil['tinggi']),
-    ctrl.Rule(minat_logika['sedang'] & minat_sosial['sedang'], hasil['sedang']),
-    ctrl.Rule(minat_logika['sedang'] & minat_kreatif['sedang'], hasil['sedang']),
+    # --- KELOMPOK 3: KONFLIK (Kurang Cocok) ---
+    # Nilai Tinggi tapi TIDAK MINAT -> Rendah (Jangan dipaksa)
+    ctrl.Rule(mtk['tinggi'] & minat_logika['rendah'], hasil['rendah']),
+    ctrl.Rule(bindo['tinggi'] & minat_sosial['rendah'], hasil['rendah']),
+    ctrl.Rule(bing['tinggi'] & minat_bahasa['rendah'], hasil['rendah']),
+    
+    # Minat Tinggi tapi Nilai Jeblok -> Rendah (Realistis)
+    ctrl.Rule(mtk['rendah'] & minat_logika['tinggi'], hasil['rendah']),
+    ctrl.Rule(bindo['rendah'] & minat_sosial['tinggi'], hasil['rendah']),
 
-    # ATURAN NEGATIF / RENDAH (PENTING)
+    # --- KELOMPOK 4: NEGATIF (Tidak Cocok) ---
     ctrl.Rule(mtk['rendah'] & minat_logika['rendah'], hasil['rendah']),
     ctrl.Rule(bindo['rendah'] & minat_sosial['rendah'], hasil['rendah']),
     ctrl.Rule(bing['rendah'] & minat_bahasa['rendah'], hasil['rendah']),
-    ctrl.Rule(minat_kreatif['rendah'], hasil['rendah']), 
+    ctrl.Rule(minat_kreatif['rendah'], hasil['rendah']),
     
-    # DEFAULT RULES
-    ctrl.Rule(mtk['rendah'] & bindo['rendah'] & bing['rendah'], hasil['rendah']),
+    # --- HYBRID (Manajemen, Arsitektur dll) ---
+    ctrl.Rule(minat_logika['tinggi'] & minat_sosial['tinggi'], hasil['tinggi']),
+    ctrl.Rule(minat_logika['tinggi'] & minat_kreatif['tinggi'], hasil['tinggi']),
 ]
 
 sistem_ctrl = ctrl.ControlSystem(rules)
@@ -80,6 +88,9 @@ def evaluasi_jurusan(mtk_v, bindo_v, bing_v, peminatan,
 
     sistem = ctrl.ControlSystemSimulation(sistem_ctrl)
     
+    # Default score jika fuzzy gagal
+    skor_fuzzy = 50 
+    
     try:
         sistem.input['mtk'] = mtk_v
         sistem.input['bindo'] = bindo_v
@@ -88,31 +99,31 @@ def evaluasi_jurusan(mtk_v, bindo_v, bing_v, peminatan,
         sistem.input['minat_sosial'] = min_sos
         sistem.input['minat_kreatif'] = min_kre
         sistem.input['minat_bahasa'] = min_bah
+        
         sistem.compute()
         skor_fuzzy = sistem.output['hasil']
     except Exception as e:
-        print(f"Error pada komputasi fuzzy: {e}")
-        skor_fuzzy = 50
+        # Log error tapi jangan crash aplikasi
+        print(f"Warning: Fuzzy compute error (Rules incomplete for this input): {e}")
+        skor_fuzzy = 40 # Nilai aman (rendah) jika tidak masuk rules manapun
 
+    # Hitung skor komponen lain
     nilai_akademik = {'mtk': mtk_v, 'bindo': bindo_v, 'bing': bing_v}
     skor_akademik = sum(nilai_akademik[k] * bobot_akademik.get(k, 0) for k in nilai_akademik.keys())
 
     nilai_minat = {'logika': min_log, 'sosial': min_sos, 'kreatif': min_kre, 'bahasa': min_bah}
     skor_minat = sum((nilai_minat[k] / 5.0) * 100 * bobot_minat.get(k, 0) for k in nilai_minat.keys())
 
-    # Hitung skor peminatan (bobot sesuai kesesuaian)
     skor_peminatan = bobot_peminatan.get(peminatan, 0) * 100
 
-    # Formula baru dengan bobot peminatan
+    # Bobot Akhir: Fuzzy (35%) + Akademik (25%) + Minat (25%) + Peminatan (15%)
     skor_final = (0.35 * skor_fuzzy) + (0.25 * skor_akademik) + (0.25 * skor_minat) + (0.15 * skor_peminatan)
     return round(skor_final, 2)
 
 def hitung_rekomendasi(mtk_v, bindo_v, bing_v, peminatan,
                        min_log, min_sos, min_kre, min_bah):
-    """
-    Menghitung rekomendasi jurusan berbasis fuzzy dengan peminatan
-    Return: (skor_umum, list of tuples (jurusan, skor))
-    """
+    
+    # Konfigurasi Bobot tiap Jurusan
     jurusan_config = {
         "Teknik Informatika": {
             'akademik': {'mtk': 0.5, 'bing': 0.3, 'bindo': 0.2},
@@ -177,6 +188,7 @@ def hitung_rekomendasi(mtk_v, bindo_v, bing_v, peminatan,
         )
         hasil_evaluasi.append((jurusan, skor))
 
+    # Urutkan dari skor tertinggi
     hasil_evaluasi = sorted(hasil_evaluasi, key=lambda x: x[1], reverse=True)
     
     top3 = hasil_evaluasi[:3]

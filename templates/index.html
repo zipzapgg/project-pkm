@@ -2,170 +2,205 @@
 {% block title %}Beranda - SPK Jurusan{% endblock %}
 {% block content %}
 
-<div class="text-center p-5 mb-5 bg-light fade-in" style="position: relative; overflow: hidden;">
-  <!-- Decorative elements -->
-  <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1)); border-radius: 50%; filter: blur(40px);"></div>
-  <div style="position: absolute; bottom: -50px; left: -50px; width: 200px; height: 200px; background: linear-gradient(135deg, rgba(17, 153, 142, 0.1), rgba(56, 239, 125, 0.1)); border-radius: 50%; filter: blur(40px);"></div>
-  
-  <div style="position: relative; z-index: 2;">
-    <div class="mb-4">
-      <span style="font-size: 5rem; display: inline-block; animation: bounce 2s infinite;">🎓</span>
+<div class="row justify-content-center">
+  <div class="col-lg-10 col-xl-9">
+    
+    <div style="position: relative; margin-bottom: -75px; z-index: 10; text-align: center;">
+        <img src="{{ url_for('static', filename='img/logosman6.jpg') }}" 
+             alt="Logo SMAN 6 Kabupaten Tangerang" 
+             class="img-fluid rounded-4 shadow-lg"
+             style="max-height: 150px; width: auto; background: white; padding: 12px; border: 1px solid rgba(0,0,0,0.05);">
     </div>
-    <h1 class="display-4 fw-bold mb-3">
-      Temukan Jurusan Kuliah <br>
-      <span style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Impianmu!</span>
-    </h1>
-    <p class="fs-5 text-muted mt-4 mb-2" style="max-width: 700px; margin: auto;">
-      Sistem rekomendasi berbasis <strong>Fuzzy Logic</strong> yang membantu kamu menemukan jurusan kuliah paling sesuai dengan kemampuan akademik dan minat pribadi.
-    </p>
-    <div class="d-flex justify-content-center gap-3 mt-4 mb-3">
-      <div class="badge bg-light text-dark px-3 py-2" style="font-size: 0.9rem;">
-        🧠 <strong>10</strong> Jurusan
-      </div>
-      <div class="badge bg-light text-dark px-3 py-2" style="font-size: 0.9rem;">
-        ⚡ <strong>Instan</strong> 
-      </div>
-      <div class="badge bg-light text-dark px-3 py-2" style="font-size: 0.9rem;">
-        🎯 <strong>Akurat</strong>
+
+    <div class="card border border-light-subtle shadow-lg p-4 p-md-5 mb-5 fade-in text-center" 
+         style="border-radius: 30px; background: white; position: relative; padding-top: 130px !important;"> 
+      
+      <div style="position: relative; z-index: 2;">
+        
+        <h1 class="display-5 fw-extrabold mb-3" style="letter-spacing: -1px; color: #2d3748;">
+          Temukan Jurusan Kuliah <br>
+          <span style="background: linear-gradient(90deg, #0061ff 0%, #60efff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            Impianmu!
+          </span>
+        </h1>
+
+        <p class="fs-5 text-muted mt-3 mb-4 mx-auto" style="max-width: 650px; line-height: 1.6;">
+          Sistem rekomendasi cerdas berbasis <strong>Fuzzy Logic</strong> untuk siswa SMAN 6 Kabupaten Tangerang. Temukan jurusan yang paling pas dengan nilaimu sekarang.
+        </p>
+        
+        <div class="d-flex justify-content-center gap-3 mb-5 flex-wrap">
+          <span class="badge rounded-pill px-3 py-2" style="background-color: #e3f2fd; color: #0061ff; font-weight: 600;">
+            📚 10 Pilihan Jurusan
+          </span>
+          <span class="badge rounded-pill px-3 py-2" style="background-color: #e0f7fa; color: #00acc1; font-weight: 600;">
+            ⚡ Hasil Instan
+          </span>
+          <span class="badge rounded-pill px-3 py-2" style="background-color: #f3e5f5; color: #8e24aa; font-weight: 600;">
+            🎯 Analisis Akurat
+          </span>
+        </div>
+
+        <a href="/tes" class="btn btn-lg px-5 py-3 rounded-pill fw-bold shadow-lg hover-gradient" 
+           style="font-size: 1.1rem; background: linear-gradient(90deg, #0061ff 0%, #60efff 100%); border: none; color: white;">
+          🚀 Mulai Tes Sekarang
+        </a>
+
+        <p class="text-muted mt-3 small" style="opacity: 0.7;">
+          <em>Gratis & hanya butuh waktu 2 menit</em>
+        </p>
       </div>
     </div>
-    <a href="/tes" class="btn btn-success btn-lg mt-4 px-5 py-3 shadow-lg" style="font-size: 1.2rem;">
-      🚀 Mulai Tes Sekarang!
-    </a>
-    <p class="text-muted mt-3 small">
-      <em>Hanya butuh 2 menit untuk menyelesaikan tes</em>
-    </p>
   </div>
 </div>
 
 <style>
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
+  /* Efek Hover pada Tombol Gradient */
+  .hover-gradient {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  .hover-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #60efff 0%, #0061ff 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+  }
+  .hover-gradient span {
+    position: relative;
+    z-index: 2;
+  }
+  .hover-gradient:hover::before {
+    opacity: 1;
+  }
+  .hover-gradient:hover {
+    box-shadow: 0 15px 30px rgba(0, 97, 255, 0.35) !important;
+    transform: translateY(-5px);
+  }
+
+  .fw-extrabold {
+    font-weight: 800;
   }
 </style>
 
 <section class="py-5 fade-in-scale" style="animation-delay: 0.2s;">
   <div class="container">
-    <h2 class="fw-bold text-center mb-5" style="color: #2d3748;">
-      ✨ Mengapa Memilih Sistem Kami?
-    </h2>
-    
-    <div class="row g-4">
+    <div class="row g-4 justify-content-center">
       <div class="col-md-4">
-        <div class="card h-100 text-center p-4 border-0">
-          <div class="mb-3">
-            <span style="font-size: 3.5rem;">🧠</span>
+        <div class="card h-100 text-center p-4 border-0 shadow-sm" style="background: white; border-radius: 20px;">
+          <div class="mb-3 p-3 rounded-circle mx-auto" style="width: 80px; height: 80px; background: rgba(0, 97, 255, 0.1); display: flex; align-items: center; justify-content: center;">
+            <span style="font-size: 2.5rem;">🧠</span>
           </div>
-          <h5 class="fw-bold mb-3">Teknologi Fuzzy Logic</h5>
-          <p class="text-muted">
-            Menggunakan kecerdasan buatan untuk menganalisis data yang kompleks dan memberikan hasil yang akurat
-          </p>
+          <h5 class="fw-bold mb-2">Fuzzy Logic AI</h5>
+          <p class="text-muted small">Menggunakan algoritma kecerdasan buatan untuk menganalisis kombinasi nilai dan minat secara mendalam.</p>
         </div>
       </div>
       
       <div class="col-md-4">
-        <div class="card h-100 text-center p-4 border-0">
-          <div class="mb-3">
-            <span style="font-size: 3.5rem;">⚡</span>
+        <div class="card h-100 text-center p-4 border-0 shadow-sm" style="background: white; border-radius: 20px;">
+          <div class="mb-3 p-3 rounded-circle mx-auto" style="width: 80px; height: 80px; background: rgba(17, 153, 142, 0.1); display: flex; align-items: center; justify-content: center;">
+            <span style="font-size: 2.5rem;">⚡</span>
           </div>
-          <h5 class="fw-bold mb-3">Cepat & Mudah</h5>
-          <p class="text-muted">
-            Proses tes hanya 2 menit! Isi data akademik dan minat, langsung dapatkan 3 rekomendasi terbaik
-          </p>
+          <h5 class="fw-bold mb-2">Cepat & Mudah</h5>
+          <p class="text-muted small">Tanpa ribet. Isi data diri, nilai rapor, dan kuisioner minat singkat. Hasil keluar dalam hitungan detik.</p>
         </div>
       </div>
       
       <div class="col-md-4">
-        <div class="card h-100 text-center p-4 border-0">
-          <div class="mb-3">
-            <span style="font-size: 3.5rem;">🎯</span>
+        <div class="card h-100 text-center p-4 border-0 shadow-sm" style="background: white; border-radius: 20px;">
+          <div class="mb-3 p-3 rounded-circle mx-auto" style="width: 80px; height: 80px; background: rgba(250, 112, 154, 0.1); display: flex; align-items: center; justify-content: center;">
+            <span style="font-size: 2.5rem;">🎯</span>
           </div>
-          <h5 class="fw-bold mb-3">Objektif & Terukur</h5>
-          <p class="text-muted">
-            Hasil berbasis perhitungan matematis yang objektif, bukan sekedar feeling atau tebakan
-          </p>
+          <h5 class="fw-bold mb-2">Rekomendasi Objektif</h5>
+          <p class="text-muted small">Memberikan saran jurusan berdasarkan data riil kemampuanmu, bukan sekadar "feeling" atau ikut teman.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="py-5 mt-4 fade-in-scale" style="animation-delay: 0.4s;">
+<section class="py-4 py-md-5 mt-2 fade-in-scale" style="animation-delay: 0.4s;">
   <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-6 mb-4 mb-lg-0">
-        <div class="card border-0 p-4" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));">
+    <div class="row align-items-start g-4">
+      
+      <div class="col-lg-6">
+        <div class="card border-0 p-4 h-100 shadow-sm" style="background: white; border-radius: 24px;">
           <h3 class="fw-bold mb-4" style="color: #2d3748;">
-            🎓 Jurusan yang Tersedia
+            🎓 Jurusan Tersedia
           </h3>
           <div class="row g-2">
-            <div class="col-6">
-              <div class="badge bg-white text-dark w-100 py-2 shadow-sm mb-2" style="font-weight: 600;">💻 Teknik Informatika</div>
+            <div class="col-12 col-md-6">
+              <div class="badge bg-light text-dark w-100 py-3 border d-flex align-items-center justify-content-center" style="font-weight: 600; white-space: normal; min-height: 50px; border-radius: 12px;">💻 Teknik Informatika</div>
             </div>
-            <div class="col-6">
-              <div class="badge bg-white text-dark w-100 py-2 shadow-sm mb-2" style="font-weight: 600;">📊 Sistem Informasi</div>
+            <div class="col-12 col-md-6">
+              <div class="badge bg-light text-dark w-100 py-3 border d-flex align-items-center justify-content-center" style="font-weight: 600; white-space: normal; min-height: 50px; border-radius: 12px;">📊 Sistem Informasi</div>
             </div>
-            <div class="col-6">
-              <div class="badge bg-white text-dark w-100 py-2 shadow-sm mb-2" style="font-weight: 600;">📢 Ilmu Komunikasi</div>
+            <div class="col-12 col-md-6">
+               <div class="badge bg-light text-dark w-100 py-3 border d-flex align-items-center justify-content-center" style="font-weight: 600; white-space: normal; min-height: 50px; border-radius: 12px;">📢 Ilmu Komunikasi</div>
             </div>
-            <div class="col-6">
-              <div class="badge bg-white text-dark w-100 py-2 shadow-sm mb-2" style="font-weight: 600;">🧠 Psikologi</div>
+             <div class="col-12 col-md-6">
+               <div class="badge bg-light text-dark w-100 py-3 border d-flex align-items-center justify-content-center" style="font-weight: 600; white-space: normal; min-height: 50px; border-radius: 12px;">🧠 Psikologi</div>
             </div>
-            <div class="col-6">
-              <div class="badge bg-white text-dark w-100 py-2 shadow-sm mb-2" style="font-weight: 600;">🎨 Desain Komunikasi Visual</div>
+            <div class="col-12 col-md-6">
+               <div class="badge bg-light text-dark w-100 py-3 border d-flex align-items-center justify-content-center" style="font-weight: 600; white-space: normal; min-height: 50px; border-radius: 12px;">🎨 DKV</div>
             </div>
-            <div class="col-6">
-              <div class="badge bg-white text-dark w-100 py-2 shadow-sm mb-2" style="font-weight: 600;">📚 Sastra Inggris</div>
+             <div class="col-12 col-md-6">
+               <div class="badge bg-light text-dark w-100 py-3 border d-flex align-items-center justify-content-center" style="font-weight: 600; white-space: normal; min-height: 50px; border-radius: 12px;">📚 Sastra Inggris</div>
             </div>
-            <div class="col-6">
-              <div class="badge bg-white text-dark w-100 py-2 shadow-sm mb-2" style="font-weight: 600;">📖 Sastra Indonesia</div>
+             <div class="col-12 col-md-6">
+               <div class="badge bg-light text-dark w-100 py-3 border d-flex align-items-center justify-content-center" style="font-weight: 600; white-space: normal; min-height: 50px; border-radius: 12px;">📖 Sastra Indonesia</div>
             </div>
-            <div class="col-6">
-              <div class="badge bg-white text-dark w-100 py-2 shadow-sm mb-2" style="font-weight: 600;">💼 Manajemen</div>
+             <div class="col-12 col-md-6">
+               <div class="badge bg-light text-dark w-100 py-3 border d-flex align-items-center justify-content-center" style="font-weight: 600; white-space: normal; min-height: 50px; border-radius: 12px;">💼 Manajemen</div>
             </div>
-            <div class="col-6">
-              <div class="badge bg-white text-dark w-100 py-2 shadow-sm mb-2" style="font-weight: 600;">🏗️ Arsitektur</div>
+             <div class="col-12 col-md-6">
+               <div class="badge bg-light text-dark w-100 py-3 border d-flex align-items-center justify-content-center" style="font-weight: 600; white-space: normal; min-height: 50px; border-radius: 12px;">🏗️ Arsitektur</div>
             </div>
-            <div class="col-6">
-              <div class="badge bg-white text-dark w-100 py-2 shadow-sm mb-2" style="font-weight: 600;">👨‍🏫 Pendidikan Guru (PGSD)</div>
+             <div class="col-12 col-md-6">
+               <div class="badge bg-light text-dark w-100 py-3 border d-flex align-items-center justify-content-center" style="font-weight: 600; white-space: normal; min-height: 50px; border-radius: 12px;">👨‍🏫 PGSD</div>
             </div>
           </div>
         </div>
       </div>
       
       <div class="col-lg-6">
-        <div class="card border-0 p-4">
-          <h4 class="fw-bold mb-3" style="color: #2d3748;">
+        <div class="card border-0 p-4 h-100 shadow-sm" style="background: white; border-radius: 24px;">
+          <h4 class="fw-bold mb-4" style="color: #2d3748;">
             📋 Cara Menggunakan
           </h4>
           <ol class="list-unstyled">
-            <li class="mb-3 d-flex align-items-start">
-              <span class="badge bg-success me-3 mt-1" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">1</span>
+            <li class="mb-4 d-flex align-items-start">
+              <span class="badge bg-primary me-3 mt-1 shadow-sm" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">1</span>
               <div>
                 <strong>Isi Data Diri</strong>
-                <p class="text-muted mb-0 small">Masukkan nama dan NISN kamu</p>
+                <p class="text-muted mb-0 small">Masukkan nama dan NISN kamu.</p>
               </div>
             </li>
-            <li class="mb-3 d-flex align-items-start">
-              <span class="badge bg-success me-3 mt-1" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">2</span>
+            <li class="mb-4 d-flex align-items-start">
+              <span class="badge bg-primary me-3 mt-1 shadow-sm" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">2</span>
               <div>
                 <strong>Input Nilai Akademik</strong>
-                <p class="text-muted mb-0 small">Masukkan nilai Matematika, Bahasa Indonesia, Bahasa Inggris, dan IPA/IPS</p>
+                <p class="text-muted mb-0 small">Masukkan nilai Matematika, Bhs Indonesia, & Inggris.</p>
               </div>
             </li>
-            <li class="mb-3 d-flex align-items-start">
-              <span class="badge bg-success me-3 mt-1" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">3</span>
+            <li class="mb-4 d-flex align-items-start">
+              <span class="badge bg-primary me-3 mt-1 shadow-sm" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">3</span>
               <div>
                 <strong>Tentukan Minat</strong>
-                <p class="text-muted mb-0 small">Geser slider untuk menilai minat di 4 kategori (Logika, Sosial, Kreatif, Bahasa)</p>
+                <p class="text-muted mb-0 small">Geser slider untuk menilai minat di 4 kategori.</p>
               </div>
             </li>
             <li class="d-flex align-items-start">
-              <span class="badge bg-success me-3 mt-1" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">4</span>
+              <span class="badge bg-primary me-3 mt-1 shadow-sm" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">4</span>
               <div>
                 <strong>Dapatkan Hasil</strong>
-                <p class="text-muted mb-0 small">Sistem akan menampilkan 3 jurusan terbaik untukmu dengan skor kesesuaian</p>
+                <p class="text-muted mb-0 small">Sistem menampilkan 3 rekomendasi terbaik.</p>
               </div>
             </li>
           </ol>
@@ -176,12 +211,11 @@
 </section>
 
 <div class="container mt-5 mb-4">
-  <div class="card border-0 p-5 text-center" style="background: linear-gradient(135deg, rgba(17, 153, 142, 0.1), rgba(56, 239, 125, 0.1)); animation-delay: 0.6s;" class="fade-in-scale">
+  <div class="card border-0 p-4 p-md-5 text-center shadow-sm" style="background: white; border-radius: 24px; animation-delay: 0.6s;" class="fade-in-scale">
     <h5 class="fw-bold mb-3" style="color: #2d3748;">🎓 Program Kreativitas Mahasiswa (PKM)</h5>
-    <p class="text-muted mb-0" style="max-width: 600px; margin: auto;">
+    <p class="text-muted mb-0 mx-auto" style="max-width: 600px;">
       Sistem ini dikembangkan sebagai bagian dari <strong>Program Kreativitas Mahasiswa</strong> bidang 
-      <strong>Pengabdian kepada Masyarakat</strong> untuk membantu siswa SMAN 6 Kabupaten Tangerang 
-      dalam menentukan pilihan jurusan kuliah yang tepat.
+      <strong>Pengabdian kepada Masyarakat</strong> untuk membantu siswa SMAN 6 Kabupaten Tangerang.
     </p>
   </div>
 </div>
