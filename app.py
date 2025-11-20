@@ -1,7 +1,8 @@
 import os
+import json
 from flask import Flask, render_template, request, redirect, url_for, flash
 from dotenv import load_dotenv
-from flask_basicauth import BasicAuth  # Pastikan ini ada
+from flask_basicauth import BasicAuth 
 from db_config import get_connection
 from fuzzy_logic.fuzzy_model import hitung_rekomendasi
 from forms import TesForm
@@ -12,12 +13,8 @@ load_dotenv()
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY')
-
-# KONFIGURASI BASIC AUTH (Login Popup Browser)
-# Mengambil username & password langsung dari .env
 app.config['BASIC_AUTH_USERNAME'] = os.getenv('ADMIN_USERNAME')
 app.config['BASIC_AUTH_PASSWORD'] = os.getenv('ADMIN_PASSWORD')
-# Supaya halaman lain tidak kena password, hanya yang dipasang @auth.required
 app.config['BASIC_AUTH_FORCE'] = False 
 
 auth = BasicAuth(app)
@@ -44,6 +41,7 @@ def hasil():
 
     if form.validate_on_submit():
         try:
+            # Ambil Data
             nama = form.nama.data
             nisn = form.nisn.data
             mtk = form.mtk.data
@@ -55,11 +53,13 @@ def hasil():
             minat_kreatif = form.minat_kreatif.data
             minat_bahasa = form.minat_bahasa.data
 
-            hasil_rekomendasi, skor = hitung_rekomendasi(
+            # --- PROSES PERHITUNGAN HYBRID FUZZY ---
+            hasil_rekomendasi, skor_rata = hitung_rekomendasi(
                 mtk, bindo, bing, peminatan,
                 minat_logika, minat_sosial, minat_kreatif, minat_bahasa
             )
 
+            # --- PERSIAPAN DATA UNTUK UI ---
             data_minat = {
                 'logika': minat_logika,
                 'sosial': minat_sosial,
@@ -67,15 +67,29 @@ def hasil():
                 'bahasa': minat_bahasa
             }
 
+            # --- PERSIAPAN DATA UNTUK DATABASE ---
+            # Format String untuk tampilan Admin Sederhana (Legacy)
             top_3_list = [f"{idx+1}. {jurusan}" for idx, (jurusan, nilai) in enumerate(hasil_rekomendasi)]
             hasil_string = ", ".join(top_3_list)
+            
+            # Format JSON untuk analisis data lebih lanjut (Modern)
+            # Kita simpan ini agar kalau nanti butuh statistik, datanya sudah terstruktur
+            hasil_json = json.dumps([{
+                'rank': idx+1,
+                'jurusan': jurusan,
+                'skor': nilai
+            } for idx, (jurusan, nilai) in enumerate(hasil_rekomendasi)])
 
+            # Simpan ke Database
             conn = None
             try:
                 conn = get_connection()
                 if conn:
                     cur = conn.cursor()
 
+                    # Kita simpan 'hasil_string' agar Admin Page tidak perlu diubah drastis
+                    # Namun idealnya, kolom hasil_jurusan di DB diubah jadi TEXT/LONGTEXT 
+                    # agar muat menyimpan JSON jika nanti diperlukan.
                     sql_query = """
                         INSERT INTO siswa (nisn, nama, nilai_mtk, nilai_bhs, nilai_bing, peminatan,
                                            minat_logika, minat_sosial, minat_kreatif, minat_bahasa, hasil_jurusan)
@@ -90,8 +104,8 @@ def hasil():
                     cur.close()
 
             except MySQLError as e:
-                if e.errno == 1062:
-                    flash(f"NISN '{nisn}' sudah terdaftar.", "danger")
+                if e.errno == 1062: # Duplicate Entry
+                    flash(f"NISN '{nisn}' sudah terdaftar sebelumnya.", "danger")
                     return redirect(url_for('tes'))
                 else:
                     flash(f"Terjadi error database: {e}", "danger")
@@ -100,21 +114,21 @@ def hasil():
                 if conn:
                     conn.close()
 
-            return render_template('hasil.html', nama=nama, hasil=hasil_rekomendasi, skor=skor, minat=data_minat)
+            return render_template('hasil.html', nama=nama, hasil=hasil_rekomendasi, skor=skor_rata, minat=data_minat)
 
         except Exception as e:
-            print(f"Terjadi kesalahan internal: {e}")
-            flash(f"Kesalahan internal: {e}", "error")
+            print(f"CRITICAL ERROR: {e}")
+            flash("Terjadi kesalahan sistem. Silakan coba lagi.", "error")
             return redirect(url_for('tes'))
 
     else:
-        flash("Input tidak valid. Periksa kembali.", "error")
+        flash("Input tidak valid. Pastikan semua kolom terisi dengan benar.", "error")
         return render_template('tes.html', form=form)
 
-# --- RUTE ADMIN DENGAN BASIC AUTH ---
+# --- RUTE ADMIN ---
 
 @app.route('/admin')
-@auth.required  # <--- Ini yang bikin browser munculin popup login
+@auth.required
 def admin():
     conn = None
     try:
@@ -122,7 +136,7 @@ def admin():
         cur = conn.cursor(dictionary=True)
         cur.execute("""
             SELECT nisn, nama, nilai_mtk, nilai_bhs, nilai_bing, peminatan,
-                   minat_logika, minat_sosial, minat_kreatif, minat_bahasa, hasil_jurusan
+                   minat_logika, minat_sosial, minat_kreatif, minat_bahasa, hasil_jurusan, waktu_tes
             FROM siswa 
             ORDER BY waktu_tes DESC
         """)
@@ -138,7 +152,7 @@ def admin():
             conn.close()
 
 @app.route('/admin/hapus/<nisn>', methods=['POST'])
-@auth.required # Proteksi hapus juga pakai password .env
+@auth.required
 def hapus_siswa(nisn):
     conn = None
     try:
@@ -148,7 +162,7 @@ def hapus_siswa(nisn):
             cur.execute("DELETE FROM siswa WHERE nisn = %s", (nisn,))
             conn.commit()
             cur.close()
-            flash(f"Data siswa dengan NISN {nisn} berhasil dihapus.", "success")
+            flash(f"Data siswa {nisn} berhasil dihapus.", "success")
     except Exception as e:
         flash(f"Gagal menghapus data: {e}", "error")
     finally:

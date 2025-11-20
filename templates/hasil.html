@@ -86,39 +86,89 @@
               
               <div class="flex-grow-1 w-100">
                 <h4 class="fw-bold mb-2" style="color: #2d3748;">{{ jurusan }}</h4>
+                
                 <p class="text-muted mb-3" style="line-height: 1.6;">
+                  {# --- TEKNIK & DIGITAL --- #}
                   {% if "Informatika" in jurusan %}
                     🔹 Cocok untuk siswa dengan kemampuan logika, matematika, dan problem solving tinggi.<br>
                     <strong>Prospek:</strong> Software Engineer, Data Scientist, AI Specialist
+                  
                   {% elif "Sistem Informasi" in jurusan %}
-                    🔹 Kombinasi antara teknologi dan bisnis. Cocok yang suka analisis tapi juga berinteraksi dengan orang.<br>
+                    🔹 Kombinasi antara teknologi dan bisnis. Cocok yang suka analisis sistem.<br>
                     <strong>Prospek:</strong> Business Analyst, IT Consultant, System Analyst
-                  {% elif "Manajemen" in jurusan %}
-                    🔹 Cocok bagi yang punya minat sosial dan kemampuan analisis bisnis.<br>
-                    <strong>Prospek:</strong> Manager, Entrepreneur, HR Specialist
+                  
+                  {% elif "Bisnis Digital" in jurusan %}
+                    🔹 Mempelajari bisnis berbasis teknologi dan startup.<br>
+                    <strong>Prospek:</strong> Startup Founder, Digital Marketer, E-Commerce Specialist
+
+                  {% elif "Arsitektur" in jurusan %}
+                    🔹 Perpaduan kreativitas seni dan logika teknik bangunan.<br>
+                    <strong>Prospek:</strong> Arsitek, Urban Planner, Interior Designer
+
+                  {# --- SOSIAL & HUKUM --- #}
+                  {% elif "Hukum" in jurusan %}
+                    🔹 Mempelajari aturan, keadilan, dan sistem peradilan.<br>
+                    <strong>Prospek:</strong> Pengacara, Hakim, Notaris, Legal Staff
+
+                  {% elif "Hubungan Internasional" in jurusan %}
+                    🔹 Mempelajari diplomasi dan isu global antarnegara.<br>
+                    <strong>Prospek:</strong> Diplomat, Staf Kemenlu, Jurnalis Internasional
+
+                  {# PERBAIKAN LOGIKA: Cek DKV dulu sebelum Ilmu Komunikasi #}
+                  {% elif "Desain" in jurusan or "DKV" in jurusan %}
+                    🔹 Ideal untuk siswa kreatif dengan imajinasi visual tinggi.<br>
+                    <strong>Prospek:</strong> Graphic Designer, UI/UX Designer, Animator
+
                   {% elif "Komunikasi" in jurusan %}
-                    🔹 Sesuai bagi yang ekspresif, komunikatif, dan suka storytelling.<br>
-                    <strong>Prospek:</strong> Public Relations, Content Creator, Journalist
+                    🔹 Sesuai bagi yang ekspresif dan suka menyampaikan pesan ke publik.<br>
+                    <strong>Prospek:</strong> Public Relations, Content Creator, Jurnalis
+
                   {% elif "Psikologi" in jurusan %}
                     🔹 Tepat bagi yang suka memahami perilaku manusia dan empati tinggi.<br>
-                    <strong>Prospek:</strong> Psikolog Klinis, HR, Counselor
-                  {% elif "Desain" in jurusan %}
-                    🔹 Ideal untuk siswa kreatif dengan imajinasi visual dan estetika tinggi.<br>
-                    <strong>Prospek:</strong> Graphic Designer, UI/UX Designer, Animator
+                    <strong>Prospek:</strong> Psikolog Klinis, HRD, Konselor
+
+                  {% elif "Kriminologi" in jurusan %}
+                    🔹 Menganalisis penyebab kejahatan dan penanggulangannya.<br>
+                    <strong>Prospek:</strong> Analis Intelijen, Detektif, Peneliti Sosial
+
+                  {% elif "Administrasi Publik" in jurusan %}
+                    🔹 Mempelajari tata kelola pemerintahan dan kebijakan publik.<br>
+                    <strong>Prospek:</strong> PNS, Konsultan Kebijakan, Staf Pemerintah
+
+                  {# --- EKONOMI --- #}
+                  {% elif "Manajemen" in jurusan %}
+                    🔹 Cocok bagi yang punya skill leadership dan analisis bisnis.<br>
+                    <strong>Prospek:</strong> Manager, Entrepreneur, CEO
+
+                  {% elif "Akuntansi" in jurusan %}
+                    🔹 Mempelajari pelaporan keuangan yang detail dan terstruktur.<br>
+                    <strong>Prospek:</strong> Akuntan Publik, Auditor, Financial Analyst
+
+                  {% elif "Ekonomi Pembangunan" in jurusan %}
+                    🔹 Menganalisis isu ekonomi makro dan pembangunan negara.<br>
+                    <strong>Prospek:</strong> Perencana Pembangunan, Analis Bank Indonesia, Peneliti
+
+                  {# --- BAHASA & SENI --- #}
                   {% elif "Sastra Inggris" in jurusan %}
-                    🔹 Cocok bagi yang menguasai bahasa asing, suka membaca dan menulis.<br>
-                    <strong>Prospek:</strong> Translator, Editor, English Teacher
+                    🔹 Menguasai bahasa global dan budaya literasi Inggris.<br>
+                    <strong>Prospek:</strong> Translator, Staff Kedutaan, Guide
+
                   {% elif "Sastra Indonesia" in jurusan %}
-                    🔹 Sesuai bagi yang mencintai bahasa, sastra, dan dunia kepenulisan.<br>
-                    <strong>Prospek:</strong> Penulis, Editor, Jurnalis
-                  {% elif "Arsitektur" in jurusan %}
-                    🔹 Perpaduan kreativitas dan logika teknis. Cocok yang suka desain dan matematika.<br>
-                    <strong>Prospek:</strong> Arsitek, Urban Planner, Interior Designer
+                    🔹 Mendalami tata bahasa dan kesusastraan nusantara.<br>
+                    <strong>Prospek:</strong> Penulis, Editor, Lexicographer
+
+                  {% elif "Sastra Jepang" in jurusan %}
+                    🔹 Mempelajari bahasa dan budaya Jepang yang unik.<br>
+                    <strong>Prospek:</strong> Interpreter, Staff Perusahaan Jepang, Tour Guide
+
                   {% elif "PGSD" in jurusan %}
-                    🔹 Rekomendasi bagi yang sabar, komunikatif, dan suka mengajar anak-anak.<br>
-                    <strong>Prospek:</strong> Guru SD, Pendidik PAUD
+                    🔹 Rekomendasi bagi yang sabar dan suka mengajar anak-anak.<br>
+                    <strong>Prospek:</strong> Guru SD, Konsultan Pendidikan Anak
+
                   {% else %}
-                    🔹 Jurusan yang sesuai dengan profil akademik dan minat kamu.
+                    {# Fallback jika ada nama jurusan yang tidak terdaftar #}
+                    🔹 Jurusan yang sesuai dengan profil akademik dan minat kamu.<br>
+                    <strong>Prospek:</strong> Profesional di bidang terkait.
                   {% endif %}
                 </p>
                 
@@ -204,7 +254,6 @@
                   minatData.bahasa
               ],
               fill: true,
-              // GANTI: Warna chart radar jadi biru
               backgroundColor: 'rgba(0, 97, 255, 0.15)',
               borderColor: 'rgb(0, 97, 255)',
               borderWidth: 3,

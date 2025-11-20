@@ -6,7 +6,6 @@
 }
 
 body {
-  /* GANTI: Base Color jadi Blue Gradient */
   background: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
   background-attachment: fixed;
   font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
@@ -168,7 +167,6 @@ body::before {
   box-shadow: 0 15px 40px rgba(17, 153, 142, 0.4);
 }
 
-/* GANTI: Btn Primary jadi Biru */
 .btn-primary {
   background: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
   box-shadow: 0 10px 30px rgba(0, 97, 255, 0.3);
@@ -179,7 +177,6 @@ body::before {
   box-shadow: 0 15px 40px rgba(0, 97, 255, 0.4);
 }
 
-/* GANTI: Outline Primary jadi Biru */
 .btn-outline-primary {
   border: 2px solid #0061ff;
   color: #0061ff;
@@ -216,7 +213,6 @@ body::before {
   font-size: 0.95rem;
 }
 
-/* GANTI: Focus color jadi Biru */
 .form-control:focus, .form-select:focus {
   border-color: #0061ff;
   box-shadow: 0 0 0 4px rgba(0, 97, 255, 0.1);
@@ -232,7 +228,6 @@ body::before {
   box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.1);
 }
 
-/* Hide number arrows */
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 
   -webkit-appearance: none; 
@@ -251,7 +246,6 @@ input[type=number] {
   -webkit-appearance: none;
 }
 
-/* GANTI: Slider Thumb jadi Biru */
 .form-range::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -269,24 +263,13 @@ input[type=number] {
   box-shadow: 0 6px 20px rgba(0, 97, 255, 0.6);
 }
 
-.form-range::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
-  cursor: pointer;
-  border: none;
-  box-shadow: 0 4px 12px rgba(0, 97, 255, 0.4);
-}
-
-/*HEADINGS - Bold & Modern*/
+/*HEADINGS*/
 h1, h2, h3, h4, h5 {
   font-weight: 800;
   color: #2d3748;
   letter-spacing: -0.5px;
 }
 
-/* GANTI: H1 Gradient Text jadi Biru */
 h1 {
   font-size: 3rem;
   background: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
@@ -300,7 +283,6 @@ h3 {
   display: inline-block;
 }
 
-/* GANTI: Underline H3 jadi Biru */
 h3::after {
   content: '';
   position: absolute;
@@ -312,7 +294,7 @@ h3::after {
   border-radius: 2px;
 }
 
-/*BADGES - Colorful*/
+/*BADGES*/
 .badge {
   padding: 8px 16px;
   border-radius: 20px;
@@ -321,19 +303,11 @@ h3::after {
   letter-spacing: 0.3px;
 }
 
-.bg-success {
-  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
-}
+.bg-success { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important; }
+.bg-info { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important; }
+.bg-warning { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%) !important; }
 
-.bg-info {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important;
-}
-
-.bg-warning {
-  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%) !important;
-}
-
-/*LIST GROUP - Hover Effect*/
+/*LIST GROUP*/
 .list-group-item {
   border: none;
   border-radius: 16px !important;
@@ -343,14 +317,13 @@ h3::after {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* GANTI: Hover list jadi nuansa biru muda */
 .list-group-item:hover {
   background: linear-gradient(135deg, rgba(0, 97, 255, 0.1) 0%, rgba(96, 239, 255, 0.1) 100%);
   transform: translateX(8px) scale(1.02);
   box-shadow: 0 8px 24px rgba(0, 97, 255, 0.15);
 }
 
-/*ALERT - Modern Design*/
+/*ALERT*/
 .alert {
   border-radius: 16px;
   border: none;
@@ -359,82 +332,39 @@ h3::after {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
-.alert-info {
-  background: linear-gradient(135deg, #e0f7ff 0%, #d4edff 100%);
-  color: #0077b6;
-}
-
-.alert-danger {
-  background: linear-gradient(135deg, #ffe0e0 0%, #ffd4d4 100%);
-  color: #c92a2a;
-}
-
-.alert-warning {
-  background: linear-gradient(135deg, #fff4e0 0%, #ffe8b3 100%);
-  color: #e67700;
-}
+.alert-info { background: linear-gradient(135deg, #e0f7ff 0%, #d4edff 100%); color: #0077b6; }
+.alert-danger { background: linear-gradient(135deg, #ffe0e0 0%, #ffd4d4 100%); color: #c92a2a; }
+.alert-warning { background: linear-gradient(135deg, #fff4e0 0%, #ffe8b3 100%); color: #e67700; }
 
 /*ANIMATIONS*/
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.fade-in {
-  animation: fadeInUp 0.8s ease;
-}
+.fade-in { animation: fadeInUp 0.8s ease; }
 
 @keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-.fade-in-scale {
-  animation: fadeInScale 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+.fade-in-scale { animation: fadeInScale 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-/*JUMBOTRON - Hero Section*/
-.bg-light {
-  background: rgba(255, 255, 255, 0.95) !important;
-  backdrop-filter: blur(20px);
-  border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-/*TABLE - Modern Style*/
+/*TABLE*/
 .table {
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
-/* GANTI: Table head jadi biru */
 .table thead {
   background: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
   color: white;
 }
 
-.table tbody tr {
-  transition: all 0.3s ease;
-}
-
-.table tbody tr:hover {
-  background: rgba(0, 97, 255, 0.08);
-  transform: scale(1.01);
-}
+.table tbody tr { transition: all 0.3s ease; }
+.table tbody tr:hover { background: rgba(0, 97, 255, 0.08); transform: scale(1.01); }
 
 /*FOOTER*/
 footer {
@@ -450,30 +380,13 @@ footer {
 }
 
 /*SCROLLBAR*/
-::-webkit-scrollbar {
-  width: 10px;
-}
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.1); }
+::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #0061ff 0%, #60efff 100%); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, #60efff 0%, #0061ff 100%); }
 
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-/* GANTI: Scrollbar jadi biru */
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #60efff 0%, #0061ff 100%);
-}
-
-/*SPINNER - Loading*/
-.spinner-border {
-  width: 3rem;
-  height: 3rem;
-  border-width: 0.3em;
-}
+/*SPINNER*/
+.spinner-border { width: 3rem; height: 3rem; border-width: 0.3em; }
 
 /*FORM LABEL*/
 .form-label {
@@ -484,14 +397,37 @@ footer {
   letter-spacing: 0.3px;
 }
 
-/*RESPONSIVE*/
+/* --- OPTIMASI PERFORMA MOBILE (PERBAIKAN UTAMA) --- */
 @media (max-width: 768px) {
-  /* Fix scroll lag on iOS */
-  body {
-    background-attachment: scroll;
+  
+  /* 1. Matikan Animasi Background di HP */
+  body::before {
+    animation: none !important;
+    background-image: none !important;
+    /* Ganti jadi warna solid/gradasi diam agar ringan */
+    background: linear-gradient(135deg, #0061ff 0%, #60efff 100%); 
   }
 
-  /* Resize Typography for Small Screens */
+  /* 2. Matikan Efek Kaca (Blur) yang bikin berat */
+  .navbar, .card, .modal-content, footer {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(255, 255, 255, 0.98) !important; /* Jadi putih solid */
+  }
+
+  /* 3. Kurangi bayangan yang berlebihan */
+  .shadow-lg, .card {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+  }
+  
+  /* 4. Matikan animasi fade-in saat scroll di HP */
+  .fade-in, .fade-in-scale {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* 5. Perbaikan Typography Mobile */
   h1 {
     font-size: 2rem !important;
     line-height: 1.2;
@@ -500,29 +436,19 @@ footer {
   h2 { font-size: 1.75rem; }
   h3 { font-size: 1.5rem; }
   
-  /* Adjust Container Padding */
   .container {
     padding-left: 15px;
     padding-right: 15px;
   }
   
-  /* Make cards slightly less rounded to save space */
   .card {
     border-radius: 16px;
     margin-bottom: 1rem;
   }
   
-  /* Buttons Adjustment */
   .btn {
-    padding: 10px 24px;
-    font-size: 0.95rem;
-    width: 100%; /* Buttons full width on mobile usually better */
+    width: 100%;
     display: block;
     margin-bottom: 10px;
-  }
-  
-  /* Navbar Toggler Adjust */
-  .navbar-brand {
-    font-size: 1.2rem;
   }
 }

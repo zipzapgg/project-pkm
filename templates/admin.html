@@ -6,8 +6,8 @@
     
     <div class="row g-4 mb-4">
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100 p-3" style="background: linear-gradient(135deg, #0061ff 0%, #60efff 100%); color: white;">
-                <div class="d-flex justify-content-between align-items-center">
+            <div class="card border-0 shadow-sm h-100 p-3 text-white" style="background: linear-gradient(135deg, #0061ff 0%, #60efff 100%); border-radius: 16px;">
+                <div class="d-flex justify-content-between align-items-center p-2">
                     <div>
                         <h6 class="opacity-75 mb-1">Total Siswa Tes</h6>
                         <h2 class="fw-bold mb-0">{{ data|length }}</h2>
@@ -17,13 +17,13 @@
             </div>
         </div>
         <div class="col-md-8">
-            <div class="card border-0 shadow-sm h-100 p-4 bg-white d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+            <div class="card border-0 shadow-sm h-100 p-4 bg-white d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3" style="border-radius: 16px;">
                 <div>
                     <h4 class="fw-bold text-primary mb-0">Dashboard Admin</h4>
-                    <p class="text-muted mb-0 small mt-1">Pantau data rekomendasi jurusan siswa secara real-time.</p>
+                    <p class="text-muted mb-0 small mt-1">Pantau data rekomendasi jurusan siswa.</p>
                 </div>
                 <div class="position-relative w-100" style="max-width: 300px;">
-                    <input type="text" id="searchInput" class="form-control rounded-pill ps-5" placeholder="Cari Nama atau NISN...">
+                    <input type="text" id="searchInput" class="form-control rounded-pill ps-5" placeholder="Cari Nama / NISN...">
                     <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">🔍</span>
                 </div>
             </div>
@@ -33,8 +33,8 @@
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         {% for category, message in messages %}
-          <div class="alert alert-{% if category == 'error' %}danger{% else %}{{ category }}{% endif %} alert-dismissible fade show shadow-sm border-0" role="alert">
-            <strong>Info:</strong> {{ message }}
+          <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm border-0 rounded-4 mb-4" role="alert">
+            {{ message }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
         {% endfor %}
@@ -48,10 +48,9 @@
                 <thead class="bg-light text-secondary small text-uppercase">
                     <tr>
                         <th class="py-3 ps-4">Siswa</th>
-                        <th class="py-3">Akademik (0-100)</th>
-                        <th class="py-3">Peminatan</th>
-                        <th class="py-3">Skor Minat (1-5)</th>
-                        <th class="py-3">Hasil Rekomendasi</th>
+                        <th class="py-3">Nilai Akademik</th>
+                        <th class="py-3">Minat (1-5)</th>
+                        <th class="py-3">Rekomendasi Utama</th>
                         <th class="py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -60,45 +59,56 @@
                     <tr>
                         <td class="ps-4">
                             <div class="d-flex align-items-center">
-                                <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3 text-primary fw-bold" style="width: 40px; height: 40px;">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center me-3 text-white fw-bold shadow-sm" 
+                                     style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                                     {{ row.nama[0] | upper }}
                                 </div>
                                 <div>
                                     <div class="fw-bold text-dark">{{ row.nama }}</div>
-                                    <div class="small text-muted">{{ row.nisn }}</div>
+                                    <div class="small text-muted">NISN: {{ row.nisn }}</div>
+                                    <span class="badge bg-light text-dark border mt-1" style="font-size: 0.65rem;">
+                                        {{ row.peminatan }}
+                                    </span>
                                 </div>
                             </div>
                         </td>
+
                         <td>
-                            <div class="d-flex flex-column gap-1 small">
-                                <span class="d-flex justify-content-between" style="width: 120px;"><span>MTK:</span> <b>{{ row.nilai_mtk }}</b></span>
-                                <span class="d-flex justify-content-between" style="width: 120px;"><span>Indo:</span> <b>{{ row.nilai_bhs }}</b></span>
-                                <span class="d-flex justify-content-between" style="width: 120px;"><span>Ing:</span> <b>{{ row.nilai_bing }}</b></span>
+                            <div class="d-flex gap-1">
+                                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10" data-bs-toggle="tooltip" title="Matematika">
+                                    MTK: {{ row.nilai_mtk }}
+                                </span>
+                                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10" data-bs-toggle="tooltip" title="B. Indonesia">
+                                    IND: {{ row.nilai_bhs }}
+                                </span>
+                                <span class="badge bg-info text-white shadow-sm" data-bs-toggle="tooltip" title="B. Inggris">
+                                    ING: {{ row.nilai_bing }}
+                                </span>
                             </div>
                         </td>
+
                         <td>
-                            <span class="badge rounded-pill px-3 py-2 text-white shadow-sm
-                                {% if row.peminatan == 'MIPA' %}bg-info
-                                {% elif row.peminatan == 'IPS' %}bg-warning
-                                {% elif row.peminatan == 'Bahasa' %}bg-success
-                                {% else %}bg-primary{% endif %}">
-                                {{ row.peminatan }}
-                            </span>
-                        </td>
-                        <td>
-                            <div class="small text-muted">
-                                L:<b>{{ row.minat_logika }}</b> | S:<b>{{ row.minat_sosial }}</b> | K:<b>{{ row.minat_kreatif }}</b> | B:<b>{{ row.minat_bahasa }}</b>
+                            <div class="d-flex gap-1 text-muted small">
+                                <span class="d-inline-block text-center bg-light rounded px-2 py-1 border" title="Logika">L:<b>{{ row.minat_logika }}</b></span>
+                                <span class="d-inline-block text-center bg-light rounded px-2 py-1 border" title="Sosial">S:<b>{{ row.minat_sosial }}</b></span>
+                                <span class="d-inline-block text-center bg-light rounded px-2 py-1 border" title="Kreatif">K:<b>{{ row.minat_kreatif }}</b></span>
+                                <span class="d-inline-block text-center bg-light rounded px-2 py-1 border" title="Bahasa">B:<b>{{ row.minat_bahasa }}</b></span>
                             </div>
                         </td>
+
                         <td>
-                            <div class="fw-semibold text-dark" style="max-width: 250px; line-height: 1.4; white-space: normal;">
-                                {{ row.hasil_jurusan }}
-                            </div>
+                            {% set juara1 = row.hasil_jurusan.split(',')[0] %}
+                            <div class="fw-bold text-dark">{{ juara1 }}</div>
+                            <button class="btn btn-link btn-sm p-0 text-decoration-none small" 
+                                    onclick="showDetail('{{ row.nama }}', '{{ row.hasil_jurusan }}')">
+                                Lihat selengkapnya...
+                            </button>
                         </td>
+
                         <td class="text-center">
                             <form action="{{ url_for('hapus_siswa', nisn=row.nisn) }}" method="POST" 
                                   onsubmit="return confirm('Yakin ingin menghapus data {{ row.nama }}?');">
-                                <button type="submit" class="btn btn-light text-danger btn-sm hover-danger" data-bs-toggle="tooltip" title="Hapus Data">
+                                <button type="submit" class="btn btn-light text-danger btn-sm hover-danger border" data-bs-toggle="tooltip" title="Hapus Data">
                                     🗑️
                                 </button>
                             </form>
@@ -112,31 +122,64 @@
         <div class="text-center py-5">
             <div class="mb-3 text-muted opacity-25" style="font-size: 4rem;">📂</div>
             <h5 class="fw-bold text-muted">Belum Ada Data</h5>
-            <p class="text-muted small">Data siswa yang telah mengikuti tes akan muncul di sini.</p>
         </div>
         {% endif %}
     </div>
 </div>
 
-<style>
-    .hover-danger:hover { background-color: #fee2e2 !important; border-color: #fee2e2; }
-    .table-hover tbody tr:hover { background-color: rgba(0, 97, 255, 0.02); }
-</style>
+{% endblock %}
+
+{% block modal %}
+<div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+      <div class="modal-header border-0 bg-light rounded-top-4">
+        <h5 class="modal-title fw-bold">Detail Rekomendasi</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <h6 class="text-primary fw-bold mb-3" id="modalSiswaName">-</h6>
+        <div class="bg-light p-3 rounded-3 border">
+            <ul class="list-unstyled mb-0" id="modalResultList">
+                </ul>
+        </div>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-secondary w-100 rounded-pill" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
+    // Search Filter
     document.getElementById('searchInput').addEventListener('keyup', function() {
         let filter = this.value.toLowerCase();
         let rows = document.querySelectorAll('#siswaTable tbody tr');
-
         rows.forEach(row => {
-            let nama = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
-            if (nama.includes(filter)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
+            let text = row.innerText.toLowerCase();
+            row.style.display = text.includes(filter) ? '' : 'none';
         });
     });
-</script>
 
+    // Show Detail Modal
+    var detailModalObj = null;
+    function showDetail(nama, hasilString) {
+        document.getElementById('modalSiswaName').innerText = "Siswa: " + nama;
+        
+        // Parse string "1. A, 2. B" menjadi list
+        let items = hasilString.split(', ');
+        let html = '';
+        items.forEach(item => {
+            html += `<li class="mb-2 py-2 border-bottom border-light-subtle">${item}</li>`;
+        });
+        document.getElementById('modalResultList').innerHTML = html;
+
+        let modalEl = document.getElementById('detailModal');
+        if (!detailModalObj) {
+            detailModalObj = new bootstrap.Modal(modalEl);
+        }
+        detailModalObj.show();
+    }
+</script>
 {% endblock %}
