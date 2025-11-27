@@ -1,9 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Beranda - SPK Jurusan{% endblock %}
+{% block title %}Beranda - SPK Jurusan (Kurikulum Merdeka){% endblock %}
+
 {% block content %}
 
 <style>
-  /* Default (Tampilan Mobile) */
+  /* Default (Mobile) */
   .logo-container {
     position: relative;
     z-index: 10;
@@ -27,42 +28,19 @@
     border: 1px solid rgba(0,0,0,0.05);
   }
 
-  /* Tampilan Laptop/Desktop (Layar > 768px) */
+  /* Desktop */
   @media (min-width: 768px) {
-    .logo-container {
-      margin-bottom: -75px; 
-    }
-    
-    .hero-card {
-      padding: 48px; 
-      padding-top: 130px !important; 
-    }
-
-    .logo-img-custom {
-      max-height: 150px; 
-      padding: 12px;
-    }
+    .logo-container { margin-bottom: -75px; }
+    .hero-card { padding: 48px; padding-top: 130px !important; }
+    .logo-img-custom { max-height: 150px; padding: 12px; }
   }
   
-  /* Efek Hover Tombol */
-  .hover-gradient {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  .hover-gradient:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0, 97, 255, 0.3) !important;
-  }
+  /* Effects */
+  .hover-gradient { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+  .hover-gradient:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 97, 255, 0.3) !important; }
 
-  /* Style khusus tombol jurusan */
-  .btn-jurusan {
-    text-align: left;
-    transition: all 0.2s ease;
-    font-size: 0.9rem;
-  }
-  .btn-jurusan:hover {
-    transform: translateX(5px);
-    background-color: #e9ecef !important;
-  }
+  .btn-jurusan { text-align: left; transition: all 0.2s ease; font-size: 0.9rem; }
+  .btn-jurusan:hover { transform: translateX(5px); background-color: #e9ecef !important; }
 </style>
 
 <div class="row justify-content-center">
@@ -75,7 +53,6 @@
     </div>
 
     <div class="card border border-light-subtle shadow-lg fade-in text-center hero-card"> 
-      
       <div style="position: relative; z-index: 2;">
         
         <h1 class="display-5 fw-bold mb-3" style="letter-spacing: -1px; color: #2d3748;">
@@ -86,15 +63,15 @@
         </h1>
 
         <p class="fs-6 text-muted mt-3 mb-4 mx-auto" style="max-width: 650px; line-height: 1.6;">
-          Sistem rekomendasi cerdas berbasis <strong>Hybrid Fuzzy Logic</strong> untuk siswa SMAN 6 Kabupaten Tangerang. Temukan jurusan yang paling pas dengan nilaimu sekarang.
+          Sistem rekomendasi cerdas berbasis <strong>Profile Matching</strong> yang mendukung <strong>Kurikulum Merdeka</strong>. Analisis potensi berdasarkan nilai mata pelajaran pilihan dan minat bakatmu.
         </p>
         
         <div class="d-flex justify-content-center gap-2 gap-md-3 mb-4 flex-wrap">
           <span class="badge rounded-pill px-3 py-2 bg-light text-primary border">
-            📚 18 Jurusan
+            📚 Kurikulum Merdeka
           </span>
           <span class="badge rounded-pill px-3 py-2 bg-light text-info border">
-            ⚡ Hasil Instan
+            ⚡ 30+ Jurusan
           </span>
           <span class="badge rounded-pill px-3 py-2 bg-light text-danger border">
             🎯 Analisis Akurat
@@ -119,23 +96,23 @@
     <div class="row g-3 justify-content-center">
       <div class="col-md-4">
         <div class="card h-100 text-center p-4 border-0 shadow-sm bg-white rounded-4">
-          <div class="mb-2 fs-1">🧠</div>
-          <h5 class="fw-bold">Fuzzy Logic AI</h5>
-          <p class="text-muted small mb-0">Analisis cerdas kombinasi nilai & minat secara presisi.</p>
+          <div class="mb-2 fs-1">📊</div>
+          <h5 class="fw-bold">Profile Matching</h5>
+          <p class="text-muted small mb-0">Analisis kesenjangan (GAP) antara kompetensi siswa dan standar jurusan.</p>
         </div>
       </div>
       <div class="col-md-4">
         <div class="card h-100 text-center p-4 border-0 shadow-sm bg-white rounded-4">
-          <div class="mb-2 fs-1">⚡</div>
-          <h5 class="fw-bold">Cepat & Mudah</h5>
-          <p class="text-muted small mb-0">Hasil keluar instan tanpa ribet, bisa dicetak.</p>
+          <div class="mb-2 fs-1">🧬</div>
+          <h5 class="fw-bold">Support Lintas Minat</h5>
+          <p class="text-muted small mb-0">Mengakomodasi kombinasi mapel Sains & Sosial sesuai Kurikulum Merdeka.</p>
         </div>
       </div>
       <div class="col-md-4">
         <div class="card h-100 text-center p-4 border-0 shadow-sm bg-white rounded-4">
           <div class="mb-2 fs-1">🎯</div>
           <h5 class="fw-bold">Objektif</h5>
-          <p class="text-muted small mb-0">Rekomendasi berdasarkan data riil, bukan asumsi.</p>
+          <p class="text-muted small mb-0">Rekomendasi berdasarkan data riil kompetensi, bukan asumsi.</p>
         </div>
       </div>
     </div>
@@ -148,167 +125,30 @@
       
       <div class="col-lg-6">
         <div class="card border-0 p-4 h-100 shadow-sm bg-white rounded-4">
-          <h4 class="fw-bold mb-3" style="color: #2d3748;">🎓 Jurusan Tersedia (18)</h4>
+          <h4 class="fw-bold mb-3" style="color: #2d3748;">🎓 Database Jurusan (30+)</h4>
           <p class="text-muted small mb-3">Klik jurusan untuk melihat detail.</p>
 
           <div class="row g-2" style="max-height: 400px; overflow-y: auto;">
-            <div class="col-12"><small class="text-muted fw-bold ls-1">TEKNIK & DIGITAL</small></div>
             
-            <div class="col-6 col-md-4">
-              <button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" 
-                data-jurusan="Teknik Informatika"
-                data-desc="Mempelajari penggunaan teknologi komputer untuk menangani transformasi data dan pengolahan informasi dengan logika pemrograman."
-                data-prospek="Software Engineer, Data Scientist, AI Specialist">
-                💻 Informatika
-              </button>
-            </div>
-            <div class="col-6 col-md-4">
-              <button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" 
-                data-jurusan="Sistem Informasi"
-                data-desc="Menggabungkan ilmu komputer dengan manajemen bisnis. Fokus pada cara merancang sistem untuk kebutuhan perusahaan."
-                data-prospek="System Analyst, IT Consultant, Business Analyst">
-                📊 Sisfo
-              </button>
-            </div>
-            <div class="col-6 col-md-4">
-              <button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" 
-                data-jurusan="Bisnis Digital"
-                data-desc="Mempelajari cara merancang dan mengelola bisnis berbasis teknologi digital dan internet."
-                data-prospek="Startup Founder, Digital Marketer, E-Commerce Manager">
-                🚀 Bisnis Digital
-              </button>
-            </div>
-            <div class="col-6 col-md-4">
-              <button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" 
-                data-jurusan="Arsitektur"
-                data-desc="Ilmu merancang bangunan yang memadukan keindahan seni, fungsi ruang, dan kekuatan teknik."
-                data-prospek="Arsitek, Urban Planner, Interior Designer">
-                🏗️ Arsitektur
-              </button>
-            </div>
+            <div class="col-12"><small class="text-success fw-bold ls-1 bg-light px-2 py-1 rounded">💊 KESEHATAN & SAINS</small></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Kedokteran Umum" data-desc="Mempelajari ilmu medis, diagnosa penyakit, dan pengobatan pasien." data-prospek="Dokter Umum, Kepala Puskesmas">🩺 Kedokteran</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Farmasi" data-desc="Meracik obat dan analisis bahan kimia medis." data-prospek="Apoteker, BPOM, Industri Obat">💊 Farmasi</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Kesehatan Masyarakat" data-desc="Pencegahan penyakit dan promosi kesehatan." data-prospek="Promotor Kesehatan, RS">🏥 Kesmas</button></div>
 
-            <div class="col-12 mt-2"><small class="text-muted fw-bold ls-1">SOSIAL & HUKUM</small></div>
+            <div class="col-12 mt-2"><small class="text-primary fw-bold ls-1 bg-light px-2 py-1 rounded">💻 TEKNOLOGI & DATA</small></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Teknik Informatika" data-desc="Coding & Software." data-prospek="Developer">💻 Informatika</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Sains Data" data-desc="Big Data & AI." data-prospek="Data Scientist">📊 Sains Data</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Sistem Informasi" data-desc="Bisnis & IT." data-prospek="System Analyst">📱 Sisfo</button></div>
             
-            <div class="col-6 col-md-4">
-              <button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" 
-                data-jurusan="Ilmu Hukum"
-                data-desc="Mempelajari sistem hukum, perundang-undangan, dan cara menyelesaikan sengketa secara adil."
-                data-prospek="Pengacara, Hakim, Notaris, Legal Staff">
-                ⚖️ Hukum
-              </button>
-            </div>
-            <div class="col-6 col-md-4">
-              <button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" 
-                data-jurusan="Hubungan Internasional"
-                data-desc="Mempelajari dinamika hubungan antarnegara, diplomasi, dan isu-isu global."
-                data-prospek="Diplomat, Staf Kemenlu, Jurnalis Internasional">
-                🌏 HI
-              </button>
-            </div>
-            <div class="col-6 col-md-4">
-              <button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" 
-                data-jurusan="Ilmu Komunikasi"
-                data-desc="Mempelajari cara menyampaikan pesan secara efektif melalui berbagai media kepada masyarakat."
-                data-prospek="Public Relations, Content Creator, Jurnalis">
-                📢 Komunikasi
-              </button>
-            </div>
-            <div class="col-6 col-md-4">
-              <button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" 
-                data-jurusan="Psikologi"
-                data-desc="Mempelajari perilaku manusia dan proses mental yang mendasarinya."
-                data-prospek="Psikolog, HRD, Konselor">
-                🧠 Psikologi
-              </button>
-            </div>
-            <div class="col-6 col-md-4">
-              <button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" 
-                data-jurusan="Kriminologi"
-                data-desc="Mempelajari kejahatan, penyebabnya, serta cara penanggulangannya secara ilmiah."
-                data-prospek="Polisi, Detektif, Analis Intelijen">
-                🕵️ Kriminologi
-              </button>
-            </div>
-            <div class="col-6 col-md-4">
-              <button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" 
-                data-jurusan="Administrasi Publik"
-                data-desc="Mempelajari tata kelola pemerintahan dan kebijakan publik untuk pelayanan masyarakat."
-                data-prospek="PNS, Staf Pemerintahan, Konsultan Kebijakan">
-                🏛️ Adm. Publik
-              </button>
-            </div>
+            <div class="col-12 mt-2"><small class="text-warning fw-bold ls-1 bg-light px-2 py-1 rounded">💰 EKONOMI & BISNIS</small></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Akuntansi" data-desc="Laporan Keuangan." data-prospek="Akuntan">📈 Akuntansi</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Manajemen" data-desc="Pengelolaan Bisnis." data-prospek="Manager">💼 Manajemen</button></div>
 
-            <div class="col-12 mt-2"><small class="text-muted fw-bold ls-1">EKONOMI</small></div>
+            <div class="col-12 mt-2"><small class="text-danger fw-bold ls-1 bg-light px-2 py-1 rounded">⚖️ SOSIAL & HUKUM</small></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Ilmu Hukum" data-desc="Undang-undang." data-prospek="Pengacara">⚖️ Hukum</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Psikologi" data-desc="Perilaku Manusia." data-prospek="HRD/Psikolog">🧠 Psikologi</button></div>
             
-            <div class="col-6 col-md-4">
-              <button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" 
-                data-jurusan="Manajemen"
-                data-desc="Mempelajari cara mengelola organisasi, keuangan, pemasaran, dan sumber daya manusia."
-                data-prospek="Manager, Entrepreneur, CEO">
-                💼 Manajemen
-              </button>
             </div>
-            <div class="col-6 col-md-4">
-              <button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" 
-                data-jurusan="Akuntansi"
-                data-desc="Mempelajari pencatatan, penggolongan, dan peringkasan transaksi keuangan."
-                data-prospek="Akuntan Publik, Auditor, Analis Keuangan">
-                💰 Akuntansi
-              </button>
-            </div>
-            <div class="col-6 col-md-4">
-              <button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" 
-                data-jurusan="Ekonomi Pembangunan"
-                data-desc="Menganalisis isu-isu pembangunan ekonomi di negara berkembang."
-                data-prospek="Perencana Pembangunan, Analis Ekonomi, Pegawai Bank">
-                📈 Eko. Pembang.
-              </button>
-            </div>
-
-            <div class="col-12 mt-2"><small class="text-muted fw-bold ls-1">BAHASA & SENI</small></div>
-            
-            <div class="col-6 col-md-4">
-              <button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" 
-                data-jurusan="Sastra Inggris"
-                data-desc="Mempelajari bahasa, budaya, dan kesusastraan negara berbahasa Inggris."
-                data-prospek="Penerjemah, Guide, Staf Kedutaan">
-                📚 Sas. Inggris
-              </button>
-            </div>
-            <div class="col-6 col-md-4">
-              <button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" 
-                data-jurusan="Sastra Indonesia"
-                data-desc="Mempelajari kebahasaan, kesusastraan, dan filologi Indonesia secara mendalam."
-                data-prospek="Penulis, Editor, Jurnalis, Peneliti Bahasa">
-                📖 Sas. Indo
-              </button>
-            </div>
-            <div class="col-6 col-md-4">
-              <button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" 
-                data-jurusan="Sastra Jepang"
-                data-desc="Mempelajari bahasa, budaya, dan kesusastraan Jepang."
-                data-prospek="Penerjemah, Staff Perusahaan Jepang, Guide">
-                ⛩️ Sas. Jepang
-              </button>
-            </div>
-            <div class="col-6 col-md-4">
-              <button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" 
-                data-jurusan="Desain Komunikasi Visual"
-                data-desc="Mempelajari cara menyampaikan pesan melalui bahasa visual dan desain grafis."
-                data-prospek="Graphic Designer, UI/UX Designer, Animator">
-                🎨 DKV
-              </button>
-            </div>
-            <div class="col-6 col-md-4">
-              <button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" 
-                data-jurusan="PGSD"
-                data-desc="Mempersiapkan tenaga pendidik profesional untuk mengajar di Sekolah Dasar."
-                data-prospek="Guru SD, Penulis Buku Anak, Konsultan Pendidikan">
-                👨‍🏫 PGSD
-              </button>
-            </div>
-
-          </div>
         </div>
       </div>
       
@@ -322,11 +162,11 @@
             </li>
             <li class="mb-3 d-flex align-items-center">
               <span class="badge bg-primary rounded-circle me-3" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">2</span>
-              <span class="small text-muted">Input <strong>Nilai Akademik</strong>.</span>
+              <span class="small text-muted">Input <strong>Nilai Wajib</strong> (MTK, Indo, Ing).</span>
             </li>
             <li class="mb-3 d-flex align-items-center">
               <span class="badge bg-primary rounded-circle me-3" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">3</span>
-              <span class="small text-muted">Tentukan tingkat <strong>Minat</strong> kamu.</span>
+              <span class="small text-muted">Input <strong>Nilai Rumpun Pilihan</strong> (Sains/Sosial).</span>
             </li>
             <li class="d-flex align-items-center">
               <span class="badge bg-primary rounded-circle me-3" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">4</span>
@@ -335,8 +175,8 @@
           </ol>
           
           <div class="alert alert-info border-0 mt-3 mb-0 py-3 px-3" style="background: linear-gradient(135deg, #e0f7ff 0%, #d4edff 100%); border-radius: 16px;">
-             <small class="fw-bold text-primary">💡 Tips:</small><br>
-             <small class="text-muted">Isilah minat dengan jujur, karena faktor minat memiliki bobot yang besar dalam penentuan jurusan yang cocok.</small>
+             <small class="fw-bold text-primary">💡 Tips Kurikulum Merdeka:</small><br>
+             <small class="text-muted">Jika kamu tidak mengambil mapel tertentu (misal Kimia/Fisika), cukup isi dengan nilai 0.</small>
           </div>
         </div>
       </div>
@@ -387,17 +227,14 @@
 var myModalObj = null;
 
 function showModal(button) {
-    // Ambil data
     var jurusan = button.getAttribute('data-jurusan');
     var desc = button.getAttribute('data-desc');
     var prospek = button.getAttribute('data-prospek');
     
-    // Isi konten modal
     document.getElementById('modalTitle').innerText = jurusan;
     document.getElementById('modalDesc').innerText = desc;
     document.getElementById('modalProspek').innerText = prospek;
     
-    // Logic aman untuk membuka modal
     var modalEl = document.getElementById('jurusanModal');
     if (!myModalObj) {
         myModalObj = new bootstrap.Modal(modalEl);

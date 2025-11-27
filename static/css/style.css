@@ -451,4 +451,39 @@ footer {
     display: block;
     margin-bottom: 10px;
   }
+  /* === TAMBAHAN FINAL: ANIMASI HASIL === */
+@keyframes celebrate {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.2) rotate(-10deg); }
+  75% { transform: scale(1.2) rotate(10deg); }
+}
+
+/* Mencegah scroll horizontal karena animasi background */
+body {
+  overflow-x: hidden; 
+}
+
+/* Mempercantik Card Hover di Hasil */
+.hover-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+}
+
+/* Perbaikan Chart Container agar responsif */
+.chart-container {
+    position: relative;
+    margin: auto;
+    height: 300px; /* Default mobile */
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .chart-container {
+        height: 380px; /* Lebih tinggi di laptop */
+        max-width: 550px;
+    }
+}
 }

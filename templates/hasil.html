@@ -8,8 +8,8 @@
     <div class="mb-3">
       <span style="font-size: 4rem; display: inline-block; animation: celebrate 1s ease;">🎉</span>
     </div>
-    <h3 class="fw-bold mb-2" style="color: #2d3748;">Hasil Rekomendasi Jurusan Kuliah</h3>
-    <p class="text-muted">Berdasarkan analisis Fuzzy Logic dari data yang kamu input</p>
+    <h3 class="fw-bold mb-2" style="color: #2d3748;">Hasil Analisis Potensi Akademik</h3>
+    <p class="text-muted">Menggunakan metode <strong>Profile Matching (Analisis Gap Kompetensi)</strong></p>
   </div>
 
   <div class="text-center mb-4 p-3 p-md-4" style="background: linear-gradient(135deg, rgba(0, 97, 255, 0.08), rgba(96, 239, 255, 0.08)); border-radius: 20px;">
@@ -22,30 +22,28 @@
     <div style="position: absolute; top: 0; left: 0; height: 100%; width: {{ skor }}%; background: linear-gradient(90deg, rgba(17, 153, 142, 0.2), rgba(56, 239, 125, 0.2)); transition: width 1s ease; border-radius: 20px;"></div>
     
     <div style="position: relative; z-index: 2;">
-      <h6 class="fw-bold text-secondary mb-3">📊 Skor Kesesuaian Fuzzy Umum</h6>
+      <h6 class="fw-bold text-secondary mb-3">📊 Skor Kecocokan Profil (PM Score)</h6>
       <h1 class="display-3 fw-bold mb-3" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-        {{ "%.1f"|format(skor) }}
+        {{ "%.1f"|format(skor) }}%
       </h1>
+      
+      <div class="mb-3">
+        <span class="badge rounded-pill border px-4 py-2 shadow-sm" style="background-color: white; color: #2d3748; font-size: 1rem;">
+           🤖 Tingkat Keyakinan: <strong>{{ confidence }}</strong>
+        </span>
+      </div>
+
       <div class="mb-2">
-        {% if skor >= 75 %}
-          <span class="badge bg-success px-4 py-2" style="font-size: 1rem;">✅ Sangat Cocok</span>
+        {% if skor >= 80 %}
+          <span class="badge bg-success px-4 py-2" style="font-size: 1rem;">✅ Sangat Potensial</span>
         {% elif skor >= 60 %}
-          <span class="badge bg-info px-4 py-2" style="font-size: 1rem;">👍 Cocok</span>
-        {% elif skor >= 45 %}
+          <span class="badge bg-info px-4 py-2" style="font-size: 1rem;">👍 Potensial</span>
+        {% elif skor >= 40 %}
           <span class="badge bg-warning text-dark px-4 py-2" style="font-size: 1rem;">⚠️ Cukup Sesuai</span>
         {% else %}
-          <span class="badge bg-secondary px-4 py-2" style="font-size: 1rem;">ℹ️ Perlu Pertimbangan</span>
+          <span class="badge bg-secondary px-4 py-2" style="font-size: 1rem;">ℹ️ Perlu Eksplorasi</span>
         {% endif %}
       </div>
-      <small class="text-muted">
-        {% if skor >= 65 %}
-          Profil kamu sangat cocok dengan jurusan-jurusan berikut!
-        {% elif skor >= 45 %}
-          Profil kamu cukup sesuai, pertimbangkan dengan matang ya!
-        {% else %}
-          Yuk eksplorasi minat & kemampuanmu lebih lanjut!
-        {% endif %}
-      </small>
     </div>
   </div>
 
@@ -53,11 +51,8 @@
 
   <div class="mb-5">
     <h5 class="fw-bold text-center mb-4" style="color: #2d3748;">
-      📈 Visualisasi Profil Minat Kamu
+      📈 Peta Kekuatan Minat Kamu
     </h5>
-    <p class="text-center text-muted mb-4 small">
-      Diagram ini menunjukkan kekuatan minatmu di empat area kunci untuk menentukan jurusan
-    </p>
     <div class="chart-container" style="position: relative; height:380px; width:100%; max-width:550px; margin: auto;">
         <canvas id="minatChart"></canvas>
     </div>
@@ -67,16 +62,16 @@
 
   <div class="mb-4">
     <h5 class="fw-bold mb-4" style="color: #2d3748;">
-      🏆 Top 3 Rekomendasi Jurusan Untukmu
+      🏆 Top 3 Rekomendasi Jurusan
     </h5>
 
     <div class="row g-4">
       {% for jurusan, nilai in hasil %}
       <div class="col-12">
-        <div class="card border-0 h-100 position-relative" style="background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,249,250,0.9)); overflow: hidden;">
+        <div class="card border-0 h-100 position-relative hover-card" style="background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
           
           <div class="position-absolute top-0 start-0 m-3">
-            <span class="badge shadow-sm" style="background: linear-gradient(135deg, {% if loop.index == 1 %}#FFD700{% elif loop.index == 2 %}#C0C0C0{% else %}#CD7F32{% endif %}, {% if loop.index == 1 %}#FFA500{% elif loop.index == 2 %}#A0A0A0{% else %}#8B4513{% endif %}); font-size: 1.1rem; padding: 8px 16px; border-radius: 12px;">
+            <span class="badge shadow-sm" style="background: linear-gradient(135deg, {% if loop.index == 1 %}#FFD700{% elif loop.index == 2 %}#C0C0C0{% else %}#CD7F32{% endif %}, {% if loop.index == 1 %}#FFA500{% elif loop.index == 2 %}#A0A0A0{% else %}#8B4513{% endif %}); font-size: 1.1rem; padding: 8px 16px; border-radius: 12px; color: white;">
               #{{ loop.index }}
             </span>
           </div>
@@ -85,112 +80,123 @@
             <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start gap-4 gap-md-5 mb-3">
               
               <div class="flex-grow-1 w-100">
-                <h4 class="fw-bold mb-2" style="color: #2d3748;">{{ jurusan }}</h4>
+                <h4 class="fw-bold mb-2 text-primary">{{ jurusan }}</h4>
                 
-                <p class="text-muted mb-3" style="line-height: 1.6;">
-                  {# --- TEKNIK & DIGITAL --- #}
+                <p class="text-muted mb-3" style="line-height: 1.6; font-size: 0.95rem;">
                   {% if "Informatika" in jurusan %}
-                    🔹 Cocok untuk siswa dengan kemampuan logika, matematika, dan problem solving tinggi.<br>
-                    <strong>Prospek:</strong> Software Engineer, Data Scientist, AI Specialist
-                  
+                    🔹 Fokus pada pengembangan perangkat lunak (coding), algoritma, dan kecerdasan buatan.<br>
+                    <strong>Prospek:</strong> Software Engineer, AI Specialist, Developer.
                   {% elif "Sistem Informasi" in jurusan %}
-                    🔹 Kombinasi antara teknologi dan bisnis. Cocok yang suka analisis sistem.<br>
-                    <strong>Prospek:</strong> Business Analyst, IT Consultant, System Analyst
-                  
+                    🔹 Menjembatani bisnis dan teknologi. Merancang sistem untuk kebutuhan perusahaan.<br>
+                    <strong>Prospek:</strong> System Analyst, IT Consultant, Business Analyst.
+                  {% elif "Sains Data" in jurusan %}
+                    🔹 Mengolah data besar (Big Data) menjadi wawasan menggunakan statistik dan programming.<br>
+                    <strong>Prospek:</strong> Data Scientist, Data Analyst, Machine Learning Engineer.
+                  {% elif "Teknik Komputer" in jurusan %}
+                    🔹 Fokus pada integrasi hardware (perangkat keras) dan software, serta jaringan komputer.<br>
+                    <strong>Prospek:</strong> Network Engineer, IoT Specialist, Hardware Engineer.
                   {% elif "Bisnis Digital" in jurusan %}
-                    🔹 Mempelajari bisnis berbasis teknologi dan startup.<br>
-                    <strong>Prospek:</strong> Startup Founder, Digital Marketer, E-Commerce Specialist
-
+                    🔹 Mempelajari manajemen bisnis berbasis teknologi, startup, dan e-commerce.<br>
+                    <strong>Prospek:</strong> Startup Founder, Digital Marketer, Product Manager.
                   {% elif "Arsitektur" in jurusan %}
-                    🔹 Perpaduan kreativitas seni dan logika teknik bangunan.<br>
-                    <strong>Prospek:</strong> Arsitek, Urban Planner, Interior Designer
-
-                  {# --- SOSIAL & HUKUM --- #}
+                    🔹 Seni merancang bangunan yang indah, fungsional, dan kokoh.<br>
+                    <strong>Prospek:</strong> Arsitek, Urban Planner, Interior Designer.
+                  {% elif "Teknik Sipil" in jurusan %}
+                    🔹 Merancang infrastruktur publik seperti jembatan, jalan, dan gedung bertingkat.<br>
+                    <strong>Prospek:</strong> Kontraktor, Konsultan Sipil, Pegawai BUMN Karya.
+                  {% elif "Teknik Industri" in jurusan %}
+                    🔹 Mengoptimalkan sistem produksi agar efisien (Manajemen + Teknik).<br>
+                    <strong>Prospek:</strong> Supply Chain Manager, Quality Control, HR Industri.
+                  {% elif "Statistika" in jurusan %}
+                    🔹 Ahli pengumpulan, analisis, dan interpretasi data angka.<br>
+                    <strong>Prospek:</strong> Data Analyst, Actuary, Market Researcher.
                   {% elif "Hukum" in jurusan %}
-                    🔹 Mempelajari aturan, keadilan, dan sistem peradilan.<br>
-                    <strong>Prospek:</strong> Pengacara, Hakim, Notaris, Legal Staff
-
+                    🔹 Mempelajari sistem peradilan, undang-undang, dan pembelaan hak.<br>
+                    <strong>Prospek:</strong> Pengacara, Hakim, Jaksa, Legal Corporate.
                   {% elif "Hubungan Internasional" in jurusan %}
-                    🔹 Mempelajari diplomasi dan isu global antarnegara.<br>
-                    <strong>Prospek:</strong> Diplomat, Staf Kemenlu, Jurnalis Internasional
-
-                  {# PERBAIKAN LOGIKA: Cek DKV dulu sebelum Ilmu Komunikasi #}
-                  {% elif "Desain" in jurusan or "DKV" in jurusan %}
-                    🔹 Ideal untuk siswa kreatif dengan imajinasi visual tinggi.<br>
-                    <strong>Prospek:</strong> Graphic Designer, UI/UX Designer, Animator
-
+                    🔹 Mempelajari diplomasi, politik global, dan kerjasama antarnegara.<br>
+                    <strong>Prospek:</strong> Diplomat, Staf Kemenlu, NGO International.
+                  {% elif "Ilmu Politik" in jurusan %}
+                    🔹 Menganalisis dinamika kekuasaan, pemerintahan, dan kebijakan publik.<br>
+                    <strong>Prospek:</strong> Politisi, Analis Politik, Staf Ahli DPR.
+                  {% elif "Sosiologi" in jurusan %}
+                    🔹 Mempelajari struktur masyarakat, interaksi sosial, dan fenomena sosial.<br>
+                    <strong>Prospek:</strong> Peneliti Sosial, Community Development, CSR.
                   {% elif "Komunikasi" in jurusan %}
-                    🔹 Sesuai bagi yang ekspresif dan suka menyampaikan pesan ke publik.<br>
-                    <strong>Prospek:</strong> Public Relations, Content Creator, Jurnalis
-
+                    🔹 Belajar menyampaikan pesan efektif lewat media massa dan digital.<br>
+                    <strong>Prospek:</strong> PR, Jurnalis, Social Media Specialist.
                   {% elif "Psikologi" in jurusan %}
-                    🔹 Tepat bagi yang suka memahami perilaku manusia dan empati tinggi.<br>
-                    <strong>Prospek:</strong> Psikolog Klinis, HRD, Konselor
-
+                    🔹 Memahami perilaku manusia dan proses mental/emosional.<br>
+                    <strong>Prospek:</strong> HRD, Psikolog, Konselor, Assessor.
                   {% elif "Kriminologi" in jurusan %}
-                    🔹 Menganalisis penyebab kejahatan dan penanggulangannya.<br>
-                    <strong>Prospek:</strong> Analis Intelijen, Detektif, Peneliti Sosial
-
+                    🔹 Menganalisis penyebab kejahatan dan cara penanggulangannya.<br>
+                    <strong>Prospek:</strong> Jurnalis Kriminal, Analis Intelijen, Kepolisian.
                   {% elif "Administrasi Publik" in jurusan %}
-                    🔹 Mempelajari tata kelola pemerintahan dan kebijakan publik.<br>
-                    <strong>Prospek:</strong> PNS, Konsultan Kebijakan, Staf Pemerintah
-
-                  {# --- EKONOMI --- #}
+                    🔹 Mengelola birokrasi pemerintahan dan pelayanan masyarakat.<br>
+                    <strong>Prospek:</strong> ASN/PNS, Konsultan Kebijakan, Administrator.
                   {% elif "Manajemen" in jurusan %}
-                    🔹 Cocok bagi yang punya skill leadership dan analisis bisnis.<br>
-                    <strong>Prospek:</strong> Manager, Entrepreneur, CEO
-
+                    🔹 Mengelola sumber daya perusahaan (Manusia, Uang, Pemasaran).<br>
+                    <strong>Prospek:</strong> Manager, CEO, Entrepreneur.
                   {% elif "Akuntansi" in jurusan %}
-                    🔹 Mempelajari pelaporan keuangan yang detail dan terstruktur.<br>
-                    <strong>Prospek:</strong> Akuntan Publik, Auditor, Financial Analyst
-
+                    🔹 Mencatat dan melaporkan keuangan secara presisi dan audit.<br>
+                    <strong>Prospek:</strong> Akuntan Publik, Auditor, Tax Consultant.
                   {% elif "Ekonomi Pembangunan" in jurusan %}
-                    🔹 Menganalisis isu ekonomi makro dan pembangunan negara.<br>
-                    <strong>Prospek:</strong> Perencana Pembangunan, Analis Bank Indonesia, Peneliti
-
-                  {# --- BAHASA & SENI --- #}
+                    🔹 Menganalisis isu ekonomi makro negara dan kebijakan fiskal.<br>
+                    <strong>Prospek:</strong> Analis Bank Indonesia, Bappenas, Peneliti.
+                  {% elif "Pemasaran" in jurusan %}
+                    🔹 Strategi menjual produk dan memahami perilaku konsumen.<br>
+                    <strong>Prospek:</strong> Brand Manager, Sales Manager, Market Researcher.
                   {% elif "Sastra Inggris" in jurusan %}
-                    🔹 Menguasai bahasa global dan budaya literasi Inggris.<br>
-                    <strong>Prospek:</strong> Translator, Staff Kedutaan, Guide
-
+                    🔹 Menguasai bahasa Inggris tingkat lanjut dan budaya literasi.<br>
+                    <strong>Prospek:</strong> Translator, Guide, Staff Multinational Company.
                   {% elif "Sastra Indonesia" in jurusan %}
-                    🔹 Mendalami tata bahasa dan kesusastraan nusantara.<br>
-                    <strong>Prospek:</strong> Penulis, Editor, Lexicographer
-
+                    🔹 Ahli bahasa, tata bahasa, dan kesusastraan Indonesia.<br>
+                    <strong>Prospek:</strong> Editor, Penulis, Jurnalis, Peneliti Bahasa.
                   {% elif "Sastra Jepang" in jurusan %}
-                    🔹 Mempelajari bahasa dan budaya Jepang yang unik.<br>
-                    <strong>Prospek:</strong> Interpreter, Staff Perusahaan Jepang, Tour Guide
-
+                    🔹 Menguasai bahasa Jepang, kanji, dan budaya kerja Jepang.<br>
+                    <strong>Prospek:</strong> Interpreter, Staff Perusahaan Jepang.
+                  {% elif "Sastra Korea" in jurusan %}
+                    🔹 Menguasai bahasa Korea dan budaya populer/korporat Korea.<br>
+                    <strong>Prospek:</strong> Translator, Staff Perusahaan Korea, Content Writer.
+                  {% elif "DKV" in jurusan %}
+                    🔹 Komunikasi visual melalui desain grafis, ilustrasi, dan media.<br>
+                    <strong>Prospek:</strong> Graphic Designer, UI/UX Designer, Illustrator.
                   {% elif "PGSD" in jurusan %}
-                    🔹 Rekomendasi bagi yang sabar dan suka mengajar anak-anak.<br>
-                    <strong>Prospek:</strong> Guru SD, Konsultan Pendidikan Anak
-
+                    🔹 Mendidik guru yang sabar dan profesional untuk SD.<br>
+                    <strong>Prospek:</strong> Guru SD, Kepala Sekolah, Konsultan Edukasi.
+                  {% elif "Farmasi" in jurusan %}
+                    🔹 Meracik obat, memahami bahan kimia obat dan pelayanan pasien.<br>
+                    <strong>Prospek:</strong> Apoteker, Peneliti Obat, BPOM.
+                  {% elif "Kesehatan Masyarakat" in jurusan %}
+                    🔹 Mencegah penyakit dan mempromosikan kesehatan di komunitas.<br>
+                    <strong>Prospek:</strong> Promotor Kesehatan, Epidemiolog, Administrator RS.
+                  {% elif "Kedokteran Umum" in jurusan %}
+                    🔹 Mempelajari ilmu medis, diagnosa penyakit, dan pengobatan pasien.<br>
+                    <strong>Prospek:</strong> Dokter Umum, Spesialis, Kepala Puskesmas.
                   {% else %}
-                    {# Fallback jika ada nama jurusan yang tidak terdaftar #}
-                    🔹 Jurusan yang sesuai dengan profil akademik dan minat kamu.<br>
-                    <strong>Prospek:</strong> Profesional di bidang terkait.
+                    🔹 Jurusan ini sangat cocok dengan profil nilai akademik dan minat kamu.<br>
+                    <strong>Prospek:</strong> Profesional ahli di bidang terkait.
                   {% endif %}
                 </p>
                 
                 <div class="mt-3">
-                  {% if nilai >= 75 %}
-                    <span class="badge bg-success px-3 py-2">⭐ Sangat Cocok</span>
+                  {% if nilai >= 80 %}
+                    <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2">⭐ Sangat Cocok</span>
                   {% elif nilai >= 60 %}
-                    <span class="badge bg-info px-3 py-2">👍 Cocok</span>
-                  {% elif nilai >= 45 %}
-                    <span class="badge bg-warning text-dark px-3 py-2">⚠️ Cukup Cocok</span>
+                    <span class="badge bg-info bg-opacity-10 text-info border border-info px-3 py-2">👍 Cocok</span>
                   {% else %}
-                    <span class="badge bg-secondary px-3 py-2">💭 Pertimbangkan</span>
+                    <span class="badge bg-warning bg-opacity-10 text-warning border border-warning px-3 py-2">⚠️ Cukup Cocok</span>
                   {% endif %}
                 </div>
               </div>
               
               <div class="flex-shrink-0 text-center">
-                <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #0061ff 0%, #60efff 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.8rem; font-weight: 800; box-shadow: 0 8px 24px rgba(0, 97, 255, 0.3); margin: 0 auto;">
-                  {{ "%.1f"|format(nilai) }}
+                <div style="width: 100px; height: 100px; border-radius: 50%; background: white; border: 8px solid {% if nilai >= 80 %}#2ecc71{% elif nilai >= 60 %}#3498db{% else %}#f1c40f{% endif %}; display: flex; align-items: center; justify-content: center; color: #2d3748; font-size: 1.5rem; font-weight: 800; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin: 0 auto;">
+                  {{ "%.0f"|format(nilai) }}
                 </div>
-                <small class="text-muted d-block mt-2 fw-bold">Skor Match</small>
+                <small class="text-muted d-block mt-2 fw-bold">Skor</small>
               </div>
+
             </div>
           </div>
         </div>
@@ -202,21 +208,56 @@
   <div class="alert alert-info border-0 mt-5 p-4" role="alert" style="border-radius: 20px; background: linear-gradient(135deg, rgba(79, 172, 254, 0.1), rgba(0, 242, 254, 0.1));">
     <h6 class="fw-bold mb-2">💡 Catatan Penting</h6>
     <p class="mb-0 small">
-      Rekomendasi ini berdasarkan analisis <strong>Fuzzy Logic</strong> dari nilai akademik dan minat kamu. 
-      Pertimbangkan juga faktor lain seperti <strong>passion</strong>, <strong>peluang karir</strong>, dan <strong>kondisi finansial</strong> sebelum memutuskan. 
-      Konsultasikan dengan orangtua, guru BK, atau kakak tingkat untuk mendapat perspektif lebih lengkap!
+      Rekomendasi ini berdasarkan analisis <strong>Profile Matching</strong> (Pencocokan Kompetensi) dari nilai rapor dan minat kamu. 
+      Pertimbangkan juga faktor lain seperti passion, peluang karir, dan dukungan orang tua.
     </p>
   </div>
 
+  <div class="text-center mt-4">
+      <button class="btn btn-sm btn-light text-muted border" type="button" data-bs-toggle="collapse" data-bs-target="#debugInfo">
+          🛠️ Lihat Detail Perhitungan (Debug Mode)
+      </button>
+  </div>
+
+  <div class="collapse mt-3" id="debugInfo">
+      <div class="card card-body bg-light border-0 small text-start">
+          <h6 class="fw-bold">Logika Profile Matching:</h6>
+          <p>Total Kandidat: {{ details.total_jurusan }} | Lolos Threshold: {{ details.jurusan_layak }}</p>
+          <div class="table-responsive">
+              <table class="table table-bordered table-sm bg-white">
+                  <thead>
+                      <tr>
+                          <th>Jurusan</th>
+                          <th>Gap (U/D/M)</th>
+                          <th>Bobot (U/D/M)</th>
+                          <th>Skor Akhir</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for log in details.detail_perhitungan %}
+                      <tr>
+                          <td>{{ log.jurusan }}</td>
+                          <td>{{ log['gaps']['u'] }} / {{ log['gaps']['d'] }} / {{ log['gaps']['m'] }}</td>
+                          <td>{{ log['bobots']['u'] }} / {{ log['bobots']['d'] }} / {{ log['bobots']['m'] }}</td>
+                          <td class="fw-bold">{{ log.final_score }}</td>
+                      </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+          <small class="text-muted">*U=Utama, D=Pendukung, M=Minat. Skor negatif menunjukkan penalti aktif.</small>
+      </div>
+  </div>
+
   <div class="text-center mt-5 d-flex gap-3 justify-content-center flex-wrap">
-    <a href="/tes" class="btn btn-outline-primary px-4 py-3" style="width: auto;">
+    <a href="/tes" class="btn btn-outline-primary px-4 py-3 rounded-pill fw-bold" style="width: auto;">
       🔄 Ulangi Tes
     </a>
-    <button onclick="window.print()" class="btn btn-outline-secondary px-4 py-3" style="width: auto;">
-      🖨️ Cetak/Simpan Hasil
+    <button onclick="window.print()" class="btn btn-outline-secondary px-4 py-3 rounded-pill fw-bold" style="width: auto;">
+      🖨️ Simpan PDF
     </button>
-    <a href="/" class="btn btn-primary px-4 py-3" style="width: auto;">
-      🏠 Kembali ke Beranda
+    <a href="/" class="btn btn-primary px-4 py-3 rounded-pill fw-bold shadow" style="width: auto;">
+      🏠 Beranda
     </a>
   </div>
 </div>
@@ -228,12 +269,20 @@
     75% { transform: scale(1.2) rotate(10deg); }
   }
   
+  .hover-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
+  }
+  
   @media print {
     .btn, .alert, .navbar, footer, hr { display: none !important; }
     .fade-in-scale { animation: none; }
     .card { box-shadow: none !important; border: 1px solid #ddd !important; page-break-inside: avoid; }
     body { background: white !important; }
-    body::before { display: none !important; }
+    .chart-container { max-width: 400px !important; page-break-inside: avoid; }
   }
 </style>
 
@@ -246,7 +295,7 @@
       data: {
           labels: ['🧠 Logika/Analisis', '🤝 Sosial/Komunikasi', '🎨 Kreatif/Desain', '📚 Bahasa/Literasi'],
           datasets: [{
-              label: 'Skor Minat Kamu',
+              label: 'Profil Minat Kamu',
               data: [
                   minatData.logika, 
                   minatData.sosial, 
@@ -254,76 +303,31 @@
                   minatData.bahasa
               ],
               fill: true,
-              backgroundColor: 'rgba(0, 97, 255, 0.15)',
-              borderColor: 'rgb(0, 97, 255)',
-              borderWidth: 3,
-              pointBackgroundColor: 'rgb(0, 97, 255)',
+              backgroundColor: 'rgba(0, 97, 255, 0.2)',
+              borderColor: '#0061ff',
+              pointBackgroundColor: '#0061ff',
               pointBorderColor: '#fff',
-              pointBorderWidth: 3,
-              pointRadius: 6,
               pointHoverBackgroundColor: '#fff',
-              pointHoverBorderColor: 'rgb(0, 97, 255)',
-              pointHoverRadius: 8
+              pointHoverBorderColor: '#0061ff',
+              borderWidth: 2,
+              pointRadius: 5
           }]
       },
       options: {
           responsive: true,
           maintainAspectRatio: false,
+          elements: { line: { tension: 0.3 } },
           scales: {
               r: { 
-                  angleLines: { 
-                      display: true,
-                      color: 'rgba(0, 0, 0, 0.1)'
-                  },
-                  grid: {
-                      color: 'rgba(0, 0, 0, 0.1)'
-                  },
+                  angleLines: { display: true, color: '#e2e8f0' },
+                  grid: { color: '#e2e8f0' },
                   suggestedMin: 0,
                   suggestedMax: 5,
-                  pointLabels: {
-                      font: { 
-                          size: 13, 
-                          weight: '700',
-                          family: 'Inter'
-                      },
-                      color: '#4a5568'
-                  },
-                  ticks: {
-                      stepSize: 1,
-                      backdropColor: 'rgba(255, 255, 255, 0.9)',
-                      color: '#4a5568',
-                      font: {
-                          weight: '600'
-                      }
-                  }
+                  ticks: { stepSize: 1, backdropColor: 'transparent', font: {size: 10} },
+                  pointLabels: { font: { size: 12, weight: 'bold', family: 'Inter' }, color: '#4a5568' }
               }
           },
-          plugins: {
-              legend: { 
-                  display: true,
-                  labels: {
-                      font: {
-                          size: 14,
-                          weight: '700',
-                          family: 'Inter'
-                      },
-                      color: '#4a5568',
-                      padding: 20
-                  }
-              },
-              tooltip: {
-                  backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                  padding: 12,
-                  titleFont: {
-                      size: 14,
-                      weight: '700'
-                  },
-                  bodyFont: {
-                      size: 13
-                  },
-                  cornerRadius: 8
-              }
-          }
+          plugins: { legend: { display: false } }
       }
   });
 </script>

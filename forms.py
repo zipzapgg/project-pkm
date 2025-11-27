@@ -1,69 +1,25 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FloatField, SubmitField, SelectField
-from wtforms.validators import InputRequired, NumberRange, DataRequired, Length, Regexp
+from wtforms import StringField, IntegerField, SubmitField
+from wtforms.validators import DataRequired, NumberRange, Length
 
-class TesForm(FlaskForm):
-    """
-    Form untuk tes rekomendasi dengan validasi server-side.
-    """
-    nama = StringField('Nama Siswa', 
-        validators=[DataRequired(message="Nama tidak boleh kosong.")])
+class TesMinatForm(FlaskForm):
+    nama = StringField('Nama Lengkap', validators=[DataRequired()])
+    nisn = StringField('NISN', validators=[DataRequired(), Length(min=5, max=20)])
 
-    nisn = StringField('NISN (Nomor Induk Siswa Nasional)',
-        validators=[
-            DataRequired(message="NISN tidak boleh kosong."),
-            Length(min=10, max=10, message="NISN harus 10 digit."),
-            Regexp('^[0-9]+$', message="NISN hanya boleh berisi angka.")
-        ])
+    mtk = IntegerField('Matematika (Wajib)', validators=[NumberRange(0, 100)])
+    bindo = IntegerField('B. Indonesia', validators=[NumberRange(0, 100)])
+    bing = IntegerField('B. Inggris', validators=[NumberRange(0, 100)])
+
+    # INPUT BARU: RATA-RATA RUMPUN
+    nilai_sains = IntegerField('Rata-rata Mapel Sains (Fisika/Kimia/Biologi)', 
+                               validators=[NumberRange(0, 100)], default=0)
     
-    mtk = FloatField('Matematika', 
-        validators=[
-            InputRequired(message="Nilai tidak boleh kosong."), 
-            NumberRange(min=0, max=100, message="Nilai harus antara 0 dan 100.")
-        ])
-    bindo = FloatField('Bahasa Indonesia', 
-        validators=[
-            InputRequired(message="Nilai tidak boleh kosong."), 
-            NumberRange(min=0, max=100, message="Nilai harus antara 0 dan 100.")
-        ])
-    bing = FloatField('Bahasa Inggris', 
-        validators=[
-            InputRequired(message="Nilai tidak boleh kosong."), 
-            NumberRange(min=0, max=100, message="Nilai harus antara 0 dan 100.")
-        ])
-    
-    # Diganti dengan SelectField untuk peminatan
-    peminatan = SelectField('Peminatan', 
-        choices=[
-            ('', '-- Pilih Peminatan --'),
-            ('MIPA', 'Matematika dan IPA'),
-            ('IPS', 'Ilmu Pengetahuan Sosial'),
-            ('Bahasa', 'Bahasa dan Budaya'),
-            ('Vokasi', 'Vokasi dan Prakarya')
-        ],
-        validators=[
-            DataRequired(message="Peminatan harus dipilih.")
-        ])
+    nilai_sosial = IntegerField('Rata-rata Mapel Sosial (Eko/Sos/Geo)', 
+                                validators=[NumberRange(0, 100)], default=0)
 
-    minat_logika = FloatField('Logika / Analisis', 
-        validators=[
-            InputRequired(message="Minat tidak boleh kosong."), 
-            NumberRange(min=1, max=5, message="Minat harus antara 1 dan 5.")
-        ])
-    minat_sosial = FloatField('Sosial / Komunikasi', 
-        validators=[
-            InputRequired(message="Minat tidak boleh kosong."), 
-            NumberRange(min=1, max=5, message="Minat harus antara 1 dan 5.")
-        ])
-    minat_kreatif = FloatField('Kreatif / Desain', 
-        validators=[
-            InputRequired(message="Minat tidak boleh kosong."), 
-            NumberRange(min=1, max=5, message="Minat harus antara 1 dan 5.")
-        ])
-    minat_bahasa = FloatField('Bahasa / Literasi', 
-        validators=[
-            InputRequired(message="Minat tidak boleh kosong."), 
-            NumberRange(min=1, max=5, message="Minat harus antara 1 dan 5.")
-        ])
+    minat_logika = IntegerField('Minat Logika', validators=[NumberRange(1, 5)], default=3)
+    minat_sosial = IntegerField('Minat Sosial', validators=[NumberRange(1, 5)], default=3)
+    minat_kreatif = IntegerField('Minat Kreatif', validators=[NumberRange(1, 5)], default=3)
+    minat_bahasa = IntegerField('Minat Bahasa', validators=[NumberRange(1, 5)], default=3)
 
-    submit = SubmitField('🔍 Lihat Hasil')
+    submit = SubmitField('Lihat Rekomendasi')

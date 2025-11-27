@@ -1,174 +1,133 @@
-import os
-import json
 from flask import Flask, render_template, request, redirect, url_for, flash
-from dotenv import load_dotenv
-from flask_basicauth import BasicAuth 
-from db_config import get_connection
-from fuzzy_logic.fuzzy_model import hitung_rekomendasi
-from forms import TesForm
-from mysql.connector import Error as MySQLError
-
-load_dotenv()
+from fuzzy_logic.profile_matching import hitung_rekomendasi
+from forms import TesMinatForm
+import mysql.connector
+import os
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'kuncirahasia123'
 
-app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY')
-app.config['BASIC_AUTH_USERNAME'] = os.getenv('ADMIN_USERNAME')
-app.config['BASIC_AUTH_PASSWORD'] = os.getenv('ADMIN_PASSWORD')
-app.config['BASIC_AUTH_FORCE'] = False 
-
-auth = BasicAuth(app)
+def get_db_connection():
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="",
+        database="sistem_pakar"
+    )
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/tes')
-def tes():
-    form = TesForm()
-    return render_template('tes.html', form=form)
-
 @app.route('/tentang')
 def tentang():
     return render_template('tentang.html')
 
-@app.route('/hasil', methods=['GET', 'POST'])
+@app.route('/tes')
+def tes():
+    form = TesMinatForm()
+    return render_template('tes.html', form=form)
+
+@app.route('/hasil', methods=['POST'])
 def hasil():
-    if request.method == 'GET':
+    form = TesMinatForm(request.form)
+    
+    if not form.validate():
+        flash("Mohon lengkapi data dengan nilai angka (0-100) yang valid!", "danger")
         return redirect(url_for('tes'))
 
-    form = TesForm()
+    data = {
+        'nama': form.nama.data,
+        'nisn': form.nisn.data,
+        'mtk': float(form.mtk.data),
+        'bindo': float(form.bindo.data),
+        'bing': float(form.bing.data),
+        'sains': float(form.nilai_sains.data),
+        'sosial': float(form.nilai_sosial.data),
+        'log': int(form.minat_logika.data),
+        'sos': int(form.minat_sosial.data),
+        'kre': int(form.minat_kreatif.data),
+        'bah': int(form.minat_bahasa.data)
+    }
 
-    if form.validate_on_submit():
-        try:
-            # Ambil Data
-            nama = form.nama.data
-            nisn = form.nisn.data
-            mtk = form.mtk.data
-            bindo = form.bindo.data
-            bing = form.bing.data
-            peminatan = form.peminatan.data
-            minat_logika = form.minat_logika.data
-            minat_sosial = form.minat_sosial.data
-            minat_kreatif = form.minat_kreatif.data
-            minat_bahasa = form.minat_bahasa.data
+    rekomendasi, skor, confidence, details = hitung_rekomendasi(
+        data['mtk'], data['bindo'], data['bing'], 
+        data['sains'], data['sosial'], 
+        data['log'], data['sos'], data['kre'], data['bah']
+    )
 
-            # --- PROSES PERHITUNGAN HYBRID FUZZY ---
-            hasil_rekomendasi, skor_rata = hitung_rekomendasi(
-                mtk, bindo, bing, peminatan,
-                minat_logika, minat_sosial, minat_kreatif, minat_bahasa
-            )
+    minat_chart = {
+        'logika': data['log'], 
+        'sosial': data['sos'], 
+        'kreatif': data['kre'], 
+        'bahasa': data['bah']
+    }
 
-            # --- PERSIAPAN DATA UNTUK UI ---
-            data_minat = {
-                'logika': minat_logika,
-                'sosial': minat_sosial,
-                'kreatif': minat_kreatif,
-                'bahasa': minat_bahasa
-            }
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS siswa_new (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            nisn VARCHAR(20),
+            nama VARCHAR(100),
+            mtk FLOAT, bindo FLOAT, bing FLOAT, 
+            sains FLOAT, sosial FLOAT,
+            log INT, sos INT, kre INT, bah INT,
+            hasil TEXT,
+            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    
+    hasil_str = ", ".join([f"{jur} ({skor}%)" for jur, skor in rekomendasi])
+    
+    query = """
+        INSERT INTO siswa_new 
+        (nisn, nama, mtk, bindo, bing, sains, sosial, log, sos, kre, bah, hasil) 
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """
+    val = (data['nisn'], data['nama'], data['mtk'], data['bindo'], data['bing'], 
+           data['sains'], data['sosial'], data['log'], data['sos'], data['kre'], data['bah'], hasil_str)
+    
+    cursor.execute(query, val)
+    conn.commit()
+    cursor.close()
+    conn.close()
 
-            # --- PERSIAPAN DATA UNTUK DATABASE ---
-            # Format String untuk tampilan Admin Sederhana (Legacy)
-            top_3_list = [f"{idx+1}. {jurusan}" for idx, (jurusan, nilai) in enumerate(hasil_rekomendasi)]
-            hasil_string = ", ".join(top_3_list)
-            
-            # Format JSON untuk analisis data lebih lanjut (Modern)
-            # Kita simpan ini agar kalau nanti butuh statistik, datanya sudah terstruktur
-            hasil_json = json.dumps([{
-                'rank': idx+1,
-                'jurusan': jurusan,
-                'skor': nilai
-            } for idx, (jurusan, nilai) in enumerate(hasil_rekomendasi)])
-
-            # Simpan ke Database
-            conn = None
-            try:
-                conn = get_connection()
-                if conn:
-                    cur = conn.cursor()
-
-                    # Kita simpan 'hasil_string' agar Admin Page tidak perlu diubah drastis
-                    # Namun idealnya, kolom hasil_jurusan di DB diubah jadi TEXT/LONGTEXT 
-                    # agar muat menyimpan JSON jika nanti diperlukan.
-                    sql_query = """
-                        INSERT INTO siswa (nisn, nama, nilai_mtk, nilai_bhs, nilai_bing, peminatan,
-                                           minat_logika, minat_sosial, minat_kreatif, minat_bahasa, hasil_jurusan)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                    """
-                    sql_values = (
-                        nisn, nama, mtk, bindo, bing, peminatan,
-                        minat_logika, minat_sosial, minat_kreatif, minat_bahasa, hasil_string
-                    )
-                    cur.execute(sql_query, sql_values)
-                    conn.commit()
-                    cur.close()
-
-            except MySQLError as e:
-                if e.errno == 1062: # Duplicate Entry
-                    flash(f"NISN '{nisn}' sudah terdaftar sebelumnya.", "danger")
-                    return redirect(url_for('tes'))
-                else:
-                    flash(f"Terjadi error database: {e}", "danger")
-                    return redirect(url_for('tes'))
-            finally:
-                if conn:
-                    conn.close()
-
-            return render_template('hasil.html', nama=nama, hasil=hasil_rekomendasi, skor=skor_rata, minat=data_minat)
-
-        except Exception as e:
-            print(f"CRITICAL ERROR: {e}")
-            flash("Terjadi kesalahan sistem. Silakan coba lagi.", "error")
-            return redirect(url_for('tes'))
-
-    else:
-        flash("Input tidak valid. Pastikan semua kolom terisi dengan benar.", "error")
-        return render_template('tes.html', form=form)
-
-# --- RUTE ADMIN ---
+    return render_template('hasil.html', 
+                            nama=data['nama'],
+                            hasil=rekomendasi,
+                            skor=skor,
+                            confidence=confidence,
+                            details=details,
+                            minat=minat_chart)
 
 @app.route('/admin')
-@auth.required
 def admin():
-    conn = None
     try:
-        conn = get_connection()
-        cur = conn.cursor(dictionary=True)
-        cur.execute("""
-            SELECT nisn, nama, nilai_mtk, nilai_bhs, nilai_bing, peminatan,
-                   minat_logika, minat_sosial, minat_kreatif, minat_bahasa, hasil_jurusan, waktu_tes
-            FROM siswa 
-            ORDER BY waktu_tes DESC
-        """)
-        data_siswa = cur.fetchall()
-        cur.close()
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM siswa_new ORDER BY id DESC")
+        data_siswa = cursor.fetchall()
+        cursor.close()
+        conn.close()
         return render_template('admin.html', data=data_siswa)
-
     except Exception as e:
-        flash(f"Gagal memuat data siswa: {e}", "error")
-        return redirect(url_for('index'))
-    finally:
-        if conn:
-            conn.close()
+        return f"Gagal koneksi database: {e}"
 
-@app.route('/admin/hapus/<nisn>', methods=['POST'])
-@auth.required
+@app.route('/hapus_siswa/<nisn>', methods=['POST'])
 def hapus_siswa(nisn):
-    conn = None
     try:
-        conn = get_connection()
-        if conn:
-            cur = conn.cursor()
-            cur.execute("DELETE FROM siswa WHERE nisn = %s", (nisn,))
-            conn.commit()
-            cur.close()
-            flash(f"Data siswa {nisn} berhasil dihapus.", "success")
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM siswa_new WHERE nisn = %s", (nisn,))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        flash('Data siswa berhasil dihapus!', 'success')
     except Exception as e:
-        flash(f"Gagal menghapus data: {e}", "error")
-    finally:
-        if conn:
-            conn.close()
-            
+        flash(f'Gagal menghapus: {e}', 'danger')
+    
     return redirect(url_for('admin'))
 
 if __name__ == '__main__':

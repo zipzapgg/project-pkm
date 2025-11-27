@@ -20,7 +20,7 @@
             <div class="card border-0 shadow-sm h-100 p-4 bg-white d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3" style="border-radius: 16px;">
                 <div>
                     <h4 class="fw-bold text-primary mb-0">Dashboard Admin</h4>
-                    <p class="text-muted mb-0 small mt-1">Pantau data rekomendasi jurusan siswa.</p>
+                    <p class="text-muted mb-0 small mt-1">Pantau data rekomendasi jurusan siswa (Kurikulum Merdeka).</p>
                 </div>
                 <div class="position-relative w-100" style="max-width: 300px;">
                     <input type="text" id="searchInput" class="form-control rounded-pill ps-5" placeholder="Cari Nama / NISN...">
@@ -66,41 +66,39 @@
                                 <div>
                                     <div class="fw-bold text-dark">{{ row.nama }}</div>
                                     <div class="small text-muted">NISN: {{ row.nisn }}</div>
-                                    <span class="badge bg-light text-dark border mt-1" style="font-size: 0.65rem;">
-                                        {{ row.peminatan }}
-                                    </span>
                                 </div>
                             </div>
                         </td>
 
                         <td>
-                            <div class="d-flex gap-1">
-                                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10" data-bs-toggle="tooltip" title="Matematika">
-                                    MTK: {{ row.nilai_mtk }}
-                                </span>
-                                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10" data-bs-toggle="tooltip" title="B. Indonesia">
-                                    IND: {{ row.nilai_bhs }}
-                                </span>
-                                <span class="badge bg-info text-white shadow-sm" data-bs-toggle="tooltip" title="B. Inggris">
-                                    ING: {{ row.nilai_bing }}
-                                </span>
+                            <div class="d-flex flex-wrap gap-1" style="max-width: 250px;">
+                                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10" title="Matematika">MTK: {{ row.mtk }}</span>
+                                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10" title="B. Indonesia">IND: {{ row.bindo }}</span>
+                                <span class="badge bg-info text-white shadow-sm" title="B. Inggris">ING: {{ row.bing }}</span>
+                                
+                                {% if row.sains > 0 %}
+                                <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-10" title="Sains">SAINS: {{ row.sains }}</span>
+                                {% endif %}
+                                {% if row.sosial > 0 %}
+                                <span class="badge bg-warning bg-opacity-10 text-dark border border-warning border-opacity-10" title="Sosial">SOS: {{ row.sosial }}</span>
+                                {% endif %}
                             </div>
                         </td>
 
                         <td>
                             <div class="d-flex gap-1 text-muted small">
-                                <span class="d-inline-block text-center bg-light rounded px-2 py-1 border" title="Logika">L:<b>{{ row.minat_logika }}</b></span>
-                                <span class="d-inline-block text-center bg-light rounded px-2 py-1 border" title="Sosial">S:<b>{{ row.minat_sosial }}</b></span>
-                                <span class="d-inline-block text-center bg-light rounded px-2 py-1 border" title="Kreatif">K:<b>{{ row.minat_kreatif }}</b></span>
-                                <span class="d-inline-block text-center bg-light rounded px-2 py-1 border" title="Bahasa">B:<b>{{ row.minat_bahasa }}</b></span>
+                                <span class="d-inline-block text-center bg-light rounded px-2 py-1 border" title="Logika">L:<b>{{ row.log }}</b></span>
+                                <span class="d-inline-block text-center bg-light rounded px-2 py-1 border" title="Sosial">S:<b>{{ row.sos }}</b></span>
+                                <span class="d-inline-block text-center bg-light rounded px-2 py-1 border" title="Kreatif">K:<b>{{ row.kre }}</b></span>
+                                <span class="d-inline-block text-center bg-light rounded px-2 py-1 border" title="Bahasa">B:<b>{{ row.bah }}</b></span>
                             </div>
                         </td>
 
                         <td>
-                            {% set juara1 = row.hasil_jurusan.split(',')[0] %}
+                            {% set juara1 = row.hasil.split(',')[0] if row.hasil else "-" %}
                             <div class="fw-bold text-dark">{{ juara1 }}</div>
                             <button class="btn btn-link btn-sm p-0 text-decoration-none small" 
-                                    onclick="showDetail('{{ row.nama }}', '{{ row.hasil_jurusan }}')">
+                                    onclick="showDetail('{{ row.nama }}', '{{ row.hasil }}')">
                                 Lihat selengkapnya...
                             </button>
                         </td>
@@ -141,7 +139,7 @@
         <h6 class="text-primary fw-bold mb-3" id="modalSiswaName">-</h6>
         <div class="bg-light p-3 rounded-3 border">
             <ul class="list-unstyled mb-0" id="modalResultList">
-                </ul>
+            </ul>
         </div>
       </div>
       <div class="modal-footer border-0">
@@ -167,7 +165,6 @@
     function showDetail(nama, hasilString) {
         document.getElementById('modalSiswaName').innerText = "Siswa: " + nama;
         
-        // Parse string "1. A, 2. B" menjadi list
         let items = hasilString.split(', ');
         let html = '';
         items.forEach(item => {
@@ -182,4 +179,4 @@
         detailModalObj.show();
     }
 </script>
-{% endblock %}
+{% endblock %}  
