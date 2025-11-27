@@ -34,7 +34,15 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/tentang">ℹ️ Tentang</a>
-          </li> 
+          </li>
+          {% if session.admin_logged_in %}
+          <li class="nav-item">
+            <a class="nav-link" href="/admin">👨‍💼 Admin</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/logout">🚪 Logout</a>
+          </li>
+          {% endif %}
         </ul>
       </div>
     </div>

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Login Admin{% endblock %}
+
+{% block content %}
+<div class="container fade-in-scale">
+    <div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+        <div class="col-md-5 col-lg-4">
+            
+            <div class="text-center mb-4">
+                <div class="bg-white p-3 rounded-circle shadow-sm d-inline-block mb-3">
+                    <span style="font-size: 2.5rem;">🔒</span>
+                </div>
+                <h4 class="fw-bold text-dark">Login Admin</h4>
+                <p class="text-muted small">Masuk untuk mengelola data siswa</p>
+            </div>
+
+            <div class="card border-0 shadow-lg p-4">
+                
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class="alert alert-{{ category }} py-2 small rounded-3 mb-3 text-center">
+                        {{ message }}
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+
+                <form method="POST" action="{{ url_for('admin_login') }}">
+                    <div class="mb-3">
+                        <label class="form-label small text-muted fw-bold">USERNAME</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">👤</span>
+                            <input type="text" name="username" class="form-control bg-light border-start-0" placeholder="Username" required autofocus>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label small text-muted fw-bold">PASSWORD</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">🔑</span>
+                            <input type="password" name="password" class="form-control bg-light border-start-0" placeholder="••••••••" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill fw-bold shadow-sm">
+                        Masuk Dashboard
+                    </button>
+                </form>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="/" class="text-decoration-none small text-muted">
+                    ← Kembali ke Beranda
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

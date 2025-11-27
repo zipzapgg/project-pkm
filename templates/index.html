@@ -4,42 +4,22 @@
 {% block content %}
 
 <style>
-  /* Default (Mobile) */
-  .logo-container {
-    position: relative;
-    z-index: 10;
-    text-align: center;
-    margin-bottom: -50px; 
-  }
+  /* Hero & Logo Styles */
+  .logo-container { position: relative; z-index: 10; text-align: center; margin-bottom: -50px; }
+  .hero-card { border-radius: 30px; background: white; position: relative; padding: 30px; padding-top: 80px !important; }
+  .logo-img-custom { max-height: 110px; width: auto; background: white; padding: 8px; border: 1px solid rgba(0,0,0,0.05); }
 
-  .hero-card {
-    border-radius: 30px;
-    background: white;
-    position: relative;
-    padding: 30px;
-    padding-top: 80px !important; 
-  }
-
-  .logo-img-custom {
-    max-height: 110px; 
-    width: auto;
-    background: white;
-    padding: 8px;
-    border: 1px solid rgba(0,0,0,0.05);
-  }
-
-  /* Desktop */
+  /* Desktop Adjustments */
   @media (min-width: 768px) {
     .logo-container { margin-bottom: -75px; }
     .hero-card { padding: 48px; padding-top: 130px !important; }
     .logo-img-custom { max-height: 150px; padding: 12px; }
   }
   
-  /* Effects */
+  /* Button & Hover Effects */
   .hover-gradient { transition: transform 0.3s ease, box-shadow 0.3s ease; }
   .hover-gradient:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 97, 255, 0.3) !important; }
-
-  .btn-jurusan { text-align: left; transition: all 0.2s ease; font-size: 0.9rem; }
+  .btn-jurusan { text-align: left; transition: all 0.2s ease; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .btn-jurusan:hover { transform: translateX(5px); background-color: #e9ecef !important; }
 </style>
 
@@ -48,7 +28,7 @@
     
     <div class="logo-container">
         <img src="{{ url_for('static', filename='img/logosman6.jpg') }}" 
-             alt="Logo SMAN 6 Kabupaten Tangerang" 
+             alt="Logo Sekolah" 
              class="img-fluid rounded-4 shadow-lg logo-img-custom">
     </div>
 
@@ -67,15 +47,9 @@
         </p>
         
         <div class="d-flex justify-content-center gap-2 gap-md-3 mb-4 flex-wrap">
-          <span class="badge rounded-pill px-3 py-2 bg-light text-primary border">
-            📚 Kurikulum Merdeka
-          </span>
-          <span class="badge rounded-pill px-3 py-2 bg-light text-info border">
-            ⚡ 30+ Jurusan
-          </span>
-          <span class="badge rounded-pill px-3 py-2 bg-light text-danger border">
-            🎯 Analisis Akurat
-          </span>
+          <span class="badge rounded-pill px-3 py-2 bg-light text-primary border">📚 Kurikulum Merdeka</span>
+          <span class="badge rounded-pill px-3 py-2 bg-light text-info border">⚡ 35 Pilihan Jurusan</span>
+          <span class="badge rounded-pill px-3 py-2 bg-light text-danger border">🎯 Analisis Akurat</span>
         </div>
 
         <a href="/tes" class="btn btn-lg px-5 py-3 rounded-pill fw-bold shadow hover-gradient text-white" 
@@ -123,60 +97,90 @@
   <div class="container">
     <div class="row align-items-start g-4">
       
-      <div class="col-lg-6">
+      <div class="col-lg-7">
         <div class="card border-0 p-4 h-100 shadow-sm bg-white rounded-4">
-          <h4 class="fw-bold mb-3" style="color: #2d3748;">🎓 Database Jurusan (30+)</h4>
-          <p class="text-muted small mb-3">Klik jurusan untuk melihat detail.</p>
+          <div class="d-flex align-items-center mb-3">
+              <span class="fs-4 me-2">🎓</span>
+              <h4 class="fw-bold mb-0" style="color: #2d3748;">Database Jurusan</h4>
+          </div>
+          <p class="text-muted small mb-3">Klik nama jurusan untuk melihat detail kompetensi yang dibutuhkan.</p>
 
-          <div class="row g-2" style="max-height: 400px; overflow-y: auto;">
+          <div class="row g-2" style="max-height: 600px; overflow-y: auto; padding-right: 5px;">
             
-            <div class="col-12"><small class="text-success fw-bold ls-1 bg-light px-2 py-1 rounded">💊 KESEHATAN & SAINS</small></div>
-            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Kedokteran Umum" data-desc="Mempelajari ilmu medis, diagnosa penyakit, dan pengobatan pasien." data-prospek="Dokter Umum, Kepala Puskesmas">🩺 Kedokteran</button></div>
-            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Farmasi" data-desc="Meracik obat dan analisis bahan kimia medis." data-prospek="Apoteker, BPOM, Industri Obat">💊 Farmasi</button></div>
-            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Kesehatan Masyarakat" data-desc="Pencegahan penyakit dan promosi kesehatan." data-prospek="Promotor Kesehatan, RS">🏥 Kesmas</button></div>
+            <div class="col-12 mt-1"><small class="text-success fw-bold ls-1 bg-light px-2 py-1 rounded">💊 KESEHATAN & SAINS</small></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Kedokteran Umum" data-desc="Mempelajari ilmu medis, diagnosa, dan pengobatan." data-prospek="Dokter, Spesialis">🩺 Kedokteran</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Farmasi" data-desc="Meracik obat dan analisis bahan kimia medis." data-prospek="Apoteker, BPOM">💊 Farmasi</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Ilmu Gizi" data-desc="Nutrisi, diet, dan kesehatan pangan." data-prospek="Ahli Gizi, Dietisien">🥗 Ilmu Gizi</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Keperawatan" data-desc="Perawatan pasien profesional dan asistensi medis." data-prospek="Perawat RS">💉 Keperawatan</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Kesehatan Masyarakat" data-desc="Pencegahan penyakit di masyarakat." data-prospek="Promotor Kes.">🏥 Kesmas</button></div>
 
-            <div class="col-12 mt-2"><small class="text-primary fw-bold ls-1 bg-light px-2 py-1 rounded">💻 TEKNOLOGI & DATA</small></div>
-            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Teknik Informatika" data-desc="Coding & Software." data-prospek="Developer">💻 Informatika</button></div>
-            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Sains Data" data-desc="Big Data & AI." data-prospek="Data Scientist">📊 Sains Data</button></div>
-            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Sistem Informasi" data-desc="Bisnis & IT." data-prospek="System Analyst">📱 Sisfo</button></div>
-            
-            <div class="col-12 mt-2"><small class="text-warning fw-bold ls-1 bg-light px-2 py-1 rounded">💰 EKONOMI & BISNIS</small></div>
-            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Akuntansi" data-desc="Laporan Keuangan." data-prospek="Akuntan">📈 Akuntansi</button></div>
-            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Manajemen" data-desc="Pengelolaan Bisnis." data-prospek="Manager">💼 Manajemen</button></div>
+            <div class="col-12 mt-3"><small class="text-primary fw-bold ls-1 bg-light px-2 py-1 rounded">🏗️ TEKNIK & REKAYASA</small></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Teknik Sipil" data-desc="Rancang bangun infrastruktur (gedung, jalan, jembatan)." data-prospek="Kontraktor">🏗️ Tek. Sipil</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Teknik Industri" data-desc="Optimalisasi sistem produksi dan manajemen." data-prospek="Manager Industri">⚙️ Tek. Industri</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Teknik Mesin" data-desc="Mesin, energi, dan mekanika." data-prospek="Engineer Mesin">🔧 Tek. Mesin</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Teknik Elektro" data-desc="Listrik, elektronika, dan energi." data-prospek="Engineer Listrik">⚡ Tek. Elektro</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Arsitektur" data-desc="Desain bangunan estetis dan fungsional." data-prospek="Arsitek">🏛️ Arsitektur</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Agroteknologi" data-desc="Teknologi pertanian modern." data-prospek="Ahli Pertanian">🌱 Agroteknologi</button></div>
 
-            <div class="col-12 mt-2"><small class="text-danger fw-bold ls-1 bg-light px-2 py-1 rounded">⚖️ SOSIAL & HUKUM</small></div>
-            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Ilmu Hukum" data-desc="Undang-undang." data-prospek="Pengacara">⚖️ Hukum</button></div>
-            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Psikologi" data-desc="Perilaku Manusia." data-prospek="HRD/Psikolog">🧠 Psikologi</button></div>
+            <div class="col-12 mt-3"><small class="text-info fw-bold ls-1 bg-light px-2 py-1 rounded">💻 KOMPUTER & IT</small></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Teknik Informatika" data-desc="Coding, algoritma, dan software." data-prospek="Programmer">💻 Informatika</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Sains Data" data-desc="Analisis Big Data dan AI." data-prospek="Data Scientist">📊 Sains Data</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Sistem Informasi" data-desc="Integrasi bisnis dan IT." data-prospek="System Analyst">📱 Sisfo</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Teknik Komputer" data-desc="Hardware dan jaringan komputer." data-prospek="Network Eng.">🔌 Tek. Komputer</button></div>
+
+            <div class="col-12 mt-3"><small class="text-warning fw-bold ls-1 bg-light px-2 py-1 rounded">💰 EKONOMI & BISNIS</small></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Akuntansi" data-desc="Laporan keuangan dan audit." data-prospek="Akuntan">📈 Akuntansi</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Manajemen" data-desc="Pengelolaan organisasi bisnis." data-prospek="Manager">💼 Manajemen</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Bisnis Digital" data-desc="Startup dan e-commerce." data-prospek="Startup Founder">🚀 Bisnis Digital</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Ekonomi Pembangunan" data-desc="Analisis ekonomi makro negara." data-prospek="Analis Kebijakan">🏦 Eko. Pemb.</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Pariwisata" data-desc="Industri travel dan wisata." data-prospek="Tour Consultant">✈️ Pariwisata</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Perhotelan" data-desc="Manajemen hotel dan hospitality." data-prospek="Hotel Manager">🏨 Perhotelan</button></div>
+
+            <div class="col-12 mt-3"><small class="text-danger fw-bold ls-1 bg-light px-2 py-1 rounded">⚖️ SOSIAL & HUMANIORA</small></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Ilmu Hukum" data-desc="Hukum dan perundang-undangan." data-prospek="Pengacara, Hakim">⚖️ Hukum</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Psikologi" data-desc="Perilaku manusia dan mental." data-prospek="HRD, Psikolog">🧠 Psikologi</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Hubungan Internasional" data-desc="Diplomasi antar negara." data-prospek="Diplomat">🌍 HI</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Ilmu Komunikasi" data-desc="Media dan penyampaian pesan." data-prospek="Jurnalis">🎙️ Komunikasi</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Humas / PR" data-desc="Hubungan masyarakat & branding." data-prospek="Public Relations">📢 Humas</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Administrasi Publik" data-desc="Tata kelola pemerintahan." data-prospek="PNS, Birokrat">🏢 Adm. Publik</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Sosiologi" data-desc="Interaksi sosial masyarakat." data-prospek="Peneliti Sosial">👥 Sosiologi</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="PGSD" data-desc="Pendidikan guru SD." data-prospek="Guru SD">🏫 PGSD</button></div>
+
+            <div class="col-12 mt-3"><small class="text-secondary fw-bold ls-1 bg-light px-2 py-1 rounded">🎨 BAHASA & SENI</small></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="DKV" data-desc="Desain grafis dan visual." data-prospek="Desainer Grafis">🎨 DKV</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Sastra Inggris" data-desc="Bahasa & literatur Inggris." data-prospek="Translator">🇬🇧 Sas. Inggris</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Sastra Indonesia" data-desc="Bahasa & literatur Indonesia." data-prospek="Editor, Penulis">🇮🇩 Sas. Indo</button></div>
+            <div class="col-6 col-md-4"><button class="btn btn-light btn-jurusan w-100 border" onclick="showModal(this)" data-jurusan="Sastra Jepang" data-desc="Bahasa & budaya Jepang." data-prospek="Interpreter">🇯🇵 Sas. Jepang</button></div>
             
-            </div>
+          </div>
         </div>
       </div>
       
-      <div class="col-lg-6">
+      <div class="col-lg-5">
         <div class="card border-0 p-4 h-100 shadow-sm bg-white rounded-4">
           <h4 class="fw-bold mb-3" style="color: #2d3748;">📋 Cara Menggunakan</h4>
           <ol class="list-unstyled">
             <li class="mb-3 d-flex align-items-center">
-              <span class="badge bg-primary rounded-circle me-3" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">1</span>
-              <span class="small text-muted">Isi <strong>Data Diri</strong> & NISN.</span>
+              <span class="badge bg-primary rounded-circle me-3 flex-shrink-0" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">1</span>
+              <span class="small text-muted">Isi <strong>Data Diri</strong> & NISN dengan benar.</span>
             </li>
             <li class="mb-3 d-flex align-items-center">
-              <span class="badge bg-primary rounded-circle me-3" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">2</span>
-              <span class="small text-muted">Input <strong>Nilai Wajib</strong> (MTK, Indo, Ing).</span>
+              <span class="badge bg-primary rounded-circle me-3 flex-shrink-0" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">2</span>
+              <span class="small text-muted">Input <strong>Nilai Wajib</strong> (MTK, Indo, Ing) rata-rata semester 1-5.</span>
             </li>
             <li class="mb-3 d-flex align-items-center">
-              <span class="badge bg-primary rounded-circle me-3" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">3</span>
-              <span class="small text-muted">Input <strong>Nilai Rumpun Pilihan</strong> (Sains/Sosial).</span>
+              <span class="badge bg-primary rounded-circle me-3 flex-shrink-0" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">3</span>
+              <span class="small text-muted">Input <strong>Nilai Rumpun Pilihan</strong> (Saintek/Soshum). Isi 0 jika tidak mengambil.</span>
             </li>
             <li class="d-flex align-items-center">
-              <span class="badge bg-primary rounded-circle me-3" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">4</span>
-              <span class="small text-muted">Dapatkan 3 <strong>Rekomendasi Terbaik</strong>!</span>
+              <span class="badge bg-primary rounded-circle me-3 flex-shrink-0" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">4</span>
+              <span class="small text-muted">Sistem akan menghitung Gap Kompetensi dan memberikan 3 rekomendasi terbaik.</span>
             </li>
           </ol>
           
           <div class="alert alert-info border-0 mt-3 mb-0 py-3 px-3" style="background: linear-gradient(135deg, #e0f7ff 0%, #d4edff 100%); border-radius: 16px;">
-             <small class="fw-bold text-primary">💡 Tips Kurikulum Merdeka:</small><br>
-             <small class="text-muted">Jika kamu tidak mengambil mapel tertentu (misal Kimia/Fisika), cukup isi dengan nilai 0.</small>
+             <small class="fw-bold text-primary">💡 Tips:</small><br>
+             <small class="text-muted">Jujurlah saat mengisi skala minat (1-5) agar rekomendasi sesuai dengan passion kamu.</small>
           </div>
         </div>
       </div>

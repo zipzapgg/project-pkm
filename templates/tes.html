@@ -1,89 +1,259 @@
 {% extends "base.html" %}
-{% block title %}Tes Rekomendasi Jurusan (Kurmer){% endblock %}
+{% block title %}Tes Minat Bakat (Kurikulum Merdeka){% endblock %}
 
 {% block content %}
-<div class="card shadow-lg p-4 p-md-5 mx-auto fade-in" style="max-width: 800px;">
-  <div class="text-center mb-4">
-    <h3 class="fw-bold mb-2">Tes Minat Bakat (Kurikulum Merdeka)</h3>
-    <p class="text-muted">Masukkan nilai rata-rata mata pelajaran pilihan kamu.</p>
+<div class="card shadow-lg p-4 p-md-5 mx-auto fade-in mb-5" style="max-width: 900px; border-radius: 24px;">
+  
+  <div class="text-center mb-5">
+    <div class="d-inline-block bg-primary bg-opacity-10 text-primary p-3 rounded-circle mb-3">
+        <span class="fs-1">📝</span>
+    </div>
+    <h2 class="fw-bold mb-2">Tes Rekomendasi Jurusan</h2>
+    <p class="text-muted">Isi data akademik dan minat kamu sejujur mungkin.</p>
   </div>
 
-  <form id="tesForm" action="{{ url_for('hasil') }}" method="POST">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm border-0" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form id="tesForm" action="{{ url_for('hasil') }}" method="POST" onsubmit="return validateForm()">
     {{ form.hidden_tag() }}
 
-    <div class="mb-4 p-4 rounded-4 bg-light border">
-      <h5 class="fw-bold text-primary mb-3">👤 Data Diri</h5>
-      <div class="row g-3">
-        <div class="col-md-6">{{ form.nama.label(class="form-label") }} {{ form.nama(class="form-control", id="nama") }}</div>
-        <div class="col-md-6">{{ form.nisn.label(class="form-label") }} {{ form.nisn(class="form-control", id="nisn") }}</div>
+    <div class="mb-5 position-relative">
+      <div class="d-flex align-items-center mb-3">
+        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 40px; height: 40px; font-weight: bold;">1</div>
+        <h5 class="fw-bold text-dark mb-0">Data Diri</h5>
       </div>
-    </div>
-
-    <div class="mb-4 p-4 rounded-4 bg-light border">
-      <h5 class="fw-bold text-success mb-3">📚 Nilai Akademik (0-100)</h5>
-      <div class="row g-3">
-        <div class="col-md-4">{{ form.mtk.label(class="form-label") }} {{ form.mtk(class="form-control", id="mtk") }}</div>
-        <div class="col-md-4">{{ form.bindo.label(class="form-label") }} {{ form.bindo(class="form-control", id="bindo") }}</div>
-        <div class="col-md-4">{{ form.bing.label(class="form-label") }} {{ form.bing(class="form-control", id="bing") }}</div>
-        
-        <div class="col-12"><hr></div>
-        
-        <div class="col-md-6">
-            <label class="form-label fw-bold text-danger">🔬 Rata-rata Mapel Sains</label>
-            <div class="form-text mb-2">Gabungan Fisika, Kimia, Biologi (Isi 0 jika tidak ambil)</div>
-            {{ form.nilai_sains(class="form-control border-danger", id="sains") }}
-        </div>
-        <div class="col-md-6">
-            <label class="form-label fw-bold text-warning">⚖️ Rata-rata Mapel Sosial</label>
-            <div class="form-text mb-2">Gabungan Ekonomi, Sosiologi, Geografi (Isi 0 jika tidak ambil)</div>
-            {{ form.nilai_sosial(class="form-control border-warning", id="sosial") }}
+      
+      <div class="p-4 rounded-4 bg-light border border-light-subtle shadow-sm position-relative">
+        <div class="position-absolute top-0 start-0 w-100 h-100 bg-white opacity-50 rounded-4" style="z-index: 0;"></div>
+        <div class="row g-4 position-relative" style="z-index: 2;">
+            <div class="col-md-7">
+                <label class="form-label fw-bold text-secondary small">NAMA LENGKAP</label>
+                {{ form.nama(class="form-control form-control-lg", id="nama", placeholder="Ketik nama kamu...", required=True) }}
+            </div>
+            <div class="col-md-5">
+                <label class="form-label fw-bold text-secondary small">NISN</label>
+                {{ form.nisn(class="form-control form-control-lg", id="nisn", placeholder="Contoh: 0051234567", required=True) }}
+            </div>
         </div>
       </div>
     </div>
 
-    <div class="mb-4 p-4 rounded-4 bg-light border">
-      <h5 class="fw-bold text-info mb-3">❤️ Skala Minat (1-5)</h5>
-      <div class="row g-3">
-        <div class="col-6">{{ form.minat_logika.label }} {{ form.minat_logika(class="form-range", type="range", min="1", max="5", id="log") }}</div>
-        <div class="col-6">{{ form.minat_sosial.label }} {{ form.minat_sosial(class="form-range", type="range", min="1", max="5", id="sos") }}</div>
-        <div class="col-6">{{ form.minat_kreatif.label }} {{ form.minat_kreatif(class="form-range", type="range", min="1", max="5", id="kre") }}</div>
-        <div class="col-6">{{ form.minat_bahasa.label }} {{ form.minat_bahasa(class="form-range", type="range", min="1", max="5", id="bah") }}</div>
-      </div>
+    <div class="mb-5 position-relative">
+        <div class="d-flex align-items-center mb-3">
+            <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 40px; height: 40px; font-weight: bold;">2</div>
+            <h5 class="fw-bold text-dark mb-0">Nilai Rapor (Rata-rata Sem 1-5)</h5>
+        </div>
+
+        <div class="p-4 rounded-4 bg-light border border-light-subtle shadow-sm position-relative">
+            <div class="position-absolute top-0 start-0 w-100 h-100 bg-white opacity-50 rounded-4" style="z-index: 0;"></div>
+            
+            <div class="position-relative" style="z-index: 2;">
+                <div class="row g-4 mb-4">
+                    <div class="col-md-4">
+                        <label class="form-label text-center w-100 fw-bold text-secondary">Matematika</label>
+                        {{ form.mtk(class="form-control form-control-lg text-center fw-bold text-primary", id="mtk", placeholder="0-100", required=True, min=0, max=100) }}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-center w-100 fw-bold text-secondary">B. Indonesia</label>
+                        {{ form.bindo(class="form-control form-control-lg text-center fw-bold text-success", id="bindo", placeholder="0-100", required=True, min=0, max=100) }}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-center w-100 fw-bold text-secondary">B. Inggris</label>
+                        {{ form.bing(class="form-control form-control-lg text-center fw-bold text-info", id="bing", placeholder="0-100", required=True, min=0, max=100) }}
+                    </div>
+                </div>
+
+                <div class="p-3 bg-white rounded-3 border border-dashed">
+                    <div class="row g-4 align-items-center">
+                        <div class="col-md-6 border-end-md">
+                            <label class="form-label fw-bold text-danger mb-1">🔬 Rata-rata Saintek</label>
+                            <small class="text-muted d-block mb-2">(Fisika, Kimia, Biologi)</small>
+                            {{ form.nilai_sains(class="form-control", id="sains", placeholder="Isi 0 jika tidak ambil", min=0, max=100) }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-warning mb-1">⚖️ Rata-rata Soshum</label>
+                            <small class="text-muted d-block mb-2">(Ekonomi, Sosiologi, Geografi)</small>
+                            {{ form.nilai_sosial(class="form-control", id="sosial", placeholder="Isi 0 jika tidak ambil", min=0, max=100) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="text-center mt-4">
-      <button type="button" onclick="isiRandom()" class="btn btn-warning me-2">🎲 Randomizer</button>
-      <button type="submit" class="btn btn-primary px-5">Lihat Hasil</button>
+    <div class="mb-5 position-relative">
+        <div class="d-flex align-items-center mb-3">
+            <div class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 40px; height: 40px; font-weight: bold;">3</div>
+            <h5 class="fw-bold text-dark mb-0">Skala Minat (1-5)</h5>
+        </div>
+
+        <div class="p-4 rounded-4 bg-light border border-light-subtle shadow-sm position-relative">
+            <div class="position-absolute top-0 start-0 w-100 h-100 bg-white opacity-50 rounded-4" style="z-index: 0;"></div>
+            
+            <div class="row g-5 position-relative" style="z-index: 2;">
+                
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-between mb-1">
+                        <label class="fw-bold text-secondary">🧠 Logika & Hitungan</label>
+                        <span class="badge bg-primary" id="lbl-log">3 - Cukup</span>
+                    </div>
+                    {{ form.minat_logika(class="form-range custom-range mb-0", type="range", min="1", max="5", id="log", style="position: relative; z-index: 10;", oninput="updateLabel(this, 'lbl-log')") }}
+                    
+                    <div class="d-flex justify-content-between px-1 text-muted small fw-bold" style="font-size: 0.75rem; margin-top: -5px;">
+                        <span class="text-center">|<br>1</span>
+                        <span class="text-center">|<br>2</span>
+                        <span class="text-center">|<br>3</span>
+                        <span class="text-center">|<br>4</span>
+                        <span class="text-center">|<br>5</span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-between mb-1">
+                        <label class="fw-bold text-secondary">🗣️ Sosial & Komunikasi</label>
+                        <span class="badge bg-primary" id="lbl-sos">3 - Cukup</span>
+                    </div>
+                    {{ form.minat_sosial(class="form-range custom-range mb-0", type="range", min="1", max="5", id="sos", style="position: relative; z-index: 10;", oninput="updateLabel(this, 'lbl-sos')") }}
+                    
+                    <div class="d-flex justify-content-between px-1 text-muted small fw-bold" style="font-size: 0.75rem; margin-top: -5px;">
+                        <span class="text-center">|<br>1</span>
+                        <span class="text-center">|<br>2</span>
+                        <span class="text-center">|<br>3</span>
+                        <span class="text-center">|<br>4</span>
+                        <span class="text-center">|<br>5</span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-between mb-1">
+                        <label class="fw-bold text-secondary">🎨 Seni & Kreativitas</label>
+                        <span class="badge bg-primary" id="lbl-kre">3 - Cukup</span>
+                    </div>
+                    {{ form.minat_kreatif(class="form-range custom-range mb-0", type="range", min="1", max="5", id="kre", style="position: relative; z-index: 10;", oninput="updateLabel(this, 'lbl-kre')") }}
+                    
+                    <div class="d-flex justify-content-between px-1 text-muted small fw-bold" style="font-size: 0.75rem; margin-top: -5px;">
+                        <span class="text-center">|<br>1</span>
+                        <span class="text-center">|<br>2</span>
+                        <span class="text-center">|<br>3</span>
+                        <span class="text-center">|<br>4</span>
+                        <span class="text-center">|<br>5</span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-between mb-1">
+                        <label class="fw-bold text-secondary">📚 Bahasa & Literasi</label>
+                        <span class="badge bg-primary" id="lbl-bah">3 - Cukup</span>
+                    </div>
+                    {{ form.minat_bahasa(class="form-range custom-range mb-0", type="range", min="1", max="5", id="bah", style="position: relative; z-index: 10;", oninput="updateLabel(this, 'lbl-bah')") }}
+                    
+                    <div class="d-flex justify-content-between px-1 text-muted small fw-bold" style="font-size: 0.75rem; margin-top: -5px;">
+                        <span class="text-center">|<br>1</span>
+                        <span class="text-center">|<br>2</span>
+                        <span class="text-center">|<br>3</span>
+                        <span class="text-center">|<br>4</span>
+                        <span class="text-center">|<br>5</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-5">
+      <button type="submit" class="btn btn-primary rounded-pill px-5 py-3 fw-bold shadow-lg hover-up" id="submitBtn" style="min-width: 250px;">
+        <span id="btnText">✨ Analisis Sekarang</span>
+        <span id="btnLoading" class="d-none">
+          <span class="spinner-border spinner-border-sm me-2"></span>Memproses...
+        </span>
+      </button>
     </div>
   </form>
 </div>
 
-<script>
-function isiRandom() {
-    document.getElementById('nama').value = "Siswa " + Math.floor(Math.random()*1000);
-    document.getElementById('nisn').value = "999" + Math.floor(Math.random()*100000);
-    
-    // Tipe Acak: 0=Saintek, 1=Soshum, 2=Campuran
-    let tipe = Math.random();
-    
-    if (tipe < 0.33) { // Saintek
-        document.getElementById('mtk').value = 90;
-        document.getElementById('sains').value = 95; // Ambil Sains
-        document.getElementById('sosial').value = 0; // Gak ambil Sosial
-    } else if (tipe < 0.66) { // Soshum
-        document.getElementById('mtk').value = 70;
-        document.getElementById('sains').value = 0;
-        document.getElementById('sosial').value = 92;
-    } else { // Lintas Minat
-        document.getElementById('mtk').value = 85;
-        document.getElementById('sains').value = 80;
-        document.getElementById('sosial').value = 80;
+<style>
+    /* Custom Range Style agar lebih besar */
+    .custom-range::-webkit-slider-thumb {
+        transform: scale(1.2);
     }
-    
-    document.getElementById('bindo').value = 80;
-    document.getElementById('bing').value = 80;
-    
-    ['log','sos','kre','bah'].forEach(id => document.getElementById(id).value = Math.floor(1 + Math.random()*5));
+    .hover-up:hover {
+        transform: translateY(-3px);
+    }
+    .border-end-md {
+        border-right: 1px dashed #dee2e6;
+    }
+    @media (max-width: 768px) {
+        .border-end-md { border-right: none; border-bottom: 1px dashed #dee2e6; padding-bottom: 1rem; margin-bottom: 1rem; }
+    }
+</style>
+
+<script>
+// Logic update label slider (1-5)
+const textLabels = {
+    '1': '1 - Sangat Kurang',
+    '2': '2 - Kurang',
+    '3': '3 - Cukup',
+    '4': '4 - Baik',
+    '5': '5 - Sangat Baik'
+};
+
+function updateLabel(el, targetId) {
+    const target = document.getElementById(targetId);
+    if(target) {
+        target.innerText = textLabels[el.value];
+        // Ganti warna badge sesuai nilai
+        if(el.value <= 2) { target.className = 'badge bg-secondary'; }
+        else if(el.value == 3) { target.className = 'badge bg-info'; }
+        else { target.className = 'badge bg-success'; }
+    }
 }
+
+function validateForm() {
+  const nama = document.getElementById('nama').value.trim();
+  const nisn = document.getElementById('nisn').value.trim();
+  
+  if (nama.length < 3) {
+    alert('Nama minimal 3 karakter!');
+    return false;
+  }
+  
+  if (!/^\d{5,20}$/.test(nisn)) {
+    alert('NISN harus berupa 5-20 digit angka!');
+    return false;
+  }
+  
+  const nilaiInputs = ['mtk', 'bindo', 'bing', 'sains', 'sosial'];
+  for (let id of nilaiInputs) {
+    const el = document.getElementById(id);
+    const val = parseInt(el.value);
+    if (isNaN(val) || val < 0 || val > 100) {
+      alert(`Nilai ${id.toUpperCase()} harus 0-100!`);
+      el.focus();
+      return false;
+    }
+  }
+  
+  document.getElementById('btnText').classList.add('d-none');
+  document.getElementById('btnLoading').classList.remove('d-none');
+  document.getElementById('submitBtn').disabled = true;
+  
+  return true;
+}
+
+// Init Label saat Load
+document.addEventListener('DOMContentLoaded', function() {
+  ['log', 'sos', 'kre', 'bah'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) updateLabel(el, 'lbl-' + id);
+  });
+});
 </script>
 {% endblock %}

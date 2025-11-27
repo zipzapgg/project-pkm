@@ -4,6 +4,16 @@
 {% block content %}
 <div class="fade-in-scale">
     
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold mb-1">Dashboard Admin</h3>
+            <p class="text-muted mb-0 small">Selamat datang, Admin! 👋</p>
+        </div>
+        <a href="{{ url_for('admin_logout') }}" class="btn btn-outline-danger">
+            🚪 Logout
+        </a>
+    </div>
+
     <div class="row g-4 mb-4">
         <div class="col-md-4">
             <div class="card border-0 shadow-sm h-100 p-3 text-white" style="background: linear-gradient(135deg, #0061ff 0%, #60efff 100%); border-radius: 16px;">
@@ -19,11 +29,11 @@
         <div class="col-md-8">
             <div class="card border-0 shadow-sm h-100 p-4 bg-white d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3" style="border-radius: 16px;">
                 <div>
-                    <h4 class="fw-bold text-primary mb-0">Dashboard Admin</h4>
+                    <h4 class="fw-bold text-primary mb-0">Data Rekomendasi Siswa</h4>
                     <p class="text-muted mb-0 small mt-1">Pantau data rekomendasi jurusan siswa (Kurikulum Merdeka).</p>
                 </div>
                 <div class="position-relative w-100" style="max-width: 300px;">
-                    <input type="text" id="searchInput" class="form-control rounded-pill ps-5" placeholder="Cari Nama / NISN...">
+                    <input type="text" id="searchInput" class="form-control rounded-pill ps-5" placeholder="Cari Nama / NISN..." autocomplete="off">
                     <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">🔍</span>
                 </div>
             </div>
@@ -105,7 +115,7 @@
 
                         <td class="text-center">
                             <form action="{{ url_for('hapus_siswa', nisn=row.nisn) }}" method="POST" 
-                                  onsubmit="return confirm('Yakin ingin menghapus data {{ row.nama }}?');">
+                                  onsubmit="return confirm('⚠️ Yakin ingin menghapus data {{ row.nama }}? Data tidak bisa dikembalikan!');">
                                 <button type="submit" class="btn btn-light text-danger btn-sm hover-danger border" data-bs-toggle="tooltip" title="Hapus Data">
                                     🗑️
                                 </button>
@@ -120,8 +130,15 @@
         <div class="text-center py-5">
             <div class="mb-3 text-muted opacity-25" style="font-size: 4rem;">📂</div>
             <h5 class="fw-bold text-muted">Belum Ada Data</h5>
+            <p class="text-muted small">Data siswa yang mengikuti tes akan muncul di sini</p>
         </div>
         {% endif %}
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary rounded-pill">
+            ← Kembali ke Beranda
+        </a>
     </div>
 </div>
 
@@ -150,17 +167,22 @@
 </div>
 
 <script>
-    // Search Filter
     document.getElementById('searchInput').addEventListener('keyup', function() {
         let filter = this.value.toLowerCase();
         let rows = document.querySelectorAll('#siswaTable tbody tr');
+        let found = 0;
+        
         rows.forEach(row => {
             let text = row.innerText.toLowerCase();
-            row.style.display = text.includes(filter) ? '' : 'none';
+            if (text.includes(filter)) {
+                row.style.display = '';
+                found++;
+            } else {
+                row.style.display = 'none';
+            }
         });
     });
 
-    // Show Detail Modal
     var detailModalObj = null;
     function showDetail(nama, hasilString) {
         document.getElementById('modalSiswaName').innerText = "Siswa: " + nama;
@@ -178,5 +200,10 @@
         }
         detailModalObj.show();
     }
+
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
 </script>
-{% endblock %}  
+{% endblock %}
